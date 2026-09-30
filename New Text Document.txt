@@ -1,0 +1,15 @@
+<?php
+header('Content-Type: application/json');
+require_once 'config.php'; // Adjust to your actual database connection file
+
+try {
+    // Select all users from the database except sensitive data like passwords
+    $stmt = $pdo->query("SELECT student_id, full_name, role, course FROM users ORDER BY full_name ASC");
+    $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($contacts);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Failed to retrieve contacts']);
+}
+?>
