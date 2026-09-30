@@ -1,9 +1,12 @@
 <?php
-// Check if running on Render with DATABASE_URL, otherwise fallback to local XAMPP MySQL
-$databaseUrl = getenv('DATABASE_URL');
+// Check for DATABASE_URL across different environment scopes in Docker/Apache
+$databaseUrl = getenv('DATABASE_URL') ?: ($_ENV['DATABASE_URL'] ?? null);
+if (!$databaseUrl && function_exists('apache_getenv')) {
+    $databaseUrl = apache_getenv('DATABASE_URL');
+}
 
 try {
-    if ($databaseUrl) {
+    if (!empty($databaseUrl)) {
         // --- RENDER & NEON (PostgreSQL) ---
         $options = parse_url($databaseUrl);
         $host = $options['host'] ?? '';
@@ -13,12 +16,13 @@ try {
         $pass = $options['pass'] ?? '';
 
         $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
+        
         $pdo = new PDO($dsn, $user, $pass, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ]);
     } else {
-        // --- LOCAL XAMPP (MySQL) ---[cite: 8]
+        // --- LOCAL XAMPP (MySQL) - Only used locally ---
         $host = 'localhost';
         $dbname = 'ptc_forum'; 
         $username = 'root';
@@ -31,9 +35,11 @@ try {
         ]);
     }
 } catch (PDOException $e) {
+    // This outputs the exact database error and environment check for debugging on Render
     echo json_encode([
         'status' => 'error', 
-        'message' => 'Database connection failed: ' . $e->getMessage()
+        'message' => 'Database connection failed: ' . $e->getMessage(),
+        'debug_url_exists' => !empty($databaseUrl) ? 'yes' : 'no'
     ]);
     exit;
 }
