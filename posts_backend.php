@@ -73,7 +73,7 @@ if ($action === 'create_post' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// TOGGLE LIKE
+// TOGGLE LIKE (Fixed syntax from $fetch.fetch() to $fetch->fetch())
 if ($action === 'toggle_like' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $postId = $_POST['postId'] ?? 0;
     try {
@@ -82,7 +82,7 @@ if ($action === 'toggle_like' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $fetch = $pdo->prepare("SELECT likes_count FROM posts WHERE id = ?");
         $fetch->execute([$postId]);
-        $res = $fetch.fetch();
+        $res = $fetch->fetch(); // Fixed
         
         echo json_encode(['status' => 'success', 'likes_count' => $res['likes_count'] ?? 0]);
     } catch (\Exception $e) {
