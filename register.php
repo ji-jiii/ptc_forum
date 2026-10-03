@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $course      = trim($_POST['course'] ?? '');
     $password    = $_POST['password'] ?? '';
 
-    // Check if ID exists
+    // Check if ID already exists in database
     $checkStmt = $conn->prepare("SELECT id FROM users WHERE student_id = ?");
     $checkStmt->bind_param("s", $studentId);
     $checkStmt->execute();
@@ -29,12 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(["status" => "error", "message" => "ID Number is already registered."]);
         exit();
     }
+    $checkStmt->close();
 
-    // Handle Image Upload
+    // Handle Student ID Image Upload securely
     $imagePath = null;
     if (isset($_FILES['student_id_image']) && $_FILES['student_id_image']['error'] === UPLOAD_ERR_OK) {
         if (!is_dir('uploads')) {
-            mkdir('uploads', 0777, true);
+            mkdir('uploads', 0755, true);
         }
         $ext = pathinfo($_FILES['student_id_image']['name'], PATHINFO_EXTENSION);
         $newFileName = "id_" . time() . "_" . rand(1000, 9999) . "." . $ext;
@@ -45,16 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Securely hash password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    // Insert user with role
+    // Insert user record into database
     $stmt = $conn->prepare("INSERT INTO users (full_name, student_id, phone_number, role, course, id_image_path, password_hash) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sssssss", $fullName, $studentId, $phoneNumber, $role, $course, $imagePath, $hashedPassword);
 
     if ($stmt->execute()) {
-        echo json_encode(["status" => "success", "message" => "Account created successfully as " . $role . "!"]);
+        echo json_encode(["status" => "success", "message" => "Account created successfully as " . $role . "!"]);[cite: 12]
     } else {
-        echo json_encode(["status" => "error", "message" => "Database save error: " . $stmt->error]);
+        echo json_encode(["status" => "error", "message" => "Database save error: " . $stmt->error]);[cite: 12]
     }
 
     $stmt->close();
