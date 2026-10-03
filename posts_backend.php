@@ -1,17 +1,23 @@
 <?php
 header('Content-Type: application/json');
-$host = 'localhost';
-$db   = 'ptc_forum';
-$user = 'root';
-$pass = '';
+
+$database_url = getenv('DATABASE_URL') ?: 'postgres://user:password@host/dbname?sslmode=require';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
+    $parsed_url = parse_url($database_url);
+    $host = $parsed_url['host'] ?? 'localhost';
+    $port = $parsed_url['port'] ?? '5432';
+    $dbname = ltrim($parsed_url['path'] ?? '', '/');
+    $user = $parsed_url['user'] ?? '';
+    $pass = $parsed_url['pass'] ?? '';
+
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
+    $pdo = new PDO($dsn, $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 } catch (\PDOException $e) {
-    echo json_encode(['status' => 'error', 'message' => 'Database connection failed.']);
+    echo json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $e->getMessage()]);
     exit;
 }
 
@@ -24,13 +30,11 @@ if ($action === 'get_posts') {
         $posts = $stmt->fetchAll();
 
         foreach ($posts as &$post) {
-            // Fetch Comments for this post
             $cStmt = $pdo->prepare("SELECT * FROM comments WHERE post_id = ? ORDER BY created_at ASC");
             $cStmt->execute([$post['id']]);
             $comments = $cStmt->fetchAll();
 
             foreach ($comments as &$comment) {
-                // Fetch Replies for each comment
                 $rStmt = $pdo->prepare("SELECT * FROM comment_replies WHERE comment_id = ? ORDER BY created_at ASC");
                 $rStmt->execute([$comment['id']]);
                 $comment['replies'] = $rStmt->fetchAll();
@@ -73,7 +77,7 @@ if ($action === 'create_post' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// TOGGLE LIKE (Fixed syntax from $fetch.fetch() to $fetch->fetch())
+// TOGGLE LIKE
 if ($action === 'toggle_like' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $postId = $_POST['postId'] ?? 0;
     try {
@@ -82,7 +86,7 @@ if ($action === 'toggle_like' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $fetch = $pdo->prepare("SELECT likes_count FROM posts WHERE id = ?");
         $fetch->execute([$postId]);
-        $res = $fetch->fetch(); // Fixed
+        $res = $fetch->fetch(); // Fixed syntax from . to ->
         
         echo json_encode(['status' => 'success', 'likes_count' => $res['likes_count'] ?? 0]);
     } catch (\Exception $e) {
@@ -145,3 +149,4 @@ if ($action === 'delete_post' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     exit;
 }
+?>
