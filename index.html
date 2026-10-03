@@ -74,26 +74,26 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased">
+<body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased overflow-x-hidden">
 
     <!-- ================================================================= -->
     <!-- VIEW 1: AUTHENTICATION (LOGIN & SIGN UP) -->
     <!-- ================================================================= -->
-    <section id="view-auth" class="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div class="w-full max-w-4xl bg-slate-900/90 border border-brand-bright/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-[620px] max-h-[90vh]">
+    <section id="view-auth" class="min-h-screen w-full flex items-center justify-center p-3 sm:p-6 lg:p-8">
+        <div class="w-full max-w-4xl bg-slate-900/90 border border-brand-bright/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row my-auto">
             
             <!-- Left Branding Panel with Large Mascot -->
             <div class="md:w-5/12 bg-gradient-to-br from-brand-dark via-emerald-950 to-slate-950 p-6 md:p-8 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-brand-bright/20 relative overflow-hidden">
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-brand-bright/10 rounded-full blur-3xl"></div>
                 <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-brand-yellow/10 rounded-full blur-3xl"></div>
 
-                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-brand-bright to-emerald-400 p-1 shadow-glow-green mb-4 transform hover:scale-105 transition-transform duration-300">
+                <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-brand-bright to-emerald-400 p-1 shadow-glow-green mb-3 transform hover:scale-105 transition-transform duration-300">
                     <div class="w-full h-full bg-brand-dark rounded-[22px] flex items-center justify-center relative overflow-hidden">
                         <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover">
                     </div>
                 </div>
 
-                <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                <h1 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight">
                     PTC <span class="text-brand-yellow block">Online Forum</span>
                 </h1>
                 <p class="text-xs text-slate-400 mt-2 leading-relaxed max-w-xs">
@@ -102,10 +102,10 @@
             </div>
 
             <!-- Right Form Panel with Tabs -->
-            <div class="md:w-7/12 p-6 sm:p-8 flex flex-col h-full bg-slate-900/95 overflow-y-auto">
+            <div class="md:w-7/12 p-5 sm:p-8 flex flex-col bg-slate-900/95 overflow-y-auto">
                 
                 <!-- Auth Tabs -->
-                <div class="flex items-center justify-between p-1 bg-slate-950/80 rounded-2xl border border-slate-800 mb-6 shrink-0">
+                <div class="flex items-center justify-between p-1 bg-slate-950/80 rounded-2xl border border-slate-800 mb-5 shrink-0">
                     <button type="button" id="auth-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-xl text-brand-yellow bg-slate-900 shadow transition-all">
                         Log In
                     </button>
@@ -115,7 +115,7 @@
                 </div>
 
                 <!-- LOGIN FORM -->
-                <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4 my-auto fade-in">
+                <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4 fade-in">
                     <div>
                         <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Student ID Number</label>
                         <div class="relative">
@@ -156,7 +156,7 @@
                 </form>
 
                 <!-- SINGLE SIGN UP FORM -->
-                <form id="form-signup" onsubmit="handleSignupSubmit(event)" class="hidden space-y-3.5 overflow-y-auto pr-1 my-auto fade-in">
+                <form id="form-signup" onsubmit="handleSignupSubmit(event)" class="hidden space-y-3.5 fade-in">
                     <div>
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Account Role</label>
                         <select id="signup-role" required class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-bright">
@@ -171,7 +171,7 @@
                         <input type="text" id="signup-fullname" required placeholder="Juan Dela Cruz" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-bright">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Student ID Number</label>
                             <input type="text" id="signup-studentid" maxlength="9" pattern="[0-9]{4}-[0-9]{4}" required placeholder="2026-1234" oninput="formatStudentIdInput(this)" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-bright">
@@ -204,7 +204,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Password</label>
                             <div class="relative">
@@ -240,19 +240,19 @@
     <div id="view-forum" class="hidden flex-col min-h-screen">
         
         <!-- Header Nav -->
-        <header class="glass-nav sticky top-0 z-40 border-b border-brand-bright/20 px-4 lg:px-8 py-3">
-            <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <header class="glass-nav sticky top-0 z-40 border-b border-brand-bright/20 px-3 sm:px-6 lg:px-8 py-3">
+            <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
                 
                 <!-- Logo -->
-                <div class="flex items-center gap-3 shrink-0">
-                    <a href="#" class="flex items-center gap-2.5 group">
-                        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-bright to-emerald-400 p-0.5 shadow-glow-green group-hover:scale-105 transition-transform duration-300">
+                <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <a href="#" class="flex items-center gap-2 group">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-brand-bright to-emerald-400 p-0.5 shadow-glow-green group-hover:scale-105 transition-transform duration-300">
                             <div class="w-full h-full bg-brand-dark rounded-[14px] flex items-center justify-center relative overflow-hidden">
                                 <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover">
                             </div>
                         </div>
-                        <span class="font-extrabold text-lg md:text-xl tracking-tight text-white group-hover:text-brand-yellow transition-colors">
-                            PTC <span class="text-brand-yellow">Online Forum</span>
+                        <span class="font-extrabold text-sm sm:text-lg md:text-xl tracking-tight text-white group-hover:text-brand-yellow transition-colors">
+                            PTC <span class="text-brand-yellow hidden sm:inline">Online Forum</span>
                         </span>
                     </a>
                 </div>
@@ -268,29 +268,29 @@
                 </div>
 
                 <!-- Action Controls -->
-                <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-1.5 sm:gap-3">
                     
                     <!-- Switch to Admin View -->
-                    <button id="admin-portal-btn" onclick="switchView('view-admin')" class="hidden px-3 py-2 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/40 hover:bg-slate-700 text-xs font-bold transition-all items-center gap-1.5" title="Open Admin Panel">
+                    <button id="admin-portal-btn" onclick="switchView('view-admin')" class="hidden px-2.5 sm:px-3 py-2 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/40 hover:bg-slate-700 text-xs font-bold transition-all items-center gap-1.5" title="Open Admin Panel">
                         <i class="fa-solid fa-user-shield"></i>
-                        <span class="hidden sm:inline">Admin Portal</span>
+                        <span class="hidden sm:inline">Admin</span>
                     </button>
 
                     <!-- Home -->
-                    <button onclick="resetTopicFilter()" class="p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
-                        <i class="fa-solid fa-house text-sm"></i>
+                    <button onclick="resetTopicFilter()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
+                        <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
                     <!-- Direct Messages -->
-                    <button onclick="scrollToContacts()" class="p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages">
-                        <i class="fa-solid fa-comment-dots text-sm"></i>
+                    <button onclick="scrollToContacts()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages">
+                        <i class="fa-solid fa-comment-dots text-xs sm:text-sm"></i>
                         <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-slate-900"></span>
                     </button>
 
                     <!-- Notifications Dropdown -->
                     <div class="relative">
-                        <button onclick="toggleNotificationsMenu()" class="p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
-                            <i class="fa-solid fa-bell text-sm"></i>
+                        <button onclick="toggleNotificationsMenu()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
+                            <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
                             <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full">0</span>
                         </button>
 
@@ -306,15 +306,15 @@
                     </div>
 
                     <!-- User Profile Dropdown Avatar -->
-                    <div class="relative ml-1">
-                        <button id="user-menu-btn" onclick="toggleUserMenu()" class="flex items-center gap-2 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-9 h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
-                            <i class="fa-solid fa-chevron-down text-xs text-slate-400 hidden sm:block"></i>
+                    <div class="relative ml-0.5">
+                        <button id="user-menu-btn" onclick="toggleUserMenu()" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
+                            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
                         </button>
 
-                        <div id="user-menu" class="hidden absolute right-0 mt-3 w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
+                        <div id="user-menu" class="hidden absolute right-0 mt-3 w-52 sm:w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
                             <div class="px-3 py-2 border-b border-slate-800 mb-1">
-                                <p id="current-user-name" class="text-xs font-bold text-white">Student Name</p>
+                                <p id="current-user-name" class="text-xs font-bold text-white truncate">Student Name</p>
                                 <p id="current-user-course" class="text-[11px] text-brand-bright">BSIT</p>
                                 <p id="current-user-id" class="text-[10px] text-slate-400">ID: 2026-XXXXX</p>
                             </div>
@@ -331,13 +331,22 @@
 
                 </div>
             </div>
+            <!-- Mobile Search Bar -->
+            <div class="mt-3 md:hidden">
+                <div class="relative w-full">
+                    <input type="text" id="forum-search-mobile" onkeyup="document.getElementById('forum-search').value = this.value; filterForumPosts();" placeholder="Search discussions..." class="w-full pl-9 pr-3 py-1.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-yellow">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <!-- Forum 3-Column Main Content -->
-        <main class="max-w-7xl mx-auto w-full flex-1 px-3 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <main class="max-w-7xl mx-auto w-full flex-1 px-3 sm:px-6 lg:px-8 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
             
-            <!-- LEFT COLUMN: TOPICS LIST -->
-            <aside class="lg:col-span-3 bg-slate-900/80 backdrop-blur-md rounded-3xl p-5 border border-slate-800 shadow-xl sticky top-20">
+            <!-- LEFT COLUMN: TOPICS LIST (Collapsible / Stacks on Mobile) -->
+            <aside class="hidden lg:block lg:col-span-3 bg-slate-900/80 backdrop-blur-md rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl sticky top-20">
                 <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
                     <h2 class="font-extrabold text-xs tracking-wider text-slate-200 flex items-center gap-2">
                         <i class="fa-solid fa-hashtag text-brand-yellow"></i>
@@ -356,15 +365,15 @@
             </aside>
 
             <!-- MIDDLE COLUMN: CREATE POST & FEED -->
-            <section class="lg:col-span-6 space-y-5">
+            <section class="col-span-1 lg:col-span-6 space-y-4 sm:space-y-5">
                 
                 <!-- Create Post Box -->
-                <div class="bg-slate-900/90 rounded-3xl p-5 border border-brand-bright/20 shadow-xl backdrop-blur-md">
+                <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-5 border border-brand-bright/20 shadow-xl backdrop-blur-md">
                     <h3 class="text-xs font-bold text-brand-yellow uppercase tracking-wider mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-pen-to-square"></i> Create Post
                     </h3>
 
-                    <textarea id="post-input" rows="3" placeholder="What's on your mind? Share announcements, questions, or updates..." class="w-full p-3.5 bg-slate-800/60 border border-slate-700 rounded-2xl text-slate-100 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-brand-yellow transition-all resize-none"></textarea>
+                    <textarea id="post-input" rows="3" placeholder="What's on your mind? Share announcements, questions, or updates..." class="w-full p-3 bg-slate-800/60 border border-slate-700 rounded-2xl text-slate-100 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-brand-yellow transition-all resize-none"></textarea>
 
                     <div id="image-preview-wrapper" class="hidden relative mt-3 rounded-2xl overflow-hidden border border-slate-700 max-h-48">
                         <img id="image-preview" src="" alt="Preview" class="w-full h-full object-cover">
@@ -376,13 +385,13 @@
                     <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-800 gap-2">
                         <div class="flex items-center gap-2">
                             <input type="file" id="post-file-input" accept="image/*" class="hidden" onchange="previewPostImage(event)">
-                            <label for="post-file-input" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium cursor-pointer transition-colors border border-slate-700">
+                            <label for="post-file-input" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium cursor-pointer transition-colors border border-slate-700">
                                 <i class="fa-regular fa-image text-brand-bright"></i>
-                                <span class="hidden sm:inline">Add photo / file</span>
+                                <span>Photo</span>
                             </label>
                         </div>
 
-                        <button onclick="addNewPost()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs shadow-glow-yellow hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                        <button onclick="addNewPost()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs shadow-glow-yellow hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5">
                             <span>POST</span>
                             <i class="fa-solid fa-paper-plane text-xs"></i>
                         </button>
@@ -396,14 +405,14 @@
                 </div>
 
                 <!-- Posts List Container -->
-                <div id="posts-container" class="space-y-5">
+                <div id="posts-container" class="space-y-4 sm:space-y-5">
                     
                     <!-- Empty State Placeholder -->
-                    <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
-                        <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
-                            <i class="fa-solid fa-pen-nib text-2xl"></i>
+                    <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
+                            <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                         </div>
-                        <h4 class="text-base font-bold text-white mb-1">Wanna start discussion?</h4>
+                        <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
                         <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
                     </div>
 
@@ -411,7 +420,7 @@
             </section>
 
             <!-- RIGHT COLUMN: SEARCH & CONTACTS / CHAT -->
-            <aside id="contacts-sidebar" class="lg:col-span-3 bg-slate-900/80 backdrop-blur-md rounded-3xl p-5 border border-slate-800 shadow-xl sticky top-20 space-y-4">
+            <aside id="contacts-sidebar" class="col-span-1 lg:col-span-3 bg-slate-900/80 backdrop-blur-md rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl lg:sticky lg:top-20 space-y-3 sm:space-y-4">
 
                 <div class="relative">
                     <input type="text" id="contact-search-input" onkeyup="filterContactsList()" placeholder="Search contact..." class="w-full pl-9 pr-3 py-2 bg-slate-800/70 border border-slate-700 rounded-2xl text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-bright">
@@ -420,14 +429,14 @@
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2">
+                <div class="flex items-center justify-between pt-1">
                     <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                         <i class="fa-solid fa-circle text-[8px] text-brand-bright animate-pulse"></i> People in forum
                     </h3>
                     <span id="active-contacts-count" class="text-[10px] bg-brand-bright/10 text-brand-bright px-2 py-0.5 rounded-full font-bold">0 Active</span>
                 </div>
 
-                <div id="contacts-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1">
+                <div id="contacts-list" class="space-y-2 max-h-[300px] sm:max-h-[360px] overflow-y-auto pr-1">
                     <p class="text-xs text-slate-400 text-center py-4">Loading contacts...</p>
                 </div>
             </aside>
@@ -441,18 +450,18 @@
     <div id="view-admin" class="hidden flex-col min-h-screen">
         
         <!-- Admin Header Navigation -->
-        <header class="glass-nav border-b border-brand-bright/20 px-4 sm:px-6 py-3 sticky top-0 z-40">
+        <header class="glass-nav border-b border-brand-bright/20 px-3 sm:px-6 py-3 sticky top-0 z-40">
             <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <h1 class="text-base sm:text-lg font-extrabold uppercase tracking-wider text-white">
+                    <h1 class="text-sm sm:text-lg font-extrabold uppercase tracking-wider text-white">
                         ADMIN DASHBOARD
                     </h1>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <button onclick="switchView('view-forum')" class="px-3.5 py-1.5 rounded-xl bg-brand-bright/20 text-brand-bright hover:bg-brand-bright hover:text-brand-dark border border-brand-bright/40 text-xs font-bold transition-all flex items-center gap-1.5">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <button onclick="switchView('view-forum')" class="px-3 py-1.5 rounded-xl bg-brand-bright/20 text-brand-bright hover:bg-brand-bright hover:text-brand-dark border border-brand-bright/40 text-xs font-bold transition-all flex items-center gap-1.5">
                         <i class="fa-solid fa-comments"></i>
-                        <span>Student Forum</span>
+                        <span class="hidden sm:inline">Student Forum</span>
                     </button>
                     <button onclick="handleLogout()" class="p-2 rounded-xl text-red-400 hover:bg-red-500/10 border border-red-500/30 text-xs">
                         <i class="fa-solid fa-right-from-bracket"></i>
@@ -461,65 +470,65 @@
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto w-full flex-1 p-4 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div class="max-w-7xl mx-auto w-full flex-1 p-3 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
             
             <!-- Left Admin Navigation Sidebar -->
-            <aside id="admin-sidebar" class="md:col-span-3 bg-slate-900/90 rounded-3xl p-4 border border-slate-800 shadow-xl space-y-2 h-fit">
-                <button onclick="setActiveAdminTab('users', this)" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all">
+            <aside id="admin-sidebar" class="md:col-span-3 bg-slate-900/90 rounded-3xl p-3 sm:p-4 border border-slate-800 shadow-xl flex md:flex-col gap-2 overflow-x-auto h-fit">
+                <button onclick="setActiveAdminTab('users', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all">
                     <i class="fa-solid fa-user-gear text-sm w-4"></i>
                     <span>Users</span>
                 </button>
-                <button onclick="setActiveAdminTab('posts', this)" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
+                <button onclick="setActiveAdminTab('posts', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
                     <i class="fa-regular fa-clock text-sm w-4"></i>
                     <span>Posts</span>
                 </button>
-                <button onclick="setActiveAdminTab('reports', this)" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
+                <button onclick="setActiveAdminTab('reports', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
                     <i class="fa-solid fa-triangle-exclamation text-sm w-4"></i>
                     <span>Reports</span>
                 </button>
-                <button onclick="setActiveAdminTab('settings', this)" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
+                <button onclick="setActiveAdminTab('settings', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
                     <i class="fa-regular fa-circle-check text-sm w-4"></i>
                     <span>Settings</span>
                 </button>
             </aside>
 
             <!-- Main Admin Content Area -->
-            <main class="md:col-span-9 space-y-6">
+            <main class="md:col-span-9 space-y-4 sm:space-y-6">
                 
                 <!-- TOP ANALYTICS CARDS -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                     
                     <!-- Total Users -->
-                    <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                    <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
                         <div class="flex items-center gap-2 text-slate-300 font-bold text-xs mb-2">
                             <i class="fa-regular fa-circle-user text-brand-bright"></i>
                             <span>Total Users</span>
                         </div>
-                        <div class="text-3xl font-extrabold text-white my-1" id="stat-total-users">0</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1" id="stat-total-users">0</div>
                         <div class="h-10 w-full">
                             <canvas id="chart-users"></canvas>
                         </div>
                     </div>
 
                     <!-- Active Posts -->
-                    <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                    <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
                         <div class="flex items-center gap-2 text-slate-300 font-bold text-xs mb-2">
                             <i class="fa-regular fa-compass text-brand-yellow"></i>
                             <span>Active Posts</span>
                         </div>
-                        <div class="text-3xl font-extrabold text-white my-1">0</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1">0</div>
                         <div class="h-10 w-full">
                             <canvas id="chart-posts"></canvas>
                         </div>
                     </div>
 
                     <!-- Reported -->
-                    <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                    <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
                         <div class="flex items-center gap-2 text-slate-300 font-bold text-xs mb-2">
                             <i class="fa-regular fa-shield text-red-400"></i>
                             <span>Reported</span>
                         </div>
-                        <div class="text-3xl font-extrabold text-white my-1">0</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1">0</div>
                         <div class="h-10 w-full">
                             <canvas id="chart-reports"></canvas>
                         </div>
@@ -528,29 +537,29 @@
                 </div>
 
                 <!-- USER MANAGEMENT SECTION & TABLE -->
-                <div class="bg-slate-900/90 rounded-3xl p-5 sm:p-6 border border-slate-800 shadow-xl space-y-4">
+                <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-xl space-y-4">
                     
                     <!-- Section Header -->
                     <div class="flex items-center justify-between">
-                        <h2 class="text-base sm:text-lg font-bold text-white tracking-tight">
+                        <h2 class="text-sm sm:text-lg font-bold text-white tracking-tight">
                             User management
                         </h2>
-                        <button onclick="toggleEditMode(this)" class="px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all">
+                        <button onclick="toggleEditMode(this)" class="px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all">
                             Edit
                         </button>
                     </div>
 
                     <!-- User Table Container -->
                     <div class="overflow-x-auto rounded-2xl border border-slate-800">
-                        <table class="w-full text-left text-xs border-collapse">
+                        <table class="w-full text-left text-xs border-collapse min-w-[600px]">
                             <thead>
                                 <tr class="bg-slate-800/80 text-slate-300 border-b border-slate-700">
-                                    <th class="py-3 px-4 font-semibold">Student ID number</th>
-                                    <th class="py-3 px-4 font-semibold">Name</th>
-                                    <th class="py-3 px-4 font-semibold">Last Name</th>
-                                    <th class="py-3 px-4 font-semibold">Role</th>
-                                    <th class="py-3 px-4 font-semibold text-center">Review</th>
-                                    <th class="py-3 px-4 font-semibold text-center">Remove</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Student ID number</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Name</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Last Name</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Role</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold text-center">Review</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold text-center">Remove</th>
                                 </tr>
                             </thead>
                             <tbody id="user-table-body" class="divide-y divide-slate-800 text-slate-200">
@@ -573,24 +582,24 @@
     
     <!-- User Detail Admin Modal -->
     <div id="modal-user-detail" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-brand-bright/30 rounded-3xl max-w-md w-full p-6 shadow-2xl relative fade-in">
+        <div class="bg-slate-900 border border-brand-bright/30 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative fade-in">
             <button onclick="closeUserModal()" class="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-full">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
             <div class="flex items-center gap-4 mb-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-bright to-brand-yellow p-0.5">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-brand-bright to-brand-yellow p-0.5 shrink-0">
                     <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-brand-yellow font-bold text-xl">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
                 </div>
                 <div>
-                    <h3 id="modal-user-fullname" class="text-lg font-bold text-white">---</h3>
+                    <h3 id="modal-user-fullname" class="text-base sm:text-lg font-bold text-white">---</h3>
                     <p id="modal-user-role" class="text-xs text-brand-bright font-medium">---</p>
                 </div>
             </div>
 
-            <div class="space-y-3 bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 text-xs">
+            <div class="space-y-2.5 sm:space-y-3 bg-slate-800/60 p-3 sm:p-4 rounded-2xl border border-slate-700/60 text-xs">
                 <div class="flex justify-between">
                     <span class="text-slate-400">Student ID Number:</span>
                     <span id="modal-user-id" class="font-mono font-bold text-white">---</span>
@@ -601,7 +610,7 @@
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-400">Official Email:</span>
-                    <span id="modal-user-email" class="font-mono text-brand-yellow">---</span>
+                    <span id="modal-user-email" class="font-mono text-brand-yellow truncate max-w-[180px]">---</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-400">Account Status:</span>
@@ -620,14 +629,14 @@
     </div>
 
     <!-- Live Contact Direct Message Drawer -->
-    <div id="chat-modal" class="hidden fixed bottom-4 right-4 z-50 w-80 sm:w-96 bg-slate-900 border border-brand-bright/30 rounded-3xl shadow-2xl overflow-hidden fade-in">
+    <div id="chat-modal" class="hidden fixed bottom-2 right-2 left-2 sm:left-auto sm:bottom-4 sm:right-4 z-50 sm:w-96 bg-slate-900 border border-brand-bright/30 rounded-3xl shadow-2xl overflow-hidden fade-in">
         <div class="bg-brand-dark p-3.5 border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-xl bg-brand-bright/20 flex items-center justify-center text-brand-bright font-bold text-xs">
+                <div class="w-8 h-8 rounded-xl bg-brand-bright/20 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
                     <i class="fa-solid fa-user"></i>
                 </div>
-                <div>
-                    <h4 id="chat-contact-name" class="font-bold text-xs text-white">Contact Name</h4>
+                <div class="truncate max-w-[200px]">
+                    <h4 id="chat-contact-name" class="font-bold text-xs text-white truncate">Contact Name</h4>
                     <span id="chat-contact-id" class="hidden"></span>
                     <span class="text-[10px] text-brand-bright flex items-center gap-1">
                         <span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now
@@ -639,7 +648,7 @@
             </button>
         </div>
 
-        <div id="chat-history" class="p-3 h-56 overflow-y-auto space-y-2 text-xs bg-slate-950/60">
+        <div id="chat-history" class="p-3 h-52 sm:h-56 overflow-y-auto space-y-2 text-xs bg-slate-950/60">
             <p class="text-slate-500 text-center py-4">Loading conversation...</p>
         </div>
 
@@ -660,12 +669,10 @@
     <!-- JAVASCRIPT LOGIC & INTERACTION CONTROLLERS -->
     <!-- ================================================================= -->
     <script>
-        // Store current user session details, active chat receiver & toast timer
         let currentUser = null;
         let activeChatReceiverId = null;
         let toastTimer = null;
 
-        // VIEW SWITCHER CONTROLLER
         function switchView(viewId) {
             if (viewId === 'view-admin') {
                 if (!currentUser || currentUser.role !== 'Admin') {
@@ -676,7 +683,7 @@
             } else if (viewId === 'view-forum') {
                 fetchForumContacts();
                 fetchUserNotifications();
-                loadSavedPosts(); // Loads posts from posts_backend.php on view switch
+                loadSavedPosts();
             }
 
             const authView = document.getElementById('view-auth');
@@ -699,7 +706,6 @@
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        // Check session and restore login state on initial page load / refresh
         document.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('ptc_user_session');
 
@@ -740,7 +746,6 @@
             switchView('view-auth');
         });
 
-        // AUTH TAB SWITCHER
         function switchAuthTab(tab) {
             const loginForm = document.getElementById('form-login');
             const signupForm = document.getElementById('form-signup');
@@ -760,7 +765,6 @@
             }
         }
 
-        // Password Show/Hide Toggle
         function togglePassVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             const icon = btn.querySelector('i');
@@ -773,7 +777,6 @@
             }
         }
 
-        // Sign Up ID Image Preview
         function previewSignupID(e) {
             const file = e.target.files[0];
             if (file) {
@@ -786,7 +789,6 @@
             }
         }
 
-        // Login Submit Handler
         async function handleLoginSubmit(e) {
             e.preventDefault();
 
@@ -832,7 +834,6 @@
                     }
 
                     showToast(`Welcome back, ${currentUser.fullName}!`);
-                    
                     switchView('view-forum');
                 } else {
                     showToast(result.message, false);
@@ -842,7 +843,6 @@
             }
         }
 
-        // Fetch users dynamically from database
         async function fetchDatabaseUsers() {
             try {
                 const response = await fetch('get_users.php');
@@ -863,19 +863,19 @@
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-slate-800/40 transition-colors';
                     tr.innerHTML = `
-                        <td class="py-3.5 px-4 font-mono text-slate-300">${escapeHTML(user.student_id || user.studentId || '')}</td>
-                        <td class="py-3.5 px-4 font-medium">${escapeHTML(user.first_name || user.full_name || user.fullName || '')}</td>
-                        <td class="py-3.5 px-4 font-medium">${escapeHTML(user.last_name || '')}</td>
-                        <td class="py-3.5 px-4">
+                        <td class="py-3.5 px-3 sm:px-4 font-mono text-slate-300">${escapeHTML(user.student_id || user.studentId || '')}</td>
+                        <td class="py-3.5 px-3 sm:px-4 font-medium">${escapeHTML(user.first_name || user.full_name || user.fullName || '')}</td>
+                        <td class="py-3.5 px-3 sm:px-4 font-medium">${escapeHTML(user.last_name || '')}</td>
+                        <td class="py-3.5 px-3 sm:px-4">
                             <span class="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 font-medium">${escapeHTML(user.role || 'Student')}</span>
                         </td>
-                        <td class="py-3.5 px-4 text-center">
-                            <button onclick="openUserModal('${escapeHTML(user.student_id || user.studentId || '')}', '${escapeHTML(user.first_name || user.full_name || user.fullName || '')}', '${escapeHTML(user.last_name || '')}', '${escapeHTML(user.role || 'Student')}', '${escapeHTML(user.course || 'N/A')}', '${escapeHTML(user.email || 'N/A')}')" class="px-3.5 py-1.5 rounded-full border border-slate-600 bg-slate-800 hover:bg-brand-bright hover:text-brand-dark transition-all font-semibold">
-                                See user
+                        <td class="py-3.5 px-3 sm:px-4 text-center">
+                            <button onclick="openUserModal('${escapeHTML(user.student_id || user.studentId || '')}', '${escapeHTML(user.first_name || user.full_name || user.fullName || '')}', '${escapeHTML(user.last_name || '')}', '${escapeHTML(user.role || 'Student')}', '${escapeHTML(user.course || 'N/A')}', '${escapeHTML(user.email || 'N/A')}')" class="px-3 py-1 rounded-full border border-slate-600 bg-slate-800 hover:bg-brand-bright hover:text-brand-dark transition-all font-semibold">
+                                View
                             </button>
                         </td>
-                        <td class="py-3.5 px-4 text-center">
-                            <button onclick="removeTableRow(this)" class="px-3.5 py-1.5 rounded-full border border-red-500/40 bg-slate-800 text-red-400 hover:bg-red-500 hover:text-white transition-all font-semibold">
+                        <td class="py-3.5 px-3 sm:px-4 text-center">
+                            <button onclick="removeTableRow(this)" class="px-3 py-1 rounded-full border border-red-500/40 bg-slate-800 text-red-400 hover:bg-red-500 hover:text-white transition-all font-semibold">
                                 Remove
                             </button>
                         </td>
@@ -887,7 +887,6 @@
             }
         }
 
-        // Fetch contacts dynamically from database
         async function fetchForumContacts() {
             try {
                 const response = await fetch('get_contacts.php');
@@ -922,30 +921,29 @@
                     btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group';
                     
                     btn.innerHTML = `
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 truncate">
                             <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
                                 <i class="fa-regular fa-user"></i>
                             </div>
-                            <div>
-                                <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors">${escapeHTML(name)}</p>
+                            <div class="truncate">
+                                <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
                                 <p class="text-[10px] text-slate-400">
                                     <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
                                 </p>
                             </div>
                         </div>
-                        <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs"></i>
+                        <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
                     `;
                     container.appendChild(btn);
                 });
             } catch (err) {
                 const container = document.getElementById('contacts-list');
                 if (container) {
-                    container.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load database accounts.</p>';
+                    container.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load accounts.</p>';
                 }
             }
         }
 
-        // Direct Messaging Logic (Backend Connected)
         async function openChat(name, targetStudentId) {
             activeChatReceiverId = targetStudentId;
             document.getElementById('chat-contact-name').textContent = name;
@@ -977,8 +975,8 @@
                     const isMe = msg.sender_id === currentUser.studentId;
 
                     msgDiv.className = isMe 
-                        ? "bg-brand-bright text-brand-dark p-2.5 rounded-2xl rounded-tr-none max-w-[80%] ml-auto font-medium text-xs"
-                        : "bg-slate-800 p-2.5 rounded-2xl rounded-tl-none max-w-[80%] text-slate-200 text-xs";
+                        ? "bg-brand-bright text-brand-dark p-2.5 rounded-2xl rounded-tr-none max-w-[80%] ml-auto font-medium text-xs break-words"
+                        : "bg-slate-800 p-2.5 rounded-2xl rounded-tl-none max-w-[80%] text-slate-200 text-xs break-words";
                     
                     msgDiv.textContent = msg.message;
                     history.appendChild(msgDiv);
@@ -1010,7 +1008,6 @@
             }
         }
 
-        // Notifications System
         function toggleNotificationsMenu() {
             document.getElementById('notif-menu').classList.toggle('hidden');
         }
@@ -1042,7 +1039,6 @@
             } catch (e) {}
         }
 
-        // Sign Up Submit Handler
         async function handleSignupSubmit(e) {
             e.preventDefault();
 
@@ -1082,11 +1078,10 @@
                     showToast(result.message, false);
                 }
             } catch (err) {
-                showToast("Could not connect to local server.", false);
+                showToast("Could not connect to server.", false);
             }
         }
 
-        // Logout Handler
         async function handleLogout() {
             const userName = currentUser ? currentUser.fullName : "User";
 
@@ -1094,14 +1089,8 @@
                 try {
                     const formData = new FormData();
                     formData.append('studentId', currentUser.studentId);
-
-                    await fetch('logout.php', {
-                        method: 'POST',
-                        body: formData
-                    });
-                } catch (err) {
-                    console.error("Could not update logout status on server:", err);
-                }
+                    await fetch('logout.php', { method: 'POST', body: formData });
+                } catch (err) {}
             }
 
             localStorage.removeItem('ptc_user_session');
@@ -1110,12 +1099,10 @@
             showToast(`Goodbye, ${userName}! You have been logged out.`);
         }
 
-        // User Dropdown Menu
         function toggleUserMenu() {
             document.getElementById('user-menu').classList.toggle('hidden');
         }
 
-        // Forum Image Attachment Preview
         let attachedImageBase64 = null;
         function previewPostImage(event) {
             const file = event.target.files[0];
@@ -1136,7 +1123,6 @@
             document.getElementById('image-preview-wrapper').classList.add('hidden');
         }
 
-        // FETCH SAVED POSTS FROM DATABASE
         async function loadSavedPosts() {
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
@@ -1149,11 +1135,11 @@
 
                 if (!posts || posts.length === 0) {
                     postsContainer.innerHTML = `
-                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
-                            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
-                                <i class="fa-solid fa-pen-nib text-2xl"></i>
+                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
+                                <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                             </div>
-                            <h4 class="text-base font-bold text-white mb-1">Wanna start discussion?</h4>
+                            <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
                             <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
                         </div>`;
                     return;
@@ -1161,10 +1147,10 @@
 
                 posts.forEach(post => {
                     const article = document.createElement('article');
-                    article.className = "post-card bg-slate-900/80 rounded-3xl p-5 border border-slate-800 shadow-lg backdrop-blur-md";
+                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md";
 
                     let imageHTML = post.image_url ? 
-                        `<div class="rounded-2xl overflow-hidden my-3 max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover"></div>` : '';
+                        `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover"></div>` : '';
 
                     let commentsHTML = '';
                     if (post.comments && post.comments.length > 0) {
@@ -1175,31 +1161,31 @@
 
                     article.innerHTML = `
                         <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-3">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-10 h-10 rounded-2xl object-cover ring-2 ring-brand-bright/60">
-                                <div>
-                                    <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
-                                        ${escapeHTML(post.author_name || 'Student User')}
-                                        <span class="text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full">${escapeHTML(post.course || 'BSIT')}</span>
+                            <div class="flex items-center gap-3 truncate">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-cover ring-2 ring-brand-bright/60 shrink-0">
+                                <div class="truncate">
+                                    <h4 class="font-bold text-xs sm:text-sm text-white flex items-center gap-1.5 truncate">
+                                        <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
+                                        <span class="text-[9px] sm:text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full shrink-0">${escapeHTML(post.course || 'BSIT')}</span>
                                     </h4>
-                                    <span class="text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
+                                    <span class="text-[10px] sm:text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">${escapeHTML(post.content)}</p>
+                        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed break-words">${escapeHTML(post.content)}</p>
                         ${imageHTML}
 
                         <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs text-slate-400">
-                            <button onclick="toggleLike(this)" class="flex items-center gap-2 hover:text-red-400 transition-colors">
+                            <button onclick="toggleLike(this)" class="flex items-center gap-1.5 hover:text-red-400 transition-colors">
                                 <i class="fa-regular fa-heart text-sm"></i>
                                 <span class="like-count font-semibold">${post.likes_count || 0}</span>
                             </button>
-                            <button onclick="toggleComments(this)" class="flex items-center gap-2 hover:text-brand-bright transition-colors">
+                            <button onclick="toggleComments(this)" class="flex items-center gap-1.5 hover:text-brand-bright transition-colors">
                                 <i class="fa-regular fa-comment text-sm"></i>
                                 <span class="comment-count font-semibold">${post.comments ? post.comments.length : 0}</span>
                             </button>
-                            <button onclick="showToast('Post link copied!')" class="flex items-center gap-2 hover:text-brand-yellow transition-colors">
+                            <button onclick="showToast('Post link copied!')" class="flex items-center gap-1.5 hover:text-brand-yellow transition-colors">
                                 <i class="fa-solid fa-share text-sm"></i>
                                 <span class="hidden sm:inline">Share</span>
                             </button>
@@ -1211,18 +1197,15 @@
                             </div>
                             <div class="flex gap-2 pt-1">
                                 <input type="text" placeholder="Write a comment..." class="comment-input flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-bright">
-                                <button onclick="addCommentToDatabase(${post.id}, this)" class="px-3 py-1.5 bg-brand-bright text-brand-dark rounded-xl font-bold text-xs">Send</button>
+                                <button onclick="addCommentToDatabase(${post.id}, this)" class="px-3 py-1.5 bg-brand-bright text-brand-dark rounded-xl font-bold text-xs shrink-0">Send</button>
                             </div>
                         </div>
                     `;
                     postsContainer.appendChild(article);
                 });
-            } catch (e) {
-                console.error("Failed to load posts", e);
-            }
+            } catch (e) {}
         }
 
-        // Add Post Logic (Saves to Database via posts_backend.php)
         async function addNewPost() {
             const input = document.getElementById('post-input');
             const content = input.value.trim();
@@ -1244,10 +1227,7 @@
             }
 
             try {
-                const response = await fetch('posts_backend.php', {
-                    method: 'POST',
-                    body: formData
-                });
+                const response = await fetch('posts_backend.php', { method: 'POST', body: formData });
                 const result = await response.json();
 
                 if (result.status === 'success') {
@@ -1259,11 +1239,10 @@
                     showToast(result.message || "Failed to create post.", false);
                 }
             } catch (err) {
-                showToast("Could not connect to server to post.", false);
+                showToast("Could not connect to server.", false);
             }
         }
 
-        // Post Interactions
         function toggleLike(btn) {
             const icon = btn.querySelector('i');
             const countSpan = btn.querySelector('.like-count');
@@ -1335,23 +1314,22 @@
             document.getElementById('contacts-sidebar').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Admin Interactions
         function setActiveAdminTab(tabName, btn) {
             document.querySelectorAll('.admin-nav-item').forEach(b => {
-                b.className = "admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all";
+                b.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all";
             });
-            btn.className = "admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all";
+            btn.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all";
             showToast(`Admin View: Switched to ${tabName.toUpperCase()} section.`);
         }
 
         function toggleEditMode(btn) {
             if (btn.textContent.trim() === "Edit") {
                 btn.textContent = "Done";
-                btn.className = "px-4 py-1.5 rounded-full border border-brand-yellow bg-brand-yellow/20 text-brand-yellow text-xs font-bold transition-all";
+                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-brand-yellow bg-brand-yellow/20 text-brand-yellow text-xs font-bold transition-all";
                 showToast("User management edit mode enabled.");
             } else {
                 btn.textContent = "Edit";
-                btn.className = "px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all";
+                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all";
                 showToast("Changes saved.");
             }
         }
@@ -1381,7 +1359,6 @@
             }, 250);
         }
 
-        // Chart.js Sparklines initialization for Admin Cards
         let sparklinesInitialized = false;
         function initSparklines() {
             if (sparklinesInitialized) return;
@@ -1397,33 +1374,23 @@
 
             new Chart(document.getElementById('chart-users').getContext('2d'), {
                 type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7],
-                    datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true }]
-                },
+                data: { labels: [1,2,3,4,5,6,7], datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true }] },
                 options: chartOptions
             });
 
             new Chart(document.getElementById('chart-posts').getContext('2d'), {
                 type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7],
-                    datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true }]
-                },
+                data: { labels: [1,2,3,4,5,6,7], datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true }] },
                 options: chartOptions
             });
 
             new Chart(document.getElementById('chart-reports').getContext('2d'), {
                 type: 'line',
-                data: {
-                    labels: [1,2,3,4,5,6,7],
-                    datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#f87171', backgroundColor: 'rgba(248, 113, 113, 0.1)', fill: true }]
-                },
+                data: { labels: [1,2,3,4,5,6,7], datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#f87171', backgroundColor: 'rgba(248, 113, 113, 0.1)', fill: true }] },
                 options: chartOptions
             });
         }
 
-        // Helper Toast Popup (Guaranteed auto-disappear after 3 seconds)
         function showToast(msg, isSuccess = true) {
             const toast = document.getElementById('toast');
             if (!toast) return;
