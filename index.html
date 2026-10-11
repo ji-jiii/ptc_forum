@@ -1294,7 +1294,7 @@
     document.getElementById('active-filter-banner').classList.add('hidden');
     document.querySelectorAll('#posts-container article').forEach(post => post.style.display = 'block');
     
-    // Apply glowing style to the home button
+    // Apply glowing styles when home button is clicked
     const homeBtn = document.getElementById('home-btn');
     if (homeBtn) {
         homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
@@ -1304,7 +1304,7 @@
 function filterForumPosts() {
     const q = document.getElementById('forum-search').value.toLowerCase();
     
-    // Remove glow from Home button when searching/filtering
+    // Remove glow from Home button when searching or filtering posts
     const homeBtn = document.getElementById('home-btn');
     if (homeBtn && q.length > 0) {
         homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow bg-slate-800/80 border border-transparent transition-all";
