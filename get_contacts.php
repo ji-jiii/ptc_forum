@@ -23,12 +23,26 @@ try {
 }
 
 try {
-    // Fetch all registered users to display in the contacts sidebar
-    $stmt = $pdo->query("SELECT student_id, full_name, course, role, is_online FROM users ORDER BY full_name ASC");
+    // Dynamically calculate online status based on last 5 minutes of activity
+    $stmt = $pdo->query("
+        SELECT student_id, full_name, course, role,
+               CASE 
+                   WHEN last_activity >= NOW() - INTERVAL '5 minutes' THEN 1 
+                   ELSE 0 
+               END AS is_online
+        FROM users 
+        ORDER BY full_name ASC
+    ");
     $contacts = $stmt->fetchAll();
     
     echo json_encode($contacts);
 } catch (Exception $e) {
-    echo json_encode([]);
+    // Fallback if last_activity column doesn't exist yet
+    try {
+        $stmt = $pdo->query("SELECT student_id, full_name, course, role, is_online FROM users ORDER BY full_name ASC");
+        echo json_encode($stmt->fetchAll());
+    } catch (Exception $ex) {
+        echo json_encode([]);
+    }
 }
 ?>
