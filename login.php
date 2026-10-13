@@ -62,4 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     exit();
 }
+    // Add this query execution during active backend endpoints (e.g. login.php or posts_backend.php)
+$updateActivity = $pdo->prepare("UPDATE users SET last_activity = CURRENT_TIMESTAMP, is_online = 1 WHERE student_id = ?");
+$updateActivity->execute([$studentId]);
 ?>
