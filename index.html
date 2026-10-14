@@ -636,9 +636,10 @@
                 <div class="truncate max-w-[200px]">
                     <h4 id="chat-contact-name" class="font-bold text-xs text-white truncate">Contact Name</h4>
                     <span id="chat-contact-id" class="hidden"></span>
-                    <span class="text-[10px] text-brand-bright flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now
-                    </span>
+                    <span id="chat-contact-status" class="text-[10px] text-brand-bright flex items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now
+    </span>
+</div>
                 </div>
             </div>
             <button onclick="closeChat()" class="text-slate-400 hover:text-white p-1">
@@ -915,7 +916,7 @@
                     const statusText = isOnline ? 'Online' : 'Offline';
                     const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
 
-                    btn.onclick = () => openChat(name, targetId);
+                    btn.onclick = () => openChat(name, targetId, isOnline);
                     btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group';
                     
                     btn.innerHTML = `
@@ -942,17 +943,25 @@
             }
         }
 
-        async function openChat(name, targetStudentId) {
-            activeChatReceiverId = targetStudentId;
-            document.getElementById('chat-contact-name').textContent = name;
-            document.getElementById('chat-modal').classList.remove('hidden');
-            await loadChatHistory();
+       async function openChat(name, targetStudentId, isOnline) {
+    activeChatReceiverId = targetStudentId;
+    document.getElementById('chat-contact-name').textContent = name;
+    
+    // Update active status indicator dynamically
+    const statusContainer = document.getElementById('chat-contact-status');
+    if (statusContainer) {
+        if (isOnline) {
+            statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now';
+            statusContainer.className = "text-[10px] text-brand-bright flex items-center gap-1";
+        } else {
+            statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Offline';
+            statusContainer.className = "text-[10px] text-slate-400 flex items-center gap-1";
         }
+    }
 
-        function closeChat() {
-            document.getElementById('chat-modal').classList.add('hidden');
-            activeChatReceiverId = null;
-        }
+    document.getElementById('chat-modal').classList.remove('hidden');
+    await loadChatHistory();
+}
 
         async function loadChatHistory() {
             if (!currentUser || !activeChatReceiverId) return;
