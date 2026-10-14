@@ -40,6 +40,16 @@
                 }
             }
         }
+        // Add this inside index.html script section to ping activity automatically
+setInterval(async () => {
+    if (currentUser && currentUser.studentId) {
+        try {
+            const formData = new FormData();
+            formData.append('studentId', currentUser.studentId);
+            await fetch('update_activity.php', { method: 'POST', body: formData });
+        } catch (e) {}
+    }
+}, 120000); // Runs every 2 minutes
     </script>
     <style>
         /* Custom Scrollbar Styling */
