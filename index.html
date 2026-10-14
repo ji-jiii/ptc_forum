@@ -163,7 +163,6 @@
                             <option value="" disabled selected>Select your role...</option>
                             <option value="Student">Student</option>
                             <option value="Teacher">Teacher</option>
-            
                         </select>
                     </div>
                     <div>
@@ -277,7 +276,7 @@
                     </button>
 
                     <!-- Home -->
-                    <button onclick="resetTopicFilter()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow border-transparent transition-all" title="Home Feed">
+                    <button id="home-btn" onclick="resetTopicFilter()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
@@ -554,7 +553,8 @@
                             <thead>
                                 <tr class="bg-slate-800/80 text-slate-300 border-b border-slate-700">
                                     <th class="py-3 px-3 sm:px-4 font-semibold">Student ID number</th>
-                                    <th class="py-3 px-3 sm:px-4 font-semibold">Full Name</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Name</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Last Name</th>
                                     <th class="py-3 px-3 sm:px-4 font-semibold">Role</th>
                                     <th class="py-3 px-3 sm:px-4 font-semibold text-center">Review</th>
                                     <th class="py-3 px-3 sm:px-4 font-semibold text-center">Remove</th>
@@ -637,9 +637,8 @@
                     <h4 id="chat-contact-name" class="font-bold text-xs text-white truncate">Contact Name</h4>
                     <span id="chat-contact-id" class="hidden"></span>
                     <span id="chat-contact-status" class="text-[10px] text-brand-bright flex items-center gap-1">
-        <span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now
-    </span>
-</div>
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now
+                    </span>
                 </div>
             </div>
             <button onclick="closeChat()" class="text-slate-400 hover:text-white p-1">
@@ -943,25 +942,29 @@
             }
         }
 
-       async function openChat(name, targetStudentId, isOnline) {
-    activeChatReceiverId = targetStudentId;
-    document.getElementById('chat-contact-name').textContent = name;
-    
-    // Update active status indicator dynamically
-    const statusContainer = document.getElementById('chat-contact-status');
-    if (statusContainer) {
-        if (isOnline) {
-            statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now';
-            statusContainer.className = "text-[10px] text-brand-bright flex items-center gap-1";
-        } else {
-            statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Offline';
-            statusContainer.className = "text-[10px] text-slate-400 flex items-center gap-1";
-        }
-    }
+        async function openChat(name, targetStudentId, isOnline) {
+            activeChatReceiverId = targetStudentId;
+            document.getElementById('chat-contact-name').textContent = name;
+            
+            const statusContainer = document.getElementById('chat-contact-status');
+            if (statusContainer) {
+                if (isOnline) {
+                    statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now';
+                    statusContainer.className = "text-[10px] text-brand-bright flex items-center gap-1";
+                } else {
+                    statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Offline';
+                    statusContainer.className = "text-[10px] text-slate-400 flex items-center gap-1";
+                }
+            }
 
-    document.getElementById('chat-modal').classList.remove('hidden');
-    await loadChatHistory();
-}
+            document.getElementById('chat-modal').classList.remove('hidden');
+            await loadChatHistory();
+        }
+
+        function closeChat() {
+            document.getElementById('chat-modal').classList.add('hidden');
+            activeChatReceiverId = null;
+        }
 
         async function loadChatHistory() {
             if (!currentUser || !activeChatReceiverId) return;
@@ -1298,30 +1301,30 @@
             }
         }
 
-       function resetTopicFilter() {
-    document.getElementById('active-filter-banner').classList.add('hidden');
-    document.querySelectorAll('#posts-container article').forEach(post => post.style.display = 'block');
-    
-    // Apply glowing styles when home button is clicked
-    const homeBtn = document.getElementById('home-btn');
-    if (homeBtn) {
-        homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
-    }
-}
+        function resetTopicFilter() {
+            document.getElementById('active-filter-banner').classList.add('hidden');
+            document.querySelectorAll('#posts-container article').forEach(post => post.style.display = 'block');
+            
+            // Activate Home button glow when selected
+            const homeBtn = document.getElementById('home-btn');
+            if (homeBtn) {
+                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
+            }
+        }
 
-function filterForumPosts() {
-    const q = document.getElementById('forum-search').value.toLowerCase();
-    
-    // Remove glow from Home button when searching or filtering posts
-    const homeBtn = document.getElementById('home-btn');
-    if (homeBtn && q.length > 0) {
-        homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow bg-slate-800/80 border border-transparent transition-all";
-    }
+        function filterForumPosts() {
+            const q = document.getElementById('forum-search').value.toLowerCase();
+            
+            // Remove glow from Home button when searching/filtering
+            const homeBtn = document.getElementById('home-btn');
+            if (homeBtn && q.length > 0) {
+                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow bg-slate-800/80 border border-transparent transition-all";
+            }
 
-    document.querySelectorAll('#posts-container article').forEach(post => {
-        post.style.display = post.textContent.toLowerCase().includes(q) ? 'block' : 'none';
-    });
-}
+            document.querySelectorAll('#posts-container article').forEach(post => {
+                post.style.display = post.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+            });
+        }
 
         function filterContactsList() {
             const q = document.getElementById('contact-search-input').value.toLowerCase();
