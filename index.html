@@ -40,16 +40,6 @@
                 }
             }
         }
-        // Add this inside index.html script section to ping activity automatically
-setInterval(async () => {
-    if (currentUser && currentUser.studentId) {
-        try {
-            const formData = new FormData();
-            formData.append('studentId', currentUser.studentId);
-            await fetch('update_activity.php', { method: 'POST', body: formData });
-        } catch (e) {}
-    }
-}, 120000); // Runs every 2 minutes
     </script>
     <style>
         /* Custom Scrollbar Styling */
@@ -524,7 +514,7 @@ setInterval(async () => {
                             <i class="fa-regular fa-compass text-brand-yellow"></i>
                             <span>Active Posts</span>
                         </div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1">0</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1" id="stat-total-posts">0</div>
                         <div class="h-10 w-full">
                             <canvas id="chart-posts"></canvas>
                         </div>
@@ -536,7 +526,7 @@ setInterval(async () => {
                             <i class="fa-regular fa-shield text-red-400"></i>
                             <span>Reported</span>
                         </div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1">0</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1" id="stat-total-reports">0</div>
                         <div class="h-10 w-full">
                             <canvas id="chart-reports"></canvas>
                         </div>
@@ -681,6 +671,17 @@ setInterval(async () => {
         let activeChatReceiverId = null;
         let toastTimer = null;
 
+        // Activity Heartbeat Ping
+        setInterval(async () => {
+            if (currentUser && currentUser.studentId) {
+                try {
+                    const formData = new FormData();
+                    formData.append('studentId', currentUser.studentId);
+                    await fetch('update_activity.php', { method: 'POST', body: formData });
+                } catch (e) {}
+            }
+        }, 120000);
+
         function switchView(viewId) {
             if (viewId === 'view-admin') {
                 if (!currentUser || currentUser.role !== 'Admin') {
@@ -688,6 +689,7 @@ setInterval(async () => {
                     return;
                 }
                 fetchDatabaseUsers();
+                fetchAdminStats();
             } else if (viewId === 'view-forum') {
                 fetchForumContacts();
                 fetchUserNotifications();
@@ -712,6 +714,20 @@ setInterval(async () => {
             }
 
             window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        async function fetchAdminStats() {
+            try {
+                const usersRes = await fetch('get_users.php');
+                const users = await usersRes.json();
+                document.getElementById('stat-total-users').textContent = users.length || 0;
+
+                const postsRes = await fetch('posts_backend.php?action=get_posts');
+                const posts = await postsRes.json();
+                document.getElementById('stat-total-posts').textContent = posts.length || 0;
+
+                document.getElementById('stat-total-reports').textContent = '0';
+            } catch (e) {}
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1438,8 +1454,8 @@ setInterval(async () => {
             }`;
 
             toast.style.display = 'block';
-            toast.classList.remove('translate-y-[-150%]', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
+            toast.classList.remove('translate-y-[-150%]', 'opacity-0');
 
             toastTimer = setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
