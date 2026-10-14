@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+
 $database_url = getenv('DATABASE_URL') ?: 'postgres://user:password@host/dbname?sslmode=require';
 
 try {
@@ -10,10 +11,27 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 
-    $stmt = $pdo->query("SELECT student_id, full_name, role, course, email, is_online FROM users ORDER BY full_name ASC");
+    // Querying with flexible field alias fallbacks
+    $stmt = $pdo->query("
+        SELECT 
+            COALESCE(student_id, studentid) AS student_id,
+            COALESCE(full_name, fullname) AS full_name,
+            role,
+            course,
+            email,
+            is_online
+        FROM users 
+        ORDER BY full_name ASC
+    ");
     $users = $stmt->fetchAll();
     echo json_encode($users);
 } catch (Exception $e) {
-    echo json_encode([]);
+    // If the above query fails due to missing columns, run a SELECT * fallback
+    try {
+        $stmt = $pdo->query("SELECT * FROM users");
+        echo json_encode($stmt->fetchAll());
+    } catch (Exception $ex) {
+        echo json_encode([]);
+    }
 }
 ?>
