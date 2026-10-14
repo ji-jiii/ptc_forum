@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($user) {
             if (password_verify($password, $user['password_hash'])) {
-                $updateStmt = $pdo->prepare("UPDATE users SET is_online = 1 WHERE student_id = ?");
+                // FIXED: Update both is_online AND last_activity simultaneously upon successful login
+                $updateStmt = $pdo->prepare("UPDATE users SET is_online = 1, last_activity = CURRENT_TIMESTAMP WHERE student_id = ?");
                 $updateStmt->execute([$studentId]);
 
                 echo json_encode([
@@ -62,7 +63,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     exit();
 }
-    // Add this query execution during active backend endpoints (e.g. login.php or posts_backend.php)
-$updateActivity = $pdo->prepare("UPDATE users SET last_activity = CURRENT_TIMESTAMP, is_online = 1 WHERE student_id = ?");
-$updateActivity->execute([$studentId]);
 ?>
