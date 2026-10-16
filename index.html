@@ -316,8 +316,8 @@
                         <span class="hidden sm:inline">Admin</span>
                     </button>
 
-                    <!-- Home Button -->
-                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Home Feed">
+                    <!-- Home -->
+                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Refresh & Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
@@ -328,7 +328,7 @@
 
                     <!-- Notifications Dropdown -->
                     <div class="relative">
-                        <button id="notif-menu-btn" onclick="toggleNotificationsMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
+                        <button onclick="toggleNotificationsMenu()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
                             <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
                             <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full">0</span>
                         </button>
@@ -344,20 +344,21 @@
                         </div>
                     </div>
 
-                    <!-- User Profile Dropdown Avatar -->
+                    <!-- User Profile Dropdown Avatar (Desktop Popover & Mobile Slide Drawer Trigger) -->
                     <div class="relative ml-0.5">
-                        <button id="user-menu-btn" onclick="toggleUserMenu(event)" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
+                        <button id="user-menu-btn" onclick="toggleUserMenu()" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
                             <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
                         </button>
 
-                        <div id="user-menu" class="hidden absolute right-0 mt-3 w-52 sm:w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
+                        <!-- Desktop Profile Menu -->
+                        <div id="user-menu" class="hidden sm:block sm:absolute right-0 mt-3 w-52 sm:w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
                             <div class="px-3 py-2 border-b border-slate-800 mb-1">
-                                <p id="current-user-name" class="text-xs font-bold text-white truncate">Student Name</p>
-                                <p id="current-user-course" class="text-[11px] text-brand-bright">BSIT</p>
-                                <p id="current-user-id" class="text-[10px] text-slate-400">ID: 2026-XXXXX</p>
+                                <p id="current-user-name" class="current-user-name-text text-xs font-bold text-white truncate">Student Name</p>
+                                <p id="current-user-course" class="current-user-course-text text-[11px] text-brand-bright">BSIT</p>
+                                <p id="current-user-id" class="current-user-id-text text-[10px] text-slate-400">ID: 2026-XXXXX</p>
                             </div>
-                            <a href="#" id="admin-menu-link" onclick="switchView('view-admin')" class="hidden flex items-center gap-2 px-3 py-2 text-xs text-brand-yellow hover:bg-slate-800 rounded-xl transition-colors">
+                            <a href="#" id="admin-menu-link" class="admin-menu-link-el hidden flex items-center gap-2 px-3 py-2 text-xs text-brand-yellow hover:bg-slate-800 rounded-xl transition-colors" onclick="switchView('view-admin')">
                                 <i class="fa-solid fa-gauge-high w-4"></i> Admin Dashboard
                             </a>
 
@@ -380,6 +381,61 @@
                 </div>
             </div>
         </header>
+
+        <!-- MOBILE USER PROFILE SLIDE-OVER DRAWER -->
+        <div id="mobile-user-drawer" class="fixed inset-0 z-50 sm:hidden hidden">
+            <!-- Overlay Backdrop -->
+            <div onclick="closeMobileUserDrawer()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"></div>
+            
+            <!-- Drawer Content Panel -->
+            <div class="absolute top-0 right-0 bottom-0 w-72 bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col z-10 fade-in overflow-hidden">
+                
+                <!-- 1. USER PROFILE HEADER CARD -->
+                <div class="p-4 bg-slate-950 border-b border-slate-800 relative">
+                    <button onclick="closeMobileUserDrawer()" class="absolute top-3 right-3 text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+
+                    <div class="mb-3">
+                        <h3 class="current-user-name-text text-base font-extrabold text-white truncate">admin</h3>
+                        <p class="current-user-course-text text-xs text-brand-bright font-semibold">admin</p>
+                        <p class="current-user-id-text text-[11px] text-slate-400 font-mono mt-0.5">ID: 2222-2222</p>
+                    </div>
+
+                    <div class="space-y-1.5 pt-3 border-t border-slate-800/80">
+                        <a href="#" class="admin-menu-link-el hidden flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-brand-yellow bg-brand-yellow/10 hover:bg-brand-yellow/20 rounded-xl transition-colors" onclick="closeMobileUserDrawer(); switchView('view-admin');">
+                            <i class="fa-solid fa-compass text-sm"></i>
+                            <span>Admin Dashboard</span>
+                        </a>
+                        <button onclick="handleLogout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-colors text-left">
+                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                            <span>Log Out</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. SEARCH CONTACT BAR -->
+                <div class="p-3 bg-slate-900 border-b border-slate-800 shrink-0">
+                    <div class="relative">
+                        <input type="text" onkeyup="filterDrawerContactsList(this.value)" placeholder="search contact" class="w-full pl-8 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-bright">
+                        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 text-xs">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. PEOPLE IN FORUM CONTACTS LIST -->
+                <div class="p-3 flex-1 overflow-y-auto">
+                    <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3">
+                        People in forum
+                    </h4>
+                    <div id="drawer-contacts-list" class="space-y-1">
+                        <p class="text-xs text-slate-400 text-center py-4">Loading contacts...</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
         <!-- Forum 3-Column Main Content -->
         <main class="max-w-7xl mx-auto w-full flex-1 px-3 sm:px-6 lg:px-8 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
@@ -446,13 +502,20 @@
                 <!-- Posts List Container -->
                 <div id="posts-container" class="space-y-4 sm:space-y-5">
                     
-                    <!-- Empty State Placeholder -->
-                    <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
-                            <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
+                    <!-- Initial Shimmer Skeleton Loading State -->
+                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-2 flex-1">
+                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+                            </div>
                         </div>
-                        <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
-                        <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
+                        <div class="space-y-2 pt-2">
+                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                        </div>
+                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
                     </div>
 
                 </div>
@@ -723,50 +786,6 @@
             }
         }, 120000);
 
-        // Global click listener to close dropdown menus when clicking outside
-        window.addEventListener('click', function(e) {
-            const notifMenu = document.getElementById('notif-menu');
-            const notifBtn = document.getElementById('notif-menu-btn');
-            if (notifMenu && notifBtn && !notifMenu.contains(e.target) && !notifBtn.contains(e.target)) {
-                notifMenu.classList.add('hidden');
-            }
-
-            const userMenu = document.getElementById('user-menu');
-            const userBtn = document.getElementById('user-menu-btn');
-            if (userMenu && userBtn && !userMenu.contains(e.target) && !userBtn.contains(e.target)) {
-                userMenu.classList.add('hidden');
-            }
-        });
-
-        // Exact Facebook-style exact timestamp formatter
-        function formatFacebookTimestamp(timestampStr) {
-            if (!timestampStr) return 'Just now';
-            
-            const parsedDate = new Date(timestampStr.replace(' ', 'T'));
-            if (isNaN(parsedDate.getTime())) return timestampStr;
-
-            const now = new Date();
-            const timeString = parsedDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
-            
-            // Check if it's today
-            const isToday = parsedDate.toDateString() === now.toDateString();
-            if (isToday) {
-                return timeString;
-            }
-
-            // Check if it was yesterday
-            const yesterday = new Date();
-            yesterday.setDate(now.getDate() - 1);
-            const isYesterday = parsedDate.toDateString() === yesterday.toDateString();
-            if (isYesterday) {
-                return `Yesterday at ${timeString}`;
-            }
-
-            // If older, show Month Day at Time (e.g., "Oct 15 at 3:45 PM")
-            const dateString = parsedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
-            return `${dateString} at ${timeString}`;
-        }
-
         function switchView(viewId) {
             if (viewId === 'view-admin') {
                 if (!currentUser || currentUser.role !== 'Admin') {
@@ -815,36 +834,42 @@
             } catch (e) {}
         }
 
+        function updateUserInfoDisplays() {
+            if (!currentUser) return;
+
+            document.querySelectorAll('.current-user-name-text').forEach(el => el.textContent = currentUser.fullName);
+            document.querySelectorAll('.current-user-course-text').forEach(el => {
+                if (currentUser.course) el.textContent = currentUser.course;
+            });
+            document.querySelectorAll('.current-user-id-text').forEach(el => el.textContent = `ID: ${currentUser.studentId}`);
+
+            const adminPortalBtn = document.getElementById('admin-portal-btn');
+            document.querySelectorAll('.admin-menu-link-el').forEach(el => {
+                if (currentUser.role === 'Admin') {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            if (adminPortalBtn) {
+                if (currentUser.role === 'Admin') {
+                    adminPortalBtn.classList.remove('hidden');
+                    adminPortalBtn.classList.add('flex');
+                } else {
+                    adminPortalBtn.classList.add('hidden');
+                    adminPortalBtn.classList.remove('flex');
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('ptc_user_session');
 
             if (savedUser) {
                 try {
                     currentUser = JSON.parse(savedUser);
-
-                    document.getElementById('current-user-name').textContent = currentUser.fullName;
-                    if (currentUser.course) {
-                        document.getElementById('current-user-course').textContent = currentUser.course;
-                    }
-                    document.getElementById('current-user-id').textContent = `ID: ${currentUser.studentId}`;
-
-                    const adminMenuLink = document.getElementById('admin-menu-link');
-                    const adminPortalBtn = document.getElementById('admin-portal-btn');
-
-                    if (currentUser.role === 'Admin') {
-                        if (adminMenuLink) adminMenuLink.classList.remove('hidden');
-                        if (adminPortalBtn) {
-                            adminPortalBtn.classList.remove('hidden');
-                            adminPortalBtn.classList.add('flex');
-                        }
-                    } else {
-                        if (adminMenuLink) adminMenuLink.classList.add('hidden');
-                        if (adminPortalBtn) {
-                            adminPortalBtn.classList.add('hidden');
-                            adminPortalBtn.classList.remove('flex');
-                        }
-                    }
-
+                    updateUserInfoDisplays();
                     switchView('view-forum');
                     return;
                 } catch (e) {
@@ -942,26 +967,7 @@
                     statusText.textContent = "Loading campus forum & messages...";
                     await new Promise(r => setTimeout(r, 700));
 
-                    document.getElementById('current-user-name').textContent = currentUser.fullName;
-                    if (currentUser.course) document.getElementById('current-user-course').textContent = currentUser.course;
-                    document.getElementById('current-user-id').textContent = `ID: ${currentUser.studentId}`;
-
-                    const adminMenuLink = document.getElementById('admin-menu-link');
-                    const adminPortalBtn = document.getElementById('admin-portal-btn');
-
-                    if (currentUser.role === 'Admin') {
-                        if (adminMenuLink) adminMenuLink.classList.remove('hidden');
-                        if (adminPortalBtn) {
-                            adminPortalBtn.classList.remove('hidden');
-                            adminPortalBtn.classList.add('flex');
-                        }
-                    } else {
-                        if (adminMenuLink) adminMenuLink.classList.add('hidden');
-                        if (adminPortalBtn) {
-                            adminPortalBtn.classList.add('hidden');
-                            adminPortalBtn.classList.remove('flex');
-                        }
-                    }
+                    updateUserInfoDisplays();
 
                     // 3. Switch View & Hide Overlay
                     switchView('view-forum');
@@ -1031,13 +1037,15 @@
                 const contacts = await response.json();
 
                 const container = document.getElementById('contacts-list');
+                const drawerContainer = document.getElementById('drawer-contacts-list');
                 const activeCount = document.getElementById('active-contacts-count');
                 
-                if (!container) return;
-                container.innerHTML = '';
+                if (container) container.innerHTML = '';
+                if (drawerContainer) drawerContainer.innerHTML = '';
 
                 if (!contacts || contacts.length === 0) {
-                    container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
+                    if (container) container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
+                    if (drawerContainer) drawerContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
                     if (activeCount) activeCount.textContent = '0 Members';
                     return;
                 }
@@ -1048,31 +1056,54 @@
                     const targetId = user.student_id || user.studentId;
                     if (currentUser && targetId === currentUser.studentId) return;
 
-                    const btn = document.createElement('button');
                     const name = user.full_name || user.fullName || (user.first_name ? `${user.first_name} ${user.last_name || ''}` : 'User');
-                    
                     const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
                     const statusText = isOnline ? 'Online' : 'Offline';
                     const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
 
-                    btn.onclick = () => openChat(name, targetId, isOnline);
-                    btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group';
-                    
-                    btn.innerHTML = `
-                        <div class="flex items-center gap-3 truncate">
-                            <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
-                                <i class="fa-regular fa-user"></i>
+                    // 1. Create element for desktop sidebar
+                    if (container) {
+                        const btn = document.createElement('button');
+                        btn.onclick = () => openChat(name, targetId, isOnline);
+                        btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group';
+                        btn.innerHTML = `
+                            <div class="flex items-center gap-3 truncate">
+                                <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <div class="truncate">
+                                    <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                                    <p class="text-[10px] text-slate-400">
+                                        <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="truncate">
-                                <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
-                                <p class="text-[10px] text-slate-400">
-                                    <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
-                                </p>
+                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
+                        `;
+                        container.appendChild(btn);
+                    }
+
+                    // 2. Create element for mobile drawer
+                    if (drawerContainer) {
+                        const drawerBtn = document.createElement('button');
+                        drawerBtn.onclick = () => { closeMobileUserDrawer(); openChat(name, targetId, isOnline); };
+                        drawerBtn.className = 'drawer-contact-card w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group';
+                        drawerBtn.innerHTML = `
+                            <div class="flex items-center gap-2.5 truncate">
+                                <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-[10px] shrink-0">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <div class="truncate">
+                                    <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                                    <p class="text-[9px] text-slate-400">
+                                        <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
-                    `;
-                    container.appendChild(btn);
+                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
+                        `;
+                        drawerContainer.appendChild(drawerBtn);
+                    }
                 });
             } catch (err) {
                 const container = document.getElementById('contacts-list');
@@ -1158,20 +1189,8 @@
             }
         }
 
-        function toggleNotificationsMenu(e) {
-            e.stopPropagation();
-            const notifMenu = document.getElementById('notif-menu');
-            const userMenu = document.getElementById('user-menu');
-            if (userMenu) userMenu.classList.add('hidden');
-            notifMenu.classList.toggle('hidden');
-        }
-
-        function toggleUserMenu(e) {
-            e.stopPropagation();
-            const userMenu = document.getElementById('user-menu');
-            const notifMenu = document.getElementById('notif-menu');
-            if (notifMenu) notifMenu.classList.add('hidden');
-            userMenu.classList.toggle('hidden');
+        function toggleNotificationsMenu() {
+            document.getElementById('notif-menu').classList.toggle('hidden');
         }
 
         async function fetchUserNotifications() {
@@ -1255,17 +1274,37 @@
                 } catch (err) {}
             }
 
-            // Immediately close chat box and user dropdown upon logout
-            closeChat();
-            const userMenu = document.getElementById('user-menu');
-            if (userMenu) userMenu.classList.add('hidden');
-            const notifMenu = document.getElementById('notif-menu');
-            if (notifMenu) notifMenu.classList.add('hidden');
-
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
+            
+            // Close active chat box and mobile drawer upon logout
+            closeChat();
+            closeMobileUserDrawer();
+
             switchView('view-auth');
             showToast(`Goodbye, ${userName}! You have been logged out.`);
+        }
+
+        function toggleUserMenu() {
+            // On mobile screens (< 640px), open the slide drawer matching wireframe
+            if (window.innerWidth < 640) {
+                document.getElementById('mobile-user-drawer').classList.remove('hidden');
+                return;
+            }
+
+            // Desktop menu dropdown
+            document.getElementById('user-menu').classList.toggle('hidden');
+        }
+
+        function closeMobileUserDrawer() {
+            document.getElementById('mobile-user-drawer').classList.add('hidden');
+        }
+
+        function filterDrawerContactsList(q) {
+            const query = q.toLowerCase();
+            document.querySelectorAll('#drawer-contacts-list .drawer-contact-card').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(query) ? 'flex' : 'none';
+            });
         }
 
         let attachedImageBase64 = null;
@@ -1288,29 +1327,27 @@
             document.getElementById('image-preview-wrapper').classList.add('hidden');
         }
 
-        async function loadSavedPosts(isBackgroundRefresh = false) {
+        async function loadSavedPosts() {
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
 
-            // Only show shimmer skeleton if it's initial load or container is empty
-            if (!isBackgroundRefresh && postsContainer.children.length === 0) {
-                postsContainer.innerHTML = `
-                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
-                            <div class="space-y-2 flex-1">
-                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
-                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
-                            </div>
+            // Render Shimmer Skeleton State while fetching
+            postsContainer.innerHTML = `
+                <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                        <div class="space-y-2 flex-1">
+                            <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                            <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
                         </div>
-                        <div class="space-y-2 pt-2">
-                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
-                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
-                        </div>
-                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
                     </div>
-                `;
-            }
+                    <div class="space-y-2 pt-2">
+                        <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                        <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                    </div>
+                    <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
+                </div>
+            `;
 
             try {
                 const response = await fetch('posts_backend.php?action=get_posts');
@@ -1320,7 +1357,7 @@
 
                 if (!posts || posts.length === 0) {
                     postsContainer.innerHTML = `
-                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
+                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center fade-in">
                             <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
                                 <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                             </div>
@@ -1332,7 +1369,7 @@
 
                 posts.forEach(post => {
                     const article = document.createElement('article');
-                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md";
+                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
 
                     let imageHTML = post.image_url ? 
                         `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover"></div>` : '';
@@ -1344,8 +1381,6 @@
                         });
                     }
 
-                    const fbTimestamp = formatFacebookTimestamp(post.created_at);
-
                     article.innerHTML = `
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-3 truncate">
@@ -1355,9 +1390,7 @@
                                         <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
                                         <span class="text-[9px] sm:text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full shrink-0">${escapeHTML(post.course || 'BSIT')}</span>
                                     </h4>
-                                    <span class="text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1" title="${escapeHTML(post.created_at || '')}">
-                                        ${escapeHTML(fbTimestamp)} <i class="fa-solid fa-earth-americas text-[9px] ml-0.5 opacity-70" title="Public"></i>
-                                    </span>
+                                    <span class="text-[10px] sm:text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
                                 </div>
                             </div>
                         </div>
@@ -1392,7 +1425,9 @@
                     `;
                     postsContainer.appendChild(article);
                 });
-            } catch (e) {}
+            } catch (e) {
+                postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
+            }
         }
 
         async function addNewPost() {
@@ -1483,21 +1518,31 @@
         function resetTopicFilter() {
             document.getElementById('active-filter-banner').classList.add('hidden');
             document.querySelectorAll('#posts-container article').forEach(post => post.style.display = 'block');
+            
+            // Activate Home button glow when selected
+            const homeBtn = document.getElementById('home-btn');
+            if (homeBtn) {
+                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
+            }
         }
 
         function handleHomeClick() {
             resetTopicFilter();
             document.getElementById('forum-search').value = '';
-            const mobileSearch = document.getElementById('forum-search-mobile');
-            if (mobileSearch) mobileSearch.value = '';
-            
+            loadSavedPosts();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            loadSavedPosts(true);
             showToast("Feed refreshed!");
         }
 
         function filterForumPosts() {
             const q = document.getElementById('forum-search').value.toLowerCase();
+            
+            // Remove glow from Home button when searching/filtering
+            const homeBtn = document.getElementById('home-btn');
+            if (homeBtn && q.length > 0) {
+                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow bg-slate-800/80 border border-transparent transition-all";
+            }
+
             document.querySelectorAll('#posts-container article').forEach(post => {
                 post.style.display = post.textContent.toLowerCase().includes(q) ? 'block' : 'none';
             });
