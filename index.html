@@ -316,7 +316,7 @@
                         <span class="hidden sm:inline">Admin</span>
                     </button>
 
-                    <!-- Home Button (Formatted identically to Message & Notification buttons) -->
+                    <!-- Home Button -->
                     <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
@@ -328,7 +328,7 @@
 
                     <!-- Notifications Dropdown -->
                     <div class="relative">
-                        <button onclick="toggleNotificationsMenu()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
+                        <button id="notif-menu-btn" onclick="toggleNotificationsMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
                             <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
                             <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full">0</span>
                         </button>
@@ -346,7 +346,7 @@
 
                     <!-- User Profile Dropdown Avatar -->
                     <div class="relative ml-0.5">
-                        <button id="user-menu-btn" onclick="toggleUserMenu()" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
+                        <button id="user-menu-btn" onclick="toggleUserMenu(event)" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
                             <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
                         </button>
@@ -722,6 +722,21 @@
                 } catch (e) {}
             }
         }, 120000);
+
+        // Global click listener to close dropdown menus when clicking outside
+        window.addEventListener('click', function(e) {
+            const notifMenu = document.getElementById('notif-menu');
+            const notifBtn = document.getElementById('notif-menu-btn');
+            if (notifMenu && notifBtn && !notifMenu.contains(e.target) && !notifBtn.contains(e.target)) {
+                notifMenu.classList.add('hidden');
+            }
+
+            const userMenu = document.getElementById('user-menu');
+            const userBtn = document.getElementById('user-menu-btn');
+            if (userMenu && userBtn && !userMenu.contains(e.target) && !userBtn.contains(e.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
 
         function switchView(viewId) {
             if (viewId === 'view-admin') {
@@ -1114,8 +1129,20 @@
             }
         }
 
-        function toggleNotificationsMenu() {
-            document.getElementById('notif-menu').classList.toggle('hidden');
+        function toggleNotificationsMenu(e) {
+            e.stopPropagation();
+            const notifMenu = document.getElementById('notif-menu');
+            const userMenu = document.getElementById('user-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            notifMenu.classList.toggle('hidden');
+        }
+
+        function toggleUserMenu(e) {
+            e.stopPropagation();
+            const userMenu = document.getElementById('user-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (notifMenu) notifMenu.classList.add('hidden');
+            userMenu.classList.toggle('hidden');
         }
 
         async function fetchUserNotifications() {
@@ -1203,10 +1230,6 @@
             currentUser = null;
             switchView('view-auth');
             showToast(`Goodbye, ${userName}! You have been logged out.`);
-        }
-
-        function toggleUserMenu() {
-            document.getElementById('user-menu').classList.toggle('hidden');
         }
 
         let attachedImageBase64 = null;
