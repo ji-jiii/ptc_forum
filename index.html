@@ -76,6 +76,28 @@
 </head>
 <body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased overflow-x-hidden">
 
+    <!-- FULL-SCREEN LOGIN LOADING OVERLAY -->
+    <div id="login-loading-overlay" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center fade-in">
+        <div class="relative flex items-center justify-center mb-6">
+            <!-- Pulsing outer glow -->
+            <div class="absolute w-28 h-28 bg-brand-bright/20 rounded-full animate-ping"></div>
+            
+            <!-- Animated Spinner Ring -->
+            <div class="w-24 h-24 rounded-full border-4 border-slate-800 border-t-brand-bright animate-spin"></div>
+            
+            <!-- Mascot/Logo inside center -->
+            <div class="absolute w-14 h-14 rounded-2xl bg-brand-dark border border-brand-bright/40 overflow-hidden shadow-glow-green p-1 flex items-center justify-center">
+                <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover rounded-xl">
+            </div>
+        </div>
+
+        <!-- Dynamic Status Messages -->
+        <h3 id="loading-status-text" class="text-sm font-bold text-white uppercase tracking-widest animate-pulse">
+            Authenticating credentials...
+        </h3>
+        <p class="text-xs text-slate-400 mt-2">Welcome back to PTC Online Forum</p>
+    </div>
+
     <!-- ================================================================= -->
     <!-- VIEW 1: AUTHENTICATION (LOGIN & SIGN UP) -->
     <!-- ================================================================= -->
@@ -833,8 +855,19 @@
 
                 if (result.status === 'success') {
                     currentUser = result.user;
-
                     localStorage.setItem('ptc_user_session', JSON.stringify(currentUser));
+
+                    // 1. Show the Loading Overlay
+                    const overlay = document.getElementById('login-loading-overlay');
+                    const statusText = document.getElementById('loading-status-text');
+                    overlay.classList.remove('hidden');
+
+                    // 2. Animate Status Messages
+                    statusText.textContent = "Verifying student session...";
+                    await new Promise(r => setTimeout(r, 600));
+
+                    statusText.textContent = "Loading campus forum & messages...";
+                    await new Promise(r => setTimeout(r, 700));
 
                     document.getElementById('current-user-name').textContent = currentUser.fullName;
                     if (currentUser.course) document.getElementById('current-user-course').textContent = currentUser.course;
@@ -857,8 +890,10 @@
                         }
                     }
 
-                    showToast(`Welcome back, ${currentUser.fullName}!`);
+                    // 3. Switch View & Hide Overlay
                     switchView('view-forum');
+                    overlay.classList.add('hidden');
+                    showToast(`Welcome back, ${currentUser.fullName}!`);
                 } else {
                     showToast(result.message, false);
                 }
