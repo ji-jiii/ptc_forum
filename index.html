@@ -77,6 +77,18 @@
         .smooth-btn {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* Shimmer Loading Animation */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .animate-shimmer {
+            background: linear-gradient(90deg, rgba(30, 41, 59, 0.5) 25%, rgba(51, 65, 85, 0.8) 50%, rgba(30, 41, 59, 0.5) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased overflow-x-hidden">
@@ -304,8 +316,8 @@
                         <span class="hidden sm:inline">Admin</span>
                     </button>
 
-                    <!-- Home -->
-                    <button id="home-btn" onclick="resetTopicFilter()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
+                    <!-- Home Button -->
+                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
@@ -316,7 +328,7 @@
 
                     <!-- Notifications Dropdown -->
                     <div class="relative">
-                        <button onclick="toggleNotificationsMenu()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
+                        <button id="notif-menu-btn" onclick="toggleNotificationsMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
                             <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
                             <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full">0</span>
                         </button>
@@ -334,7 +346,7 @@
 
                     <!-- User Profile Dropdown Avatar -->
                     <div class="relative ml-0.5">
-                        <button id="user-menu-btn" onclick="toggleUserMenu()" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
+                        <button id="user-menu-btn" onclick="toggleUserMenu(event)" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
                             <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
                         </button>
@@ -710,6 +722,50 @@
                 } catch (e) {}
             }
         }, 120000);
+
+        // Global click listener to close dropdown menus when clicking outside
+        window.addEventListener('click', function(e) {
+            const notifMenu = document.getElementById('notif-menu');
+            const notifBtn = document.getElementById('notif-menu-btn');
+            if (notifMenu && notifBtn && !notifMenu.contains(e.target) && !notifBtn.contains(e.target)) {
+                notifMenu.classList.add('hidden');
+            }
+
+            const userMenu = document.getElementById('user-menu');
+            const userBtn = document.getElementById('user-menu-btn');
+            if (userMenu && userBtn && !userMenu.contains(e.target) && !userBtn.contains(e.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        // Exact Facebook-style exact timestamp formatter
+        function formatFacebookTimestamp(timestampStr) {
+            if (!timestampStr) return 'Just now';
+            
+            const parsedDate = new Date(timestampStr.replace(' ', 'T'));
+            if (isNaN(parsedDate.getTime())) return timestampStr;
+
+            const now = new Date();
+            const timeString = parsedDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+            
+            // Check if it's today
+            const isToday = parsedDate.toDateString() === now.toDateString();
+            if (isToday) {
+                return timeString;
+            }
+
+            // Check if it was yesterday
+            const yesterday = new Date();
+            yesterday.setDate(now.getDate() - 1);
+            const isYesterday = parsedDate.toDateString() === yesterday.toDateString();
+            if (isYesterday) {
+                return `Yesterday at ${timeString}`;
+            }
+
+            // If older, show Month Day at Time (e.g., "Oct 15 at 3:45 PM")
+            const dateString = parsedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            return `${dateString} at ${timeString}`;
+        }
 
         function switchView(viewId) {
             if (viewId === 'view-admin') {
@@ -1102,8 +1158,20 @@
             }
         }
 
-        function toggleNotificationsMenu() {
-            document.getElementById('notif-menu').classList.toggle('hidden');
+        function toggleNotificationsMenu(e) {
+            e.stopPropagation();
+            const notifMenu = document.getElementById('notif-menu');
+            const userMenu = document.getElementById('user-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            notifMenu.classList.toggle('hidden');
+        }
+
+        function toggleUserMenu(e) {
+            e.stopPropagation();
+            const userMenu = document.getElementById('user-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (notifMenu) notifMenu.classList.add('hidden');
+            userMenu.classList.toggle('hidden');
         }
 
         async function fetchUserNotifications() {
@@ -1187,14 +1255,17 @@
                 } catch (err) {}
             }
 
+            // Immediately close chat box and user dropdown upon logout
+            closeChat();
+            const userMenu = document.getElementById('user-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            const notifMenu = document.getElementById('notif-menu');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
             switchView('view-auth');
             showToast(`Goodbye, ${userName}! You have been logged out.`);
-        }
-
-        function toggleUserMenu() {
-            document.getElementById('user-menu').classList.toggle('hidden');
         }
 
         let attachedImageBase64 = null;
@@ -1217,9 +1288,29 @@
             document.getElementById('image-preview-wrapper').classList.add('hidden');
         }
 
-        async function loadSavedPosts() {
+        async function loadSavedPosts(isBackgroundRefresh = false) {
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
+
+            // Only show shimmer skeleton if it's initial load or container is empty
+            if (!isBackgroundRefresh && postsContainer.children.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-2 flex-1">
+                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2 pt-2">
+                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                        </div>
+                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
+                    </div>
+                `;
+            }
 
             try {
                 const response = await fetch('posts_backend.php?action=get_posts');
@@ -1253,6 +1344,8 @@
                         });
                     }
 
+                    const fbTimestamp = formatFacebookTimestamp(post.created_at);
+
                     article.innerHTML = `
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-3 truncate">
@@ -1262,7 +1355,9 @@
                                         <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
                                         <span class="text-[9px] sm:text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full shrink-0">${escapeHTML(post.course || 'BSIT')}</span>
                                     </h4>
-                                    <span class="text-[10px] sm:text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
+                                    <span class="text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1" title="${escapeHTML(post.created_at || '')}">
+                                        ${escapeHTML(fbTimestamp)} <i class="fa-solid fa-earth-americas text-[9px] ml-0.5 opacity-70" title="Public"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -1388,23 +1483,21 @@
         function resetTopicFilter() {
             document.getElementById('active-filter-banner').classList.add('hidden');
             document.querySelectorAll('#posts-container article').forEach(post => post.style.display = 'block');
+        }
+
+        function handleHomeClick() {
+            resetTopicFilter();
+            document.getElementById('forum-search').value = '';
+            const mobileSearch = document.getElementById('forum-search-mobile');
+            if (mobileSearch) mobileSearch.value = '';
             
-            // Activate Home button glow when selected
-            const homeBtn = document.getElementById('home-btn');
-            if (homeBtn) {
-                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
-            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            loadSavedPosts(true);
+            showToast("Feed refreshed!");
         }
 
         function filterForumPosts() {
             const q = document.getElementById('forum-search').value.toLowerCase();
-            
-            // Remove glow from Home button when searching/filtering
-            const homeBtn = document.getElementById('home-btn');
-            if (homeBtn && q.length > 0) {
-                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow bg-slate-800/80 border border-transparent transition-all";
-            }
-
             document.querySelectorAll('#posts-container article').forEach(post => {
                 post.style.display = post.textContent.toLowerCase().includes(q) ? 'block' : 'none';
             });
