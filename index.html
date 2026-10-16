@@ -77,18 +77,6 @@
         .smooth-btn {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        /* Shimmer Loading Animation */
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .animate-shimmer {
-            background: linear-gradient(90deg, rgba(30, 41, 59, 0.5) 25%, rgba(51, 65, 85, 0.8) 50%, rgba(30, 41, 59, 0.5) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased overflow-x-hidden">
@@ -317,7 +305,7 @@
                     </button>
 
                     <!-- Home -->
-                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Refresh & Home Feed">
+                    <button id="home-btn" onclick="resetTopicFilter()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
@@ -344,21 +332,20 @@
                         </div>
                     </div>
 
-                    <!-- User Profile Dropdown Avatar (Desktop Popover & Mobile Slide Drawer Trigger) -->
+                    <!-- User Profile Dropdown Avatar -->
                     <div class="relative ml-0.5">
                         <button id="user-menu-btn" onclick="toggleUserMenu()" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
                             <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
                         </button>
 
-                        <!-- Desktop Profile Menu -->
-                        <div id="user-menu" class="hidden sm:block sm:absolute right-0 mt-3 w-52 sm:w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
+                        <div id="user-menu" class="hidden absolute right-0 mt-3 w-52 sm:w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
                             <div class="px-3 py-2 border-b border-slate-800 mb-1">
-                                <p class="current-user-name-text text-xs font-bold text-white truncate">Student Name</p>
-                                <p class="current-user-course-text text-[11px] text-brand-bright">BSIT</p>
-                                <p class="current-user-id-text text-[10px] text-slate-400">ID: 2026-XXXXX</p>
+                                <p id="current-user-name" class="text-xs font-bold text-white truncate">Student Name</p>
+                                <p id="current-user-course" class="text-[11px] text-brand-bright">BSIT</p>
+                                <p id="current-user-id" class="text-[10px] text-slate-400">ID: 2026-XXXXX</p>
                             </div>
-                            <a href="#" class="admin-menu-link-el hidden flex items-center gap-2 px-3 py-2 text-xs text-brand-yellow hover:bg-slate-800 rounded-xl transition-colors">
+                            <a href="#" id="admin-menu-link" onclick="switchView('view-admin')" class="hidden flex items-center gap-2 px-3 py-2 text-xs text-brand-yellow hover:bg-slate-800 rounded-xl transition-colors">
                                 <i class="fa-solid fa-gauge-high w-4"></i> Admin Dashboard
                             </a>
 
@@ -381,65 +368,6 @@
                 </div>
             </div>
         </header>
-
-        <!-- MOBILE USER PROFILE SLIDE-OVER DRAWER -->
-        <div id="mobile-user-drawer" class="fixed inset-0 z-50 sm:hidden hidden">
-            <!-- Backdrop -->
-            <div onclick="closeMobileUserDrawer()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"></div>
-            
-            <!-- Right Panel Drawer -->
-            <div class="absolute top-0 right-0 bottom-0 w-72 bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col z-10 fade-in">
-                
-                <!-- Drawer Header / User Profile Box -->
-                <div class="p-4 bg-slate-950/80 border-b border-slate-800">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">User Profile</span>
-                        <button onclick="closeMobileUserDrawer()" class="text-slate-400 hover:text-white p-1">
-                            <i class="fa-solid fa-xmark text-sm"></i>
-                        </button>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-10 h-10 rounded-xl object-cover ring-2 ring-brand-bright/60 shrink-0">
-                        <div class="truncate">
-                            <p class="current-user-name-text text-sm font-bold text-white truncate">Student Name</p>
-                            <p class="current-user-course-text text-xs text-brand-bright font-semibold">BSIT</p>
-                            <p class="current-user-id-text text-[11px] text-slate-400 font-mono">ID: 2026-XXXXX</p>
-                        </div>
-                    </div>
-
-                    <!-- Profile Actions -->
-                    <div class="mt-4 space-y-1.5 pt-3 border-t border-slate-800/80">
-                        <a href="#" class="admin-menu-link-el hidden flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-brand-yellow bg-brand-yellow/10 hover:bg-brand-yellow/20 rounded-xl transition-colors">
-                            <i class="fa-solid fa-gauge-high text-xs"></i> Admin Dashboard
-                        </a>
-                        <button onclick="handleLogout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-colors text-left">
-                            <i class="fa-solid fa-right-from-bracket text-xs"></i> Log Out
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Contacts Section Stacked directly under user info -->
-                <div class="p-3 bg-slate-900 border-b border-slate-800">
-                    <div class="relative">
-                        <input type="text" onkeyup="filterDrawerContactsList(this.value)" placeholder="search contact..." class="w-full pl-8 pr-3 py-1.5 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-bright">
-                        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 text-xs">
-                            <i class="fa-regular fa-user"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-3 flex-1 overflow-y-auto">
-                    <h3 class="text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-address-book text-brand-yellow text-xs"></i> CONTACT LISTS
-                    </h3>
-                    <div id="drawer-contacts-list" class="space-y-1.5">
-                        <p class="text-xs text-slate-400 text-center py-4">Loading contacts...</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
 
         <!-- Forum 3-Column Main Content -->
         <main class="max-w-7xl mx-auto w-full flex-1 px-3 sm:px-6 lg:px-8 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
@@ -506,20 +434,13 @@
                 <!-- Posts List Container -->
                 <div id="posts-container" class="space-y-4 sm:space-y-5">
                     
-                    <!-- Initial Shimmer Skeleton Loading State -->
-                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
-                            <div class="space-y-2 flex-1">
-                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
-                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
-                            </div>
+                    <!-- Empty State Placeholder -->
+                    <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
+                            <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                         </div>
-                        <div class="space-y-2 pt-2">
-                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
-                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
-                        </div>
-                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
+                        <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
                     </div>
 
                 </div>
@@ -838,42 +759,36 @@
             } catch (e) {}
         }
 
-        function updateUserInfoDisplays() {
-            if (!currentUser) return;
-
-            document.querySelectorAll('.current-user-name-text').forEach(el => el.textContent = currentUser.fullName);
-            document.querySelectorAll('.current-user-course-text').forEach(el => {
-                if (currentUser.course) el.textContent = currentUser.course;
-            });
-            document.querySelectorAll('.current-user-id-text').forEach(el => el.textContent = `ID: ${currentUser.studentId}`);
-
-            const adminPortalBtn = document.getElementById('admin-portal-btn');
-            document.querySelectorAll('.admin-menu-link-el').forEach(el => {
-                if (currentUser.role === 'Admin') {
-                    el.classList.remove('hidden');
-                } else {
-                    el.classList.add('hidden');
-                }
-            });
-
-            if (adminPortalBtn) {
-                if (currentUser.role === 'Admin') {
-                    adminPortalBtn.classList.remove('hidden');
-                    adminPortalBtn.classList.add('flex');
-                } else {
-                    adminPortalBtn.classList.add('hidden');
-                    adminPortalBtn.classList.remove('flex');
-                }
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('ptc_user_session');
 
             if (savedUser) {
                 try {
                     currentUser = JSON.parse(savedUser);
-                    updateUserInfoDisplays();
+
+                    document.getElementById('current-user-name').textContent = currentUser.fullName;
+                    if (currentUser.course) {
+                        document.getElementById('current-user-course').textContent = currentUser.course;
+                    }
+                    document.getElementById('current-user-id').textContent = `ID: ${currentUser.studentId}`;
+
+                    const adminMenuLink = document.getElementById('admin-menu-link');
+                    const adminPortalBtn = document.getElementById('admin-portal-btn');
+
+                    if (currentUser.role === 'Admin') {
+                        if (adminMenuLink) adminMenuLink.classList.remove('hidden');
+                        if (adminPortalBtn) {
+                            adminPortalBtn.classList.remove('hidden');
+                            adminPortalBtn.classList.add('flex');
+                        }
+                    } else {
+                        if (adminMenuLink) adminMenuLink.classList.add('hidden');
+                        if (adminPortalBtn) {
+                            adminPortalBtn.classList.add('hidden');
+                            adminPortalBtn.classList.remove('flex');
+                        }
+                    }
+
                     switchView('view-forum');
                     return;
                 } catch (e) {
@@ -971,7 +886,26 @@
                     statusText.textContent = "Loading campus forum & messages...";
                     await new Promise(r => setTimeout(r, 700));
 
-                    updateUserInfoDisplays();
+                    document.getElementById('current-user-name').textContent = currentUser.fullName;
+                    if (currentUser.course) document.getElementById('current-user-course').textContent = currentUser.course;
+                    document.getElementById('current-user-id').textContent = `ID: ${currentUser.studentId}`;
+
+                    const adminMenuLink = document.getElementById('admin-menu-link');
+                    const adminPortalBtn = document.getElementById('admin-portal-btn');
+
+                    if (currentUser.role === 'Admin') {
+                        if (adminMenuLink) adminMenuLink.classList.remove('hidden');
+                        if (adminPortalBtn) {
+                            adminPortalBtn.classList.remove('hidden');
+                            adminPortalBtn.classList.add('flex');
+                        }
+                    } else {
+                        if (adminMenuLink) adminMenuLink.classList.add('hidden');
+                        if (adminPortalBtn) {
+                            adminPortalBtn.classList.add('hidden');
+                            adminPortalBtn.classList.remove('flex');
+                        }
+                    }
 
                     // 3. Switch View & Hide Overlay
                     switchView('view-forum');
@@ -1041,15 +975,13 @@
                 const contacts = await response.json();
 
                 const container = document.getElementById('contacts-list');
-                const drawerContainer = document.getElementById('drawer-contacts-list');
                 const activeCount = document.getElementById('active-contacts-count');
                 
-                if (container) container.innerHTML = '';
-                if (drawerContainer) drawerContainer.innerHTML = '';
+                if (!container) return;
+                container.innerHTML = '';
 
                 if (!contacts || contacts.length === 0) {
-                    if (container) container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
-                    if (drawerContainer) drawerContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
+                    container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
                     if (activeCount) activeCount.textContent = '0 Members';
                     return;
                 }
@@ -1060,54 +992,31 @@
                     const targetId = user.student_id || user.studentId;
                     if (currentUser && targetId === currentUser.studentId) return;
 
+                    const btn = document.createElement('button');
                     const name = user.full_name || user.fullName || (user.first_name ? `${user.first_name} ${user.last_name || ''}` : 'User');
+                    
                     const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
                     const statusText = isOnline ? 'Online' : 'Offline';
                     const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
 
-                    // 1. Create element for desktop sidebar
-                    if (container) {
-                        const btn = document.createElement('button');
-                        btn.onclick = () => openChat(name, targetId, isOnline);
-                        btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group';
-                        btn.innerHTML = `
-                            <div class="flex items-center gap-3 truncate">
-                                <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
-                                    <i class="fa-regular fa-user"></i>
-                                </div>
-                                <div class="truncate">
-                                    <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
-                                    <p class="text-[10px] text-slate-400">
-                                        <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
-                                    </p>
-                                </div>
+                    btn.onclick = () => openChat(name, targetId, isOnline);
+                    btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group';
+                    
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-3 truncate">
+                            <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
+                                <i class="fa-regular fa-user"></i>
                             </div>
-                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
-                        `;
-                        container.appendChild(btn);
-                    }
-
-                    // 2. Create element for mobile drawer
-                    if (drawerContainer) {
-                        const drawerBtn = document.createElement('button');
-                        drawerBtn.onclick = () => { closeMobileUserDrawer(); openChat(name, targetId, isOnline); };
-                        drawerBtn.className = 'drawer-contact-card w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group';
-                        drawerBtn.innerHTML = `
-                            <div class="flex items-center gap-2.5 truncate">
-                                <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-[10px] shrink-0">
-                                    <i class="fa-regular fa-user"></i>
-                                </div>
-                                <div class="truncate">
-                                    <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
-                                    <p class="text-[9px] text-slate-400">
-                                        <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
-                                    </p>
-                                </div>
+                            <div class="truncate">
+                                <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                                <p class="text-[10px] text-slate-400">
+                                    <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
+                                </p>
                             </div>
-                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
-                        `;
-                        drawerContainer.appendChild(drawerBtn);
-                    }
+                        </div>
+                        <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
+                    `;
+                    container.appendChild(btn);
                 });
             } catch (err) {
                 const container = document.getElementById('contacts-list');
@@ -1280,35 +1189,12 @@
 
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
-            
-            // Close active chat box and mobile drawer upon logout
-            closeChat();
-            closeMobileUserDrawer();
-
             switchView('view-auth');
             showToast(`Goodbye, ${userName}! You have been logged out.`);
         }
 
         function toggleUserMenu() {
-            // On mobile screens (< 640px), open the side drawer matching wireframe
-            if (window.innerWidth < 640) {
-                document.getElementById('mobile-user-drawer').classList.remove('hidden');
-                return;
-            }
-
-            // Desktop menu dropdown
             document.getElementById('user-menu').classList.toggle('hidden');
-        }
-
-        function closeMobileUserDrawer() {
-            document.getElementById('mobile-user-drawer').classList.add('hidden');
-        }
-
-        function filterDrawerContactsList(q) {
-            const query = q.toLowerCase();
-            document.querySelectorAll('#drawer-contacts-list .drawer-contact-card').forEach(card => {
-                card.style.display = card.textContent.toLowerCase().includes(query) ? 'flex' : 'none';
-            });
         }
 
         let attachedImageBase64 = null;
@@ -1335,24 +1221,6 @@
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
 
-            // Render Shimmer Skeleton State while fetching
-            postsContainer.innerHTML = `
-                <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
-                        <div class="space-y-2 flex-1">
-                            <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
-                            <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
-                        </div>
-                    </div>
-                    <div class="space-y-2 pt-2">
-                        <div class="w-full h-4 rounded-lg animate-shimmer"></div>
-                        <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
-                    </div>
-                    <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
-                </div>
-            `;
-
             try {
                 const response = await fetch('posts_backend.php?action=get_posts');
                 const posts = await response.json();
@@ -1361,7 +1229,7 @@
 
                 if (!posts || posts.length === 0) {
                     postsContainer.innerHTML = `
-                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center fade-in">
+                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
                             <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
                                 <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                             </div>
@@ -1373,7 +1241,7 @@
 
                 posts.forEach(post => {
                     const article = document.createElement('article');
-                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
+                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md";
 
                     let imageHTML = post.image_url ? 
                         `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover"></div>` : '';
@@ -1429,9 +1297,7 @@
                     `;
                     postsContainer.appendChild(article);
                 });
-            } catch (e) {
-                postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
-            }
+            } catch (e) {}
         }
 
         async function addNewPost() {
@@ -1528,14 +1394,6 @@
             if (homeBtn) {
                 homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
             }
-        }
-
-        function handleHomeClick() {
-            resetTopicFilter();
-            document.getElementById('forum-search').value = '';
-            loadSavedPosts();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            showToast("Feed refreshed!");
         }
 
         function filterForumPosts() {
