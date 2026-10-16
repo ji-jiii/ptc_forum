@@ -317,7 +317,7 @@
                     </button>
 
                     <!-- Home -->
-                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Refresh & Home Feed">
+                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
@@ -446,20 +446,13 @@
                 <!-- Posts List Container -->
                 <div id="posts-container" class="space-y-4 sm:space-y-5">
                     
-                    <!-- Initial Shimmer Skeleton Loading State -->
-                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
-                            <div class="space-y-2 flex-1">
-                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
-                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
-                            </div>
+                    <!-- Empty State Placeholder -->
+                    <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
+                            <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                         </div>
-                        <div class="space-y-2 pt-2">
-                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
-                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
-                        </div>
-                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
+                        <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
                     </div>
 
                 </div>
@@ -1208,10 +1201,6 @@
 
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
-            
-            // Close active chat box upon logout
-            closeChat();
-
             switchView('view-auth');
             showToast(`Goodbye, ${userName}! You have been logged out.`);
         }
@@ -1240,27 +1229,29 @@
             document.getElementById('image-preview-wrapper').classList.add('hidden');
         }
 
-        async function loadSavedPosts() {
+        async function loadSavedPosts(isBackgroundRefresh = false) {
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
 
-            // Render Shimmer Skeleton State while fetching
-            postsContainer.innerHTML = `
-                <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
-                        <div class="space-y-2 flex-1">
-                            <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
-                            <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+            // Only show shimmer skeleton if it's initial load or container is empty
+            if (!isBackgroundRefresh && postsContainer.children.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-2 flex-1">
+                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+                            </div>
                         </div>
+                        <div class="space-y-2 pt-2">
+                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                        </div>
+                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
                     </div>
-                    <div class="space-y-2 pt-2">
-                        <div class="w-full h-4 rounded-lg animate-shimmer"></div>
-                        <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
-                    </div>
-                    <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
-                </div>
-            `;
+                `;
+            }
 
             try {
                 const response = await fetch('posts_backend.php?action=get_posts');
@@ -1270,7 +1261,7 @@
 
                 if (!posts || posts.length === 0) {
                     postsContainer.innerHTML = `
-                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center fade-in">
+                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
                             <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
                                 <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                             </div>
@@ -1282,7 +1273,7 @@
 
                 posts.forEach(post => {
                     const article = document.createElement('article');
-                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
+                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md";
 
                     let imageHTML = post.image_url ? 
                         `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover"></div>` : '';
@@ -1338,9 +1329,7 @@
                     `;
                     postsContainer.appendChild(article);
                 });
-            } catch (e) {
-                postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
-            }
+            } catch (e) {}
         }
 
         async function addNewPost() {
@@ -1442,8 +1431,11 @@
         function handleHomeClick() {
             resetTopicFilter();
             document.getElementById('forum-search').value = '';
-            loadSavedPosts();
+            const mobileSearch = document.getElementById('forum-search-mobile');
+            if (mobileSearch) mobileSearch.value = '';
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            loadSavedPosts(true);
             showToast("Feed refreshed!");
         }
 
