@@ -72,6 +72,23 @@
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Smooth Button Micro-interaction */
+        .smooth-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Shimmer Loading Animation */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .animate-shimmer {
+            background: linear-gradient(90deg, rgba(30, 41, 59, 0.5) 25%, rgba(51, 65, 85, 0.8) 50%, rgba(30, 41, 59, 0.5) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased overflow-x-hidden">
@@ -172,8 +189,10 @@
                         <a href="#" onclick="alert('Password reset link sent to registered college email.')" class="text-brand-bright hover:underline font-medium">Forgot password?</a>
                     </div>
 
-                    <button type="submit" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-brand-bright to-emerald-500 text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-green hover:scale-[1.01] active:scale-[0.99] transition-all">
-                        Enter Student Forum
+                    <!-- SMOOTH ANIMATED LOGIN BUTTON -->
+                    <button type="submit" id="login-submit-btn" class="smooth-btn w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-brand-bright to-emerald-500 text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-green hover:brightness-110 hover:scale-[1.01] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
+                        <span id="login-btn-text">Enter Student Forum</span>
+                        <i id="login-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm"></i>
                     </button>
                 </form>
 
@@ -246,7 +265,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-yellow hover:scale-[1.01] active:scale-[0.99] transition-all">
+                    <button type="submit" class="smooth-btn w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-yellow hover:scale-[1.01] active:scale-[0.98] cursor-pointer">
                         Create Account
                     </button>
                 </form>
@@ -427,13 +446,20 @@
                 <!-- Posts List Container -->
                 <div id="posts-container" class="space-y-4 sm:space-y-5">
                     
-                    <!-- Empty State Placeholder -->
-                    <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
-                            <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
+                    <!-- Initial Shimmer Skeleton Loading State -->
+                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-2 flex-1">
+                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+                            </div>
                         </div>
-                        <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
-                        <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
+                        <div class="space-y-2 pt-2">
+                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                        </div>
+                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
                     </div>
 
                 </div>
@@ -841,6 +867,16 @@
             const studentId = document.getElementById('login-studentid').value;
             const password = document.getElementById('login-pass').value;
 
+            // Trigger smooth button loading animation state
+            const submitBtn = document.getElementById('login-submit-btn');
+            const btnText = document.getElementById('login-btn-text');
+            const btnSpinner = document.getElementById('login-btn-spinner');
+            
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.textContent = "Authenticating...";
+            btnSpinner.classList.remove('hidden');
+
             const formData = new FormData();
             formData.append('studentId', studentId);
             formData.append('password', password);
@@ -899,6 +935,12 @@
                 }
             } catch (err) {
                 showToast("Could not connect to authentication server.", false);
+            } finally {
+                // Reset button state if login fails
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.textContent = "Enter Student Forum";
+                btnSpinner.classList.add('hidden');
             }
         }
 
@@ -1166,6 +1208,10 @@
 
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
+            
+            // Close active chat box upon logout
+            closeChat();
+
             switchView('view-auth');
             showToast(`Goodbye, ${userName}! You have been logged out.`);
         }
@@ -1198,6 +1244,24 @@
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
 
+            // Render Shimmer Skeleton State while fetching
+            postsContainer.innerHTML = `
+                <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                        <div class="space-y-2 flex-1">
+                            <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                            <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2 pt-2">
+                        <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                        <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                    </div>
+                    <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
+                </div>
+            `;
+
             try {
                 const response = await fetch('posts_backend.php?action=get_posts');
                 const posts = await response.json();
@@ -1206,7 +1270,7 @@
 
                 if (!posts || posts.length === 0) {
                     postsContainer.innerHTML = `
-                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center">
+                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center fade-in">
                             <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
                                 <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
                             </div>
@@ -1218,7 +1282,7 @@
 
                 posts.forEach(post => {
                     const article = document.createElement('article');
-                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md";
+                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
 
                     let imageHTML = post.image_url ? 
                         `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover"></div>` : '';
@@ -1274,7 +1338,9 @@
                     `;
                     postsContainer.appendChild(article);
                 });
-            } catch (e) {}
+            } catch (e) {
+                postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
+            }
         }
 
         async function addNewPost() {
