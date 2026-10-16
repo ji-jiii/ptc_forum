@@ -738,39 +738,33 @@
             }
         });
 
-        // Facebook-style relative timestamp formatter
+        // Exact Facebook-style exact timestamp formatter
         function formatFacebookTimestamp(timestampStr) {
             if (!timestampStr) return 'Just now';
             
-            // Replace space with 'T' if standard SQL datetime format to ensure consistent parsing
             const parsedDate = new Date(timestampStr.replace(' ', 'T'));
-            if (isNaN(parsedDate.getTime())) return timestampStr; // Fallback if format is unrecognized
+            if (isNaN(parsedDate.getTime())) return timestampStr;
 
             const now = new Date();
-            const secondsAgo = Math.floor((now - parsedDate) / 1000);
+            const timeString = parsedDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+            
+            // Check if it's today
+            const isToday = parsedDate.toDateString() === now.toDateString();
+            if (isToday) {
+                return timeString;
+            }
 
-            if (secondsAgo < 60) {
-                return 'Just now';
-            }
-            const minutesAgo = Math.floor(secondsAgo / 60);
-            if (minutesAgo < 60) {
-                return `${minutesAgo}m`;
-            }
-            const hoursAgo = Math.floor(minutesAgo / 60);
-            if (hoursAgo < 24) {
-                return `${hoursAgo}h`;
-            }
-            const daysAgo = Math.floor(hoursAgo / 24);
-            if (daysAgo === 1) {
-                const timeString = parsedDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+            // Check if it was yesterday
+            const yesterday = new Date();
+            yesterday.setDate(now.getDate() - 1);
+            const isYesterday = parsedDate.toDateString() === yesterday.toDateString();
+            if (isYesterday) {
                 return `Yesterday at ${timeString}`;
             }
-            if (daysAgo < 7) {
-                return `${daysAgo}d`;
-            }
-            
-            // If older than a week, show Month Day (e.g. "Oct 12")
-            return parsedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+
+            // If older, show Month Day at Time (e.g., "Oct 15 at 3:45 PM")
+            const dateString = parsedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            return `${dateString} at ${timeString}`;
         }
 
         function switchView(viewId) {
