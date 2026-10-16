@@ -738,7 +738,7 @@
             }
         });
 
-        // Exact Facebook-style exact timestamp formatter
+        // Country/Region-dependent exact Facebook-style timestamp formatter
         function formatFacebookTimestamp(timestampStr) {
             if (!timestampStr) return 'Just now';
             
@@ -746,7 +746,12 @@
             if (isNaN(parsedDate.getTime())) return timestampStr;
 
             const now = new Date();
-            const timeString = parsedDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+            
+            // Automatically detects the user's browser/system locale language and country settings (e.g., 'en-PH', 'en-US', 'es-ES', etc.)
+            const userLocale = navigator.language || navigator.userLanguage || 'en-US';
+
+            // Format exact time according to country/locale conventions (handles 12-hour vs 24-hour preference automatically)
+            const timeString = parsedDate.toLocaleTimeString(userLocale, { hour: 'numeric', minute: '2-digit' });
             
             // Check if it's today
             const isToday = parsedDate.toDateString() === now.toDateString();
@@ -762,8 +767,8 @@
                 return `Yesterday at ${timeString}`;
             }
 
-            // If older, show Month Day at Time (e.g., "Oct 15 at 3:45 PM")
-            const dateString = parsedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            // If older, format date and time according to the user's regional standards
+            const dateString = parsedDate.toLocaleDateString(userLocale, { month: 'short', day: 'numeric' });
             return `${dateString} at ${timeString}`;
         }
 
