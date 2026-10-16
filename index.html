@@ -1189,6 +1189,10 @@
 
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
+            
+            // Close active chat box upon logout
+            closeChat();
+
             switchView('view-auth');
             showToast(`Goodbye, ${userName}! You have been logged out.`);
         }
