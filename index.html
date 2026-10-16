@@ -1226,6 +1226,13 @@
                 } catch (err) {}
             }
 
+            // Immediately close chat box and user dropdown upon logout
+            closeChat();
+            const userMenu = document.getElementById('user-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            const notifMenu = document.getElementById('notif-menu');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
             switchView('view-auth');
