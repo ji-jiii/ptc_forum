@@ -77,18 +77,6 @@
         .smooth-btn {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        /* Shimmer Loading Animation */
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .animate-shimmer {
-            background: linear-gradient(90deg, rgba(30, 41, 59, 0.5) 25%, rgba(51, 65, 85, 0.8) 50%, rgba(30, 41, 59, 0.5) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased overflow-x-hidden">
@@ -317,7 +305,7 @@
                     </button>
 
                     <!-- Home -->
-                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
+                    <button id="home-btn" onclick="resetTopicFilter()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
@@ -1229,29 +1217,9 @@
             document.getElementById('image-preview-wrapper').classList.add('hidden');
         }
 
-        async function loadSavedPosts(isBackgroundRefresh = false) {
+        async function loadSavedPosts() {
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
-
-            // Only show shimmer skeleton if it's initial load or container is empty
-            if (!isBackgroundRefresh && postsContainer.children.length === 0) {
-                postsContainer.innerHTML = `
-                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
-                            <div class="space-y-2 flex-1">
-                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
-                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
-                            </div>
-                        </div>
-                        <div class="space-y-2 pt-2">
-                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
-                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
-                        </div>
-                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
-                    </div>
-                `;
-            }
 
             try {
                 const response = await fetch('posts_backend.php?action=get_posts');
@@ -1426,17 +1394,6 @@
             if (homeBtn) {
                 homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
             }
-        }
-
-        function handleHomeClick() {
-            resetTopicFilter();
-            document.getElementById('forum-search').value = '';
-            const mobileSearch = document.getElementById('forum-search-mobile');
-            if (mobileSearch) mobileSearch.value = '';
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            loadSavedPosts(true);
-            showToast("Feed refreshed!");
         }
 
         function filterForumPosts() {
