@@ -738,6 +738,41 @@
             }
         });
 
+        // Facebook-style relative timestamp formatter
+        function formatFacebookTimestamp(timestampStr) {
+            if (!timestampStr) return 'Just now';
+            
+            // Replace space with 'T' if standard SQL datetime format to ensure consistent parsing
+            const parsedDate = new Date(timestampStr.replace(' ', 'T'));
+            if (isNaN(parsedDate.getTime())) return timestampStr; // Fallback if format is unrecognized
+
+            const now = new Date();
+            const secondsAgo = Math.floor((now - parsedDate) / 1000);
+
+            if (secondsAgo < 60) {
+                return 'Just now';
+            }
+            const minutesAgo = Math.floor(secondsAgo / 60);
+            if (minutesAgo < 60) {
+                return `${minutesAgo}m`;
+            }
+            const hoursAgo = Math.floor(minutesAgo / 60);
+            if (hoursAgo < 24) {
+                return `${hoursAgo}h`;
+            }
+            const daysAgo = Math.floor(hoursAgo / 24);
+            if (daysAgo === 1) {
+                const timeString = parsedDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+                return `Yesterday at ${timeString}`;
+            }
+            if (daysAgo < 7) {
+                return `${daysAgo}d`;
+            }
+            
+            // If older than a week, show Month Day (e.g. "Oct 12")
+            return parsedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+        }
+
         function switchView(viewId) {
             if (viewId === 'view-admin') {
                 if (!currentUser || currentUser.role !== 'Admin') {
@@ -1315,6 +1350,8 @@
                         });
                     }
 
+                    const fbTimestamp = formatFacebookTimestamp(post.created_at);
+
                     article.innerHTML = `
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-3 truncate">
@@ -1324,7 +1361,9 @@
                                         <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
                                         <span class="text-[9px] sm:text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full shrink-0">${escapeHTML(post.course || 'BSIT')}</span>
                                     </h4>
-                                    <span class="text-[10px] sm:text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
+                                    <span class="text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1" title="${escapeHTML(post.created_at || '')}">
+                                        ${escapeHTML(fbTimestamp)} <i class="fa-solid fa-earth-americas text-[9px] ml-0.5 opacity-70" title="Public"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
