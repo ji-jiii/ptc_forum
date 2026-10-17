@@ -323,7 +323,7 @@
 
                     <!-- Direct Messages Dropdown Menu -->
                     <div class="relative">
-                        <button onclick="toggleMessagesMenu()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages Inbox">
+                        <button id="messages-menu-btn" onclick="toggleMessagesMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages Inbox">
                             <i class="fa-solid fa-comment-dots text-xs sm:text-sm"></i>
                             <span id="msg-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-brand-bright text-brand-dark rounded-full">0</span>
                         </button>
@@ -348,7 +348,7 @@
 
                     <!-- Notifications Dropdown -->
                     <div class="relative">
-                        <button onclick="toggleNotificationsMenu()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
+                        <button id="notif-menu-btn" onclick="toggleNotificationsMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
                             <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
                             <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full">0</span>
                         </button>
@@ -366,7 +366,7 @@
 
                     <!-- User Profile Dropdown Avatar (Desktop Popover & Mobile Slide Drawer Trigger) -->
                     <div class="relative ml-0.5">
-                        <button id="user-menu-btn" onclick="toggleUserMenu()" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
+                        <button id="user-menu-btn" onclick="toggleUserMenu(event)" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
                             <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
                         </button>
@@ -900,6 +900,28 @@
             switchView('view-auth');
         });
 
+        // Global Click-Outside Listener to Close Menus
+        document.addEventListener('click', (event) => {
+            const messagesMenu = document.getElementById('messages-menu');
+            const messagesBtn = document.getElementById('messages-menu-btn');
+            const notifMenu = document.getElementById('notif-menu');
+            const notifBtn = document.getElementById('notif-menu-btn');
+            const userMenu = document.getElementById('user-menu');
+            const userBtn = document.getElementById('user-menu-btn');
+
+            if (messagesMenu && messagesBtn && !messagesMenu.contains(event.target) && !messagesBtn.contains(event.target)) {
+                messagesMenu.classList.add('hidden');
+            }
+
+            if (notifMenu && notifBtn && !notifMenu.contains(event.target) && !notifBtn.contains(event.target)) {
+                notifMenu.classList.add('hidden');
+            }
+
+            if (userMenu && userBtn && !userMenu.contains(event.target) && !userBtn.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
         function switchAuthTab(tab) {
             const loginForm = document.getElementById('form-login');
             const signupForm = document.getElementById('form-signup');
@@ -1249,7 +1271,8 @@
             }
         }
 
-        function toggleMessagesMenu() {
+        function toggleMessagesMenu(event) {
+            if (event) event.stopPropagation();
             const notifMenu = document.getElementById('notif-menu');
             const userMenu = document.getElementById('user-menu');
             if (notifMenu) notifMenu.classList.add('hidden');
@@ -1258,7 +1281,8 @@
             document.getElementById('messages-menu').classList.toggle('hidden');
         }
 
-        function toggleNotificationsMenu() {
+        function toggleNotificationsMenu(event) {
+            if (event) event.stopPropagation();
             const messagesMenu = document.getElementById('messages-menu');
             const userMenu = document.getElementById('user-menu');
             if (messagesMenu) messagesMenu.classList.add('hidden');
@@ -1359,7 +1383,9 @@
             showToast(`Goodbye, ${userName}! You have been logged out.`);
         }
 
-        function toggleUserMenu() {
+        function toggleUserMenu(event) {
+            if (event) event.stopPropagation();
+            
             // Close other top navigation menus
             const messagesMenu = document.getElementById('messages-menu');
             const notifMenu = document.getElementById('notif-menu');
