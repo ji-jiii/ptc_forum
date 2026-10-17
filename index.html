@@ -214,7 +214,7 @@
                     <div>
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Institutional Email</label>
                         <div class="relative">
-                            <input type="email" id="signup-institutional-email" required placeholder="2026-1234@ptc.edu.ph" class="w-full pl-9 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
+                            <input type="email" id="signup-institutional-email" required placeholder="name@paterostechnologicalcollege.edu.ph" class="w-full pl-9 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
                             <i class="fa-solid fa-envelope absolute left-3 top-2.5 text-slate-500 text-xs"></i>
                         </div>
                     </div>
@@ -1056,6 +1056,14 @@
         async function handleSignupSubmit(e) {
             e.preventDefault();
 
+            const institutionalEmailVal = document.getElementById('signup-institutional-email').value.trim();
+
+            // Validate institutional email format explicitly
+            if (!institutionalEmailVal.endsWith('@paterostechnologicalcollege.edu.ph')) {
+                showToast("make sure you already have ptc institutional email (name@paterostechnologicalcollege.edu.ph)", false);
+                return;
+            }
+
             const pass = document.getElementById('signup-pass').value;
             const confirmPass = document.getElementById('signup-pass-confirm').value;
 
@@ -1065,7 +1073,6 @@
             }
 
             const fullNameVal = document.getElementById('signup-fullname').value;
-            const institutionalEmailVal = document.getElementById('signup-institutional-email').value;
             const studentIdVal = document.getElementById('signup-studentid').value;
             const courseVal = document.getElementById('signup-course').value;
             const roleVal = document.getElementById('signup-role').value;
