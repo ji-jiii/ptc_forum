@@ -316,15 +316,35 @@
                         <span class="hidden sm:inline">Admin</span>
                     </button>
 
-                    <!-- Home (Formatted same as message and notification buttons) -->
+                    <!-- Home -->
                     <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Refresh & Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
-                    <!-- Direct Messages -->
-                    <button onclick="showToast('Select a contact below to start messaging!')" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages">
-                        <i class="fa-solid fa-comment-dots text-xs sm:text-sm"></i>
-                    </button>
+                    <!-- Direct Messages Dropdown Menu -->
+                    <div class="relative">
+                        <button onclick="toggleMessagesMenu()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages Inbox">
+                            <i class="fa-solid fa-comment-dots text-xs sm:text-sm"></i>
+                            <span id="msg-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-brand-bright text-brand-dark rounded-full">0</span>
+                        </button>
+
+                        <div id="messages-menu" class="hidden absolute right-0 mt-3 w-72 sm:w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-3 z-50 fade-in">
+                            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                    <i class="fa-solid fa-inbox text-brand-bright"></i> Direct Messages
+                                </h4>
+                                <span class="text-[10px] text-brand-yellow font-medium">Recent chats</span>
+                            </div>
+                            <div id="messages-menu-list" class="space-y-1 my-2 max-h-64 overflow-y-auto pr-1">
+                                <p class="text-xs text-slate-400 text-center py-4">Loading messages...</p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-800 text-center">
+                                <button onclick="toggleMessagesMenu(); scrollToContacts();" class="text-[11px] font-bold text-brand-bright hover:underline">
+                                    View all forum members
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Notifications Dropdown -->
                     <div class="relative">
@@ -1038,19 +1058,26 @@
 
                 const container = document.getElementById('contacts-list');
                 const drawerContainer = document.getElementById('drawer-contacts-list');
+                const messagesMenuList = document.getElementById('messages-menu-list');
+                const msgBadge = document.getElementById('msg-badge');
                 const activeCount = document.getElementById('active-contacts-count');
                 
                 if (container) container.innerHTML = '';
                 if (drawerContainer) drawerContainer.innerHTML = '';
+                if (messagesMenuList) messagesMenuList.innerHTML = '';
 
                 if (!contacts || contacts.length === 0) {
                     if (container) container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
                     if (drawerContainer) drawerContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
+                    if (messagesMenuList) messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No recent contacts.</p>';
                     if (activeCount) activeCount.textContent = '0 Members';
+                    if (msgBadge) msgBadge.classList.add('hidden');
                     return;
                 }
 
                 if (activeCount) activeCount.textContent = `${contacts.length} Members`;
+
+                let activeMembersCount = 0;
 
                 contacts.forEach(user => {
                     const targetId = user.student_id || user.studentId;
@@ -1058,6 +1085,8 @@
 
                     const name = user.full_name || user.fullName || (user.first_name ? `${user.first_name} ${user.last_name || ''}` : 'User');
                     const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
+                    if (isOnline) activeMembersCount++;
+
                     const statusText = isOnline ? 'Online' : 'Offline';
                     const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
 
@@ -1104,7 +1133,38 @@
                         `;
                         drawerContainer.appendChild(drawerBtn);
                     }
+
+                    // 3. Create element for Top Bar Messages Menu
+                    if (messagesMenuList) {
+                        const msgItem = document.createElement('button');
+                        msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
+                        msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group';
+                        msgItem.innerHTML = `
+                            <div class="flex items-center gap-2.5 truncate">
+                                <div class="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
+                                    <i class="fa-solid fa-user"></i>
+                                    ${isOnline ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-brand-bright border-2 border-slate-900"></span>' : ''}
+                                </div>
+                                <div class="truncate">
+                                    <p class="font-bold text-xs text-white group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                                    <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all">Chat</span>
+                        `;
+                        messagesMenuList.appendChild(msgItem);
+                    }
                 });
+
+                if (msgBadge) {
+                    if (activeMembersCount > 0) {
+                        msgBadge.textContent = activeMembersCount;
+                        msgBadge.classList.remove('hidden');
+                    } else {
+                        msgBadge.classList.add('hidden');
+                    }
+                }
+
             } catch (err) {
                 const container = document.getElementById('contacts-list');
                 if (container) {
@@ -1189,7 +1249,21 @@
             }
         }
 
+        function toggleMessagesMenu() {
+            const notifMenu = document.getElementById('notif-menu');
+            const userMenu = document.getElementById('user-menu');
+            if (notifMenu) notifMenu.classList.add('hidden');
+            if (userMenu) userMenu.classList.add('hidden');
+
+            document.getElementById('messages-menu').classList.toggle('hidden');
+        }
+
         function toggleNotificationsMenu() {
+            const messagesMenu = document.getElementById('messages-menu');
+            const userMenu = document.getElementById('user-menu');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (userMenu) userMenu.classList.add('hidden');
+
             document.getElementById('notif-menu').classList.toggle('hidden');
         }
 
@@ -1286,6 +1360,12 @@
         }
 
         function toggleUserMenu() {
+            // Close other top navigation menus
+            const messagesMenu = document.getElementById('messages-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
             // On mobile screens (< 640px), open the slide drawer matching wireframe
             if (window.innerWidth < 640) {
                 document.getElementById('mobile-user-drawer').classList.remove('hidden');
