@@ -292,7 +292,7 @@
                             </div>
                         </div>
                         <span class="font-extrabold text-sm sm:text-lg md:text-xl tracking-tight text-white group-hover:text-brand-yellow transition-colors">
-                            PTC <span class="text-brand-yellow sm:inline">Online Forum</span>
+                            PTC <span class="text-brand-yellow hidden sm:inline">Online Forum</span>
                         </span>
                     </a>
                 </div>
@@ -372,7 +372,7 @@
                         </button>
 
                         <!-- Desktop Profile Menu -->
-                        <div id="user-menu" class="hidden sm:block sm:absolute right-0 mt-3 w-52 sm:w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
+                        <div id="user-menu" class="hidden absolute right-0 mt-3 w-52 sm:w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50">
                             <div class="px-3 py-2 border-b border-slate-800 mb-1">
                                 <p id="current-user-name" class="current-user-name-text text-xs font-bold text-white truncate">Student Name</p>
                                 <p id="current-user-course" class="current-user-course-text text-[11px] text-brand-bright">BSIT</p>
@@ -807,7 +807,7 @@
         }, 120000);
 
         function switchView(viewId) {
-            // Explicitly force all menus closed on view change
+            // Explicitly force all dropdown menus hidden on view change
             const userMenu = document.getElementById('user-menu');
             const messagesMenu = document.getElementById('messages-menu');
             const notifMenu = document.getElementById('notif-menu');
@@ -892,7 +892,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Ensure all menus start closed on load
+            // Forcefully hide all menus on initial load
             const userMenu = document.getElementById('user-menu');
             const messagesMenu = document.getElementById('messages-menu');
             const notifMenu = document.getElementById('notif-menu');
@@ -1027,7 +1027,7 @@
 
                     updateUserInfoDisplays();
 
-                    // 3. Switch View & Hide Overlay (ensures menus stay closed)
+                    // 3. Switch View & Hide Overlay (Forces all menus to stay closed)
                     switchView('view-forum');
                     overlay.classList.add('hidden');
                     showToast(`Welcome back, ${currentUser.fullName}!`);
