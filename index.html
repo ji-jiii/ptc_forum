@@ -316,8 +316,8 @@
                         <span class="hidden sm:inline">Admin</span>
                     </button>
 
-                    <!-- Home -->
-                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all" title="Refresh & Home Feed">
+                    <!-- Home (Formatted same as message and notification buttons) -->
+                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Refresh & Home Feed">
                         <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                     </button>
 
@@ -1518,12 +1518,6 @@
         function resetTopicFilter() {
             document.getElementById('active-filter-banner').classList.add('hidden');
             document.querySelectorAll('#posts-container article').forEach(post => post.style.display = 'block');
-            
-            // Activate Home button glow when selected
-            const homeBtn = document.getElementById('home-btn');
-            if (homeBtn) {
-                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/30 shadow-glow-yellow transition-all";
-            }
         }
 
         function handleHomeClick() {
@@ -1536,13 +1530,6 @@
 
         function filterForumPosts() {
             const q = document.getElementById('forum-search').value.toLowerCase();
-            
-            // Remove glow from Home button when searching/filtering
-            const homeBtn = document.getElementById('home-btn');
-            if (homeBtn && q.length > 0) {
-                homeBtn.className = "p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-yellow bg-slate-800/80 border border-transparent transition-all";
-            }
-
             document.querySelectorAll('#posts-container article').forEach(post => {
                 post.style.display = post.textContent.toLowerCase().includes(q) ? 'block' : 'none';
             });
