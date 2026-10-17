@@ -292,7 +292,7 @@
                             </div>
                         </div>
                         <span class="font-extrabold text-sm sm:text-lg md:text-xl tracking-tight text-white group-hover:text-brand-yellow transition-colors">
-                            PTC <span class="text-brand-yellow sm:inline">Online Forum</span>
+                            PTC <span class="text-brand-yellow hidden sm:inline">Online Forum</span>
                         </span>
                     </a>
                 </div>
@@ -1045,6 +1045,65 @@
             }
         }
 
+        async function handleSignupSubmit(e) {
+            e.preventDefault();
+
+            const pass = document.getElementById('signup-pass').value;
+            const confirmPass = document.getElementById('signup-pass-confirm').value;
+
+            if (pass !== confirmPass) {
+                showToast("Passwords do not match!", false);
+                return;
+            }
+
+            const fullNameVal = document.getElementById('signup-fullname').value;
+            const studentIdVal = document.getElementById('signup-studentid').value;
+            const courseVal = document.getElementById('signup-course').value;
+            const roleVal = document.getElementById('signup-role').value;
+
+            const formData = new FormData();
+            formData.append('role', roleVal);
+            formData.append('fullName', fullNameVal);
+            formData.append('studentId', studentIdVal);
+            formData.append('phoneNumber', document.getElementById('signup-phone').value);
+            formData.append('course', courseVal);
+            formData.append('password', pass);
+
+            const fileInput = document.getElementById('signup-id-file');
+            if (fileInput.files[0]) {
+                formData.append('student_id_image', fileInput.files[0]);
+            }
+
+            try {
+                const response = await fetch('register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    // Automatically set the newly created account as the active session user
+                    currentUser = result.user || {
+                        studentId: studentIdVal,
+                        fullName: fullNameVal,
+                        course: courseVal,
+                        role: roleVal
+                    };
+                    
+                    localStorage.setItem('ptc_user_session', JSON.stringify(currentUser));
+
+                    updateUserInfoDisplays();
+                    switchView('view-forum');
+                    showToast(result.message || "Account created successfully!");
+                } else {
+                    showToast(result.message, false);
+                }
+            } catch (err) {
+                showToast("Could not connect to server.", false);
+            }
+        }
+
         async function fetchDatabaseUsers() {
             try {
                 const response = await fetch('get_users.php');
@@ -1332,49 +1391,6 @@
                     list.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No notifications yet.</p>';
                 }
             } catch (e) {}
-        }
-
-        async function handleSignupSubmit(e) {
-            e.preventDefault();
-
-            const pass = document.getElementById('signup-pass').value;
-            const confirmPass = document.getElementById('signup-pass-confirm').value;
-
-            if (pass !== confirmPass) {
-                showToast("Passwords do not match!", false);
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('role', document.getElementById('signup-role').value);
-            formData.append('fullName', document.getElementById('signup-fullname').value);
-            formData.append('studentId', document.getElementById('signup-studentid').value);
-            formData.append('phoneNumber', document.getElementById('signup-phone').value);
-            formData.append('course', document.getElementById('signup-course').value);
-            formData.append('password', pass);
-
-            const fileInput = document.getElementById('signup-id-file');
-            if (fileInput.files[0]) {
-                formData.append('student_id_image', fileInput.files[0]);
-            }
-
-            try {
-                const response = await fetch('register.php', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    showToast(result.message);
-                    switchView('view-forum');
-                } else {
-                    showToast(result.message, false);
-                }
-            } catch (err) {
-                showToast("Could not connect to server.", false);
-            }
         }
 
         async function handleLogout() {
