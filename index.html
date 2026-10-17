@@ -807,6 +807,14 @@
         }, 120000);
 
         function switchView(viewId) {
+            // Explicitly force all menus closed on view change
+            const userMenu = document.getElementById('user-menu');
+            const messagesMenu = document.getElementById('messages-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
             if (viewId === 'view-admin') {
                 if (!currentUser || currentUser.role !== 'Admin') {
                     showToast("Access Denied: Admin privileges required.", false);
@@ -884,6 +892,14 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Ensure all menus start closed on load
+            const userMenu = document.getElementById('user-menu');
+            const messagesMenu = document.getElementById('messages-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
             const savedUser = localStorage.getItem('ptc_user_session');
 
             if (savedUser) {
@@ -1011,7 +1027,7 @@
 
                     updateUserInfoDisplays();
 
-                    // 3. Switch View & Hide Overlay
+                    // 3. Switch View & Hide Overlay (ensures menus stay closed)
                     switchView('view-forum');
                     overlay.classList.add('hidden');
                     showToast(`Welcome back, ${currentUser.fullName}!`);
