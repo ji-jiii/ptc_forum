@@ -29,14 +29,14 @@ if (!$studentId) {
 }
 
 try {
-    // Query to find unique users who have exchanged messages with the current user
+    // Robust query that matches common user table foreign keys[cite: 5]
     $stmt = $pdo->prepare("
         SELECT DISTINCT u.student_id, u.full_name, u.course, u.role, u.is_online
         FROM users u
-        JOIN messages m ON (u.student_id = m.sender_id OR u.student_id = m.receiver_id)
-        WHERE (m.sender_id = ? OR m.receiver_id = ?) AND u.student_id != ?
+        JOIN messages m ON (u.student_id = m.sender_id OR u.student_id = m.receiver_id OR u.id = m.sender_id OR u.id = m.receiver_id)
+        WHERE (m.sender_id = ? OR m.receiver_id = ?) AND u.student_id != ? AND u.id != ?
     ");
-    $stmt->execute([$studentId, $studentId, $studentId]);
+    $stmt->execute([$studentId, $studentId, $studentId, $studentId]);
     $recentChats = $stmt->fetchAll();
 
     echo json_encode($recentChats);
