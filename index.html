@@ -1535,71 +1535,76 @@
 
                 const fragment = document.createDocumentFragment();
 
-                // Iterate in reverse (or use insertBefore) so that newer posts sort to the top below the create box
+                // Render latest posts from up (first post) to down (last post)
                 posts.forEach(post => {
-                    const article = document.createElement('article');
-                    article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
-
-                    let imageHTML = post.image_url ? 
-                        `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover" loading="lazy"></div>` : '';
-
-                    let commentsHTML = '';
-                    if (post.comments && post.comments.length > 0) {
-                        post.comments.forEach(c => {
-                            commentsHTML += `<div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/50 text-xs mt-2"><span class="font-bold text-brand-yellow">${escapeHTML(c.author_name)}:</span> <span class="text-slate-300 ml-1">${escapeHTML(c.content)}</span></div>`;
-                        });
-                    }
-
-                    article.innerHTML = `
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-3 truncate">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-cover ring-2 ring-brand-bright/60 shrink-0" loading="lazy">
-                                <div class="truncate">
-                                    <h4 class="font-bold text-xs sm:text-sm text-white flex items-center gap-1.5 truncate">
-                                        <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
-                                        <span class="text-[9px] sm:text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full shrink-0">${escapeHTML(post.course || 'BSIT')}</span>
-                                    </h4>
-                                    <span class="text-[10px] sm:text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed break-words">${escapeHTML(post.content)}</p>
-                        ${imageHTML}
-
-                        <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs text-slate-400">
-                            <button onclick="toggleLike(this)" class="flex items-center gap-1.5 hover:text-red-400 transition-colors">
-                                <i class="fa-regular fa-heart text-sm"></i>
-                                <span class="like-count font-semibold">${post.likes_count || 0}</span>
-                            </button>
-                            <button onclick="toggleComments(this)" class="flex items-center gap-1.5 hover:text-brand-bright transition-colors">
-                                <i class="fa-regular fa-comment text-sm"></i>
-                                <span class="comment-count font-semibold">${post.comments ? post.comments.length : 0}</span>
-                            </button>
-                            <button onclick="showToast('Post link copied!')" class="flex items-center gap-1.5 hover:text-brand-yellow transition-colors">
-                                <i class="fa-solid fa-share text-sm"></i>
-                                <span class="hidden sm:inline">Share</span>
-                            </button>
-                        </div>
-
-                        <div class="comments-section hidden pt-4 border-t border-slate-800/80 mt-3 space-y-3">
-                            <div id="comments-list-${post.id}">
-                                ${commentsHTML}
-                            </div>
-                            <div class="flex gap-2 pt-1">
-                                <input type="text" placeholder="Write a comment..." class="comment-input flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-bright">
-                                <button onclick="addCommentToDatabase(${post.id}, this)" class="px-3 py-1.5 bg-brand-bright text-brand-dark rounded-xl font-bold text-xs shrink-0">Send</button>
-                            </div>
-                        </div>
-                    `;
-                    // Prepend so newest items appear at the top of the feed immediately below the create post box
-                    fragment.insertBefore(article, fragment.firstChild);
+                    const article = createPostElement(post);
+                    fragment.appendChild(article);
                 });
 
                 postsContainer.appendChild(fragment);
             } catch (e) {
                 postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
             }
+        }
+
+        function createPostElement(post) {
+            const article = document.createElement('article');
+            article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
+            article.setAttribute('data-post-id', post.id);
+
+            let imageHTML = post.image_url ? 
+                `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover" loading="lazy"></div>` : '';
+
+            let commentsHTML = '';
+            if (post.comments && post.comments.length > 0) {
+                post.comments.forEach(c => {
+                    commentsHTML += `<div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/50 text-xs mt-2"><span class="font-bold text-brand-yellow">${escapeHTML(c.author_name)}:</span> <span class="text-slate-300 ml-1">${escapeHTML(c.content)}</span></div>`;
+                });
+            }
+
+            article.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3 truncate">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-cover ring-2 ring-brand-bright/60 shrink-0" loading="lazy">
+                        <div class="truncate">
+                            <h4 class="font-bold text-xs sm:text-sm text-white flex items-center gap-1.5 truncate">
+                                <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
+                                <span class="text-[9px] sm:text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full shrink-0">${escapeHTML(post.course || 'BSIT')}</span>
+                            </h4>
+                            <span class="text-[10px] sm:text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-200 leading-relaxed break-words">${escapeHTML(post.content)}</p>
+                ${imageHTML}
+
+                <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs text-slate-400">
+                    <button onclick="toggleLike(this)" class="flex items-center gap-1.5 hover:text-red-400 transition-colors">
+                        <i class="fa-regular fa-heart text-sm"></i>
+                        <span class="like-count font-semibold">${post.likes_count || 0}</span>
+                    </button>
+                    <button onclick="toggleComments(this)" class="flex items-center gap-1.5 hover:text-brand-bright transition-colors">
+                        <i class="fa-regular fa-comment text-sm"></i>
+                        <span class="comment-count font-semibold">${post.comments ? post.comments.length : 0}</span>
+                    </button>
+                    <button onclick="showToast('Post link copied!')" class="flex items-center gap-1.5 hover:text-brand-yellow transition-colors">
+                        <i class="fa-solid fa-share text-sm"></i>
+                        <span class="hidden sm:inline">Share</span>
+                    </button>
+                </div>
+
+                <div class="comments-section hidden pt-4 border-t border-slate-800/80 mt-3 space-y-3">
+                    <div id="comments-list-${post.id}">
+                        ${commentsHTML}
+                    </div>
+                    <div class="flex gap-2 pt-1">
+                        <input type="text" placeholder="Write a comment..." class="comment-input flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-bright">
+                        <button onclick="addCommentToDatabase(${post.id}, this)" class="px-3 py-1.5 bg-brand-bright text-brand-dark rounded-xl font-bold text-xs shrink-0">Send</button>
+                    </div>
+                </div>
+            `;
+            return article;
         }
 
         async function addNewPost() {
@@ -1612,7 +1617,6 @@
                 return;
             }
 
-            // Post button animation & spinner feedback state
             const submitBtn = document.getElementById('post-submit-btn');
             const btnText = document.getElementById('post-btn-text');
             const btnSpinner = document.getElementById('post-btn-spinner');
@@ -1640,7 +1644,26 @@
                     input.value = '';
                     removeAttachedImage();
                     showToast("Your post is live!");
-                    loadSavedPosts();
+
+                    // Instantly prepend the new post to the top of the feed without reloading/refreshing the page
+                    const postsContainer = document.getElementById('posts-container');
+                    const emptyPlaceholder = document.getElementById('empty-feed-placeholder');
+                    if (emptyPlaceholder) emptyPlaceholder.remove();
+
+                    // Use the newly created post object from response if available, or construct a temporary local one
+                    const newPostObj = result.post || {
+                        id: Date.now(),
+                        author_name: currentUser ? currentUser.fullName : 'Student User',
+                        course: currentUser ? currentUser.course : 'BSIT',
+                        content: content,
+                        image_url: attachedImageBase64,
+                        created_at: 'Just now',
+                        likes_count: 0,
+                        comments: []
+                    };
+
+                    const newArticle = createPostElement(newPostObj);
+                    postsContainer.insertBefore(newArticle, postsContainer.firstChild);
                 } else {
                     showToast(result.message || "Failed to create post.", false);
                 }
