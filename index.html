@@ -1415,7 +1415,13 @@
             if (notifMenu) notifMenu.classList.add('hidden');
             if (userMenu) userMenu.classList.add('hidden');
 
-            document.getElementById('messages-menu').classList.toggle('hidden');
+            const messagesMenu = document.getElementById('messages-menu');
+            messagesMenu.classList.toggle('hidden');
+
+            // Automatically load recent chats when the menu is opened
+            if (!messagesMenu.classList.contains('hidden')) {
+                fetchRecentChats();
+            }
         }
 
         function toggleNotificationsMenu(event) {
