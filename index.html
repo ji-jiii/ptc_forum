@@ -834,6 +834,7 @@
                 fetchAdminStats();
             } else if (viewId === 'view-forum') {
                 fetchForumContacts();
+                fetchRecentChats();
                 fetchUserNotifications();
                 loadSavedPosts();
             }
@@ -1191,20 +1192,15 @@
 
                 const container = document.getElementById('contacts-list');
                 const drawerContainer = document.getElementById('drawer-contacts-list');
-                const messagesMenuList = document.getElementById('messages-menu-list');
-                const msgBadge = document.getElementById('msg-badge');
                 const activeCount = document.getElementById('active-contacts-count');
                 
                 if (container) container.innerHTML = '';
                 if (drawerContainer) drawerContainer.innerHTML = '';
-                if (messagesMenuList) messagesMenuList.innerHTML = '';
 
                 if (!contacts || contacts.length === 0) {
                     if (container) container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
                     if (drawerContainer) drawerContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
-                    if (messagesMenuList) messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No recent contacts.</p>';
                     if (activeCount) activeCount.textContent = '0 Members';
-                    if (msgBadge) msgBadge.classList.add('hidden');
                     return;
                 }
 
@@ -1264,42 +1260,70 @@
                         `;
                         drawerContainer.appendChild(drawerBtn);
                     }
-
-                    if (messagesMenuList) {
-                        const msgItem = document.createElement('button');
-                        msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
-                        msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group';
-                        msgItem.innerHTML = `
-                            <div class="flex items-center gap-2.5 truncate">
-                                <div class="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
-                                    <i class="fa-solid fa-user"></i>
-                                    ${isOnline ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-brand-bright border-2 border-slate-900"></span>' : ''}
-                                </div>
-                                <div class="truncate">
-                                    <p class="font-bold text-xs text-white group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
-                                    <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all">Chat</span>
-                        `;
-                        messagesMenuList.appendChild(msgItem);
-                    }
                 });
-
-                if (msgBadge) {
-                    if (activeMembersCount > 0) {
-                        msgBadge.textContent = activeMembersCount;
-                        msgBadge.classList.remove('hidden');
-                    } else {
-                        msgBadge.classList.add('hidden');
-                    }
-                }
 
             } catch (err) {
                 const container = document.getElementById('contacts-list');
                 if (container) {
                     container.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load accounts.</p>';
                 }
+            }
+        }
+
+        async function fetchRecentChats() {
+            if (!currentUser || !currentUser.studentId) return;
+
+            const messagesMenuList = document.getElementById('messages-menu-list');
+            const msgBadge = document.getElementById('msg-badge');
+            if (!messagesMenuList) return;
+
+            messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Loading chats...</p>';
+
+            try {
+                const response = await fetch(`get_recent_chats.php?studentId=${currentUser.studentId}`);
+                const chats = await response.json();
+
+                messagesMenuList.innerHTML = '';
+
+                if (!chats || chats.length === 0) {
+                    messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No recent conversations yet. Click on any member in the forum list to start chatting!</p>';
+                    if (msgBadge) msgBadge.classList.add('hidden');
+                    return;
+                }
+
+                if (msgBadge) {
+                    msgBadge.textContent = chats.length;
+                    msgBadge.classList.remove('hidden');
+                }
+
+                chats.forEach(user => {
+                    const targetId = user.student_id || user.studentId;
+                    const name = user.full_name || user.fullName || 'User';
+                    const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
+                    const statusText = isOnline ? 'Online' : 'Offline';
+                    const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
+
+                    const msgItem = document.createElement('button');
+                    msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
+                    msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group';
+                    msgItem.innerHTML = `
+                        <div class="flex items-center gap-2.5 truncate">
+                            <div class="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
+                                <i class="fa-solid fa-user"></i>
+                                ${isOnline ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-brand-bright border-2 border-slate-900"></span>' : ''}
+                            </div>
+                            <div class="truncate">
+                                <p class="font-bold text-xs text-white group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                                <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all">Open</span>
+                    `;
+                    messagesMenuList.appendChild(msgItem);
+                });
+
+            } catch (e) {
+                messagesMenuList.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load messages.</p>';
             }
         }
 
@@ -1374,6 +1398,7 @@
                 await fetch('messages.php', { method: 'POST', body: formData });
                 input.value = '';
                 await loadChatHistory();
+                await fetchRecentChats(); // Refresh recent chats list if a new person was messaged
             } catch (e) {
                 showToast("Failed to send message.", false);
             }
