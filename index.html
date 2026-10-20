@@ -1494,57 +1494,92 @@
             document.getElementById('image-preview-wrapper').classList.add('hidden');
         }
 
-        async function loadSavedPosts() {
+        // Pagination Tracking Variables
+        let currentOffset = 0;
+        const postsPerPage = 10;
+
+        async function loadSavedPosts(isLoadMore = false) {
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
 
-            postsContainer.innerHTML = `
-                <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
-                        <div class="space-y-2 flex-1">
-                            <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
-                            <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+            if (!isLoadMore) {
+                currentOffset = 0;
+                postsContainer.innerHTML = `
+                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-2 flex-1">
+                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+                            </div>
                         </div>
+                        <div class="space-y-2 pt-2">
+                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                        </div>
+                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
                     </div>
-                    <div class="space-y-2 pt-2">
-                        <div class="w-full h-4 rounded-lg animate-shimmer"></div>
-                        <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
-                    </div>
-                    <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
-                </div>
-            `;
+                `;
+            } else {
+                const existingBtn = document.getElementById('load-more-btn-container');
+                if (existingBtn) existingBtn.remove();
+            }
 
             try {
-                const response = await fetch('posts_backend.php?action=get_posts');
+                const response = await fetch(`posts_backend.php?action=get_posts&limit=${postsPerPage}&offset=${currentOffset}`);
                 const posts = await response.json();
 
-                postsContainer.innerHTML = '';
+                if (!isLoadMore) {
+                    postsContainer.innerHTML = '';
+                }
 
                 if (!posts || posts.length === 0) {
-                    postsContainer.innerHTML = `
-                        <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center fade-in">
-                            <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
-                                <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
-                            </div>
-                            <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
-                            <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
-                        </div>`;
+                    if (!isLoadMore) {
+                        postsContainer.innerHTML = `
+                            <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center fade-in">
+                                <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
+                                    <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
+                                </div>
+                                <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
+                                <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
+                            </div>`;
+                    }
                     return;
                 }
 
                 const fragment = document.createDocumentFragment();
 
-                // Render latest posts from up (first post) to down (last post)
+                // Render posts from up (first post) to down (last post)
                 posts.forEach(post => {
                     const article = createPostElement(post);
                     fragment.appendChild(article);
                 });
 
                 postsContainer.appendChild(fragment);
+                currentOffset += posts.length;
+
+                // Add "Load More" button if a full batch was returned
+                if (posts.length === postsPerPage) {
+                    const loadMoreDiv = document.createElement('div');
+                    loadMoreDiv.id = 'load-more-btn-container';
+                    loadMoreDiv.className = 'text-center py-4';
+                    loadMoreDiv.innerHTML = `
+                        <button onclick="loadMorePosts()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-200 transition-all shadow-md cursor-pointer">
+                            Load More Discussions
+                        </button>
+                    `;
+                    postsContainer.appendChild(loadMoreDiv);
+                }
+
             } catch (e) {
-                postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
+                if (!isLoadMore) {
+                    postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
+                }
             }
+        }
+
+        function loadMorePosts() {
+            loadSavedPosts(true);
         }
 
         function createPostElement(post) {
