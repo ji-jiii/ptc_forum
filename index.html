@@ -1288,7 +1288,10 @@
                 renderRecentChats(chats);
             } catch (e) {
                 messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Failed to load messages.</p>';
-                if (msgBadge) msgBadge.classList.add('hidden');
+                if (msgBadge) {
+                    msgBadge.textContent = '0';
+                    msgBadge.classList.add('hidden');
+                }
             }
         }
 
@@ -1459,7 +1462,7 @@
                 const badge = document.getElementById('notif-badge');
                 list.innerHTML = '';
 
-                if (notifs.length > 0) {
+                if (notifs && notifs.length > 0) {
                     badge.classList.remove('hidden');
                     badge.textContent = notifs.length;
 
@@ -1470,10 +1473,16 @@
                         list.appendChild(div);
                     });
                 } else {
-                    badge.classList.add('hidden');
+                    if (badge) {
+                        badge.textContent = '0';
+                        badge.classList.add('hidden');
+                    }
                     list.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No notifications yet.</p>';
                 }
-            } catch (e) {}
+            } catch (e) {
+                const badge = document.getElementById('notif-badge');
+                if (badge) badge.classList.add('hidden');
+            }
         }
 
         async function handleLogout() {
