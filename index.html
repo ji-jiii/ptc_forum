@@ -335,7 +335,7 @@
                     <div class="relative">
                         <button id="messages-menu-btn" onclick="toggleMessagesMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages Inbox">
                             <i class="fa-solid fa-comment-dots text-xs sm:text-sm"></i>
-                            <span id="msg-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-brand-bright text-brand-dark rounded-full">0</span>
+                            <span id="msg-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-brand-bright text-brand-dark rounded-full"></span>
                         </button>
 
                         <div id="messages-menu" class="hidden absolute right-0 mt-3 w-72 sm:w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-3 z-50 fade-in">
@@ -360,7 +360,7 @@
                     <div class="relative">
                         <button id="notif-menu-btn" onclick="toggleNotificationsMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
                             <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
-                            <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full">0</span>
+                            <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full"></span>
                         </button>
 
                         <div id="notif-menu" class="hidden absolute right-0 mt-3 w-72 sm:w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-3 z-50">
@@ -1289,7 +1289,7 @@
             } catch (e) {
                 messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Failed to load messages.</p>';
                 if (msgBadge) {
-                    msgBadge.textContent = '0';
+                    msgBadge.textContent = '';
                     msgBadge.classList.add('hidden');
                 }
             }
@@ -1302,21 +1302,24 @@
 
             messagesMenuList.innerHTML = '';
 
-            if (!chats || chats.length === 0) {
-                messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No recent conversations yet. Click on any member in the forum list to start chatting!</p>';
+            // Filter out chats that actually have unread/new messages or show active chats only when there's an actual message
+            const activeChats = chats ? chats.filter(c => c.has_unread || c.unread_count > 0 || c.is_new) : [];
+
+            if (!activeChats || activeChats.length === 0) {
+                messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No new messages or chats right now.</p>';
                 if (msgBadge) {
-                    msgBadge.textContent = '0';
+                    msgBadge.textContent = '';
                     msgBadge.classList.add('hidden');
                 }
                 return;
             }
 
             if (msgBadge) {
-                msgBadge.textContent = chats.length;
+                msgBadge.textContent = activeChats.length;
                 msgBadge.classList.remove('hidden');
             }
 
-            chats.forEach(user => {
+            activeChats.forEach(user => {
                 const targetId = user.student_id || user.studentId;
                 const name = user.full_name || user.fullName || 'User';
                 const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
@@ -1474,7 +1477,7 @@
                     });
                 } else {
                     if (badge) {
-                        badge.textContent = '0';
+                        badge.textContent = '';
                         badge.classList.add('hidden');
                     }
                     list.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No notifications yet.</p>';
