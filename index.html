@@ -1287,7 +1287,10 @@
 
                 if (!chats || chats.length === 0) {
                     messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No recent conversations yet. Click on any member in the forum list to start chatting!</p>';
-                    if (msgBadge) msgBadge.classList.add('hidden');
+                    if (msgBadge) {
+                        msgBadge.textContent = '0';
+                        msgBadge.classList.add('hidden');
+                    }
                     return;
                 }
 
@@ -1323,7 +1326,8 @@
                 });
 
             } catch (e) {
-                messagesMenuList.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load messages.</p>';
+                messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Failed to load messages.</p>';
+                if (msgBadge) msgBadge.classList.add('hidden');
             }
         }
 
