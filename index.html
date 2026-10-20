@@ -106,7 +106,7 @@
             
             <!-- Mascot/Logo inside center -->
             <div class="absolute w-14 h-14 rounded-2xl bg-brand-dark border border-brand-bright/40 overflow-hidden shadow-glow-green p-1 flex items-center justify-center">
-                <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover rounded-xl">
+                <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover rounded-xl" loading="lazy">
             </div>
         </div>
 
@@ -130,7 +130,7 @@
 
                 <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-brand-bright to-emerald-400 p-1 shadow-glow-green mb-3 transform hover:scale-105 transition-transform duration-300">
                     <div class="w-full h-full bg-brand-dark rounded-[22px] flex items-center justify-center relative overflow-hidden">
-                        <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover">
+                        <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover" loading="lazy">
                     </div>
                 </div>
 
@@ -249,7 +249,7 @@
                                 <i class="fa-solid fa-cloud-arrow-up text-brand-bright mr-1"></i> Choose image...
                             </label>
                             <div id="signup-id-preview-box" class="hidden w-9 h-9 rounded-xl bg-slate-800 border border-brand-bright overflow-hidden shrink-0">
-                                <img id="signup-id-preview" src="" alt="ID Preview" class="w-full h-full object-cover">
+                                <img id="signup-id-preview" src="" alt="ID Preview" class="w-full h-full object-cover" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -275,7 +275,7 @@
                         </div>
                     </div>
 
-                    <!-- SMOOTH ANIMATED SIGN UP BUTTON -->
+                    <!-- ANIMATED SIGN UP BUTTON (Maintains user styling preference) -->
                     <button type="submit" id="signup-submit-btn" class="smooth-btn w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-yellow hover:scale-[1.01] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
                         <span id="signup-btn-text">Create Account</span>
                         <i id="signup-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm"></i>
@@ -300,7 +300,7 @@
                     <a href="#" class="flex items-center gap-2 group">
                         <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-brand-bright to-emerald-400 p-0.5 shadow-glow-green group-hover:scale-105 transition-transform duration-300">
                             <div class="w-full h-full bg-brand-dark rounded-[14px] flex items-center justify-center relative overflow-hidden">
-                                <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover">
+                                <img src="logo.jpg" alt="PTC Logo" class="w-full h-full object-cover" loading="lazy">
                             </div>
                         </div>
                         <span class="font-extrabold text-sm sm:text-lg md:text-xl tracking-tight text-white group-hover:text-brand-yellow transition-colors">
@@ -376,10 +376,10 @@
                         </div>
                     </div>
 
-                    <!-- User Profile Dropdown Avatar (Desktop Popover & Mobile Slide Drawer Trigger) -->
+                    <!-- User Profile Dropdown Avatar -->
                     <div class="relative ml-0.5">
                         <button id="user-menu-btn" onclick="toggleUserMenu(event)" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60" loading="lazy">
                             <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
                         </button>
 
@@ -472,7 +472,7 @@
         <!-- Forum 3-Column Main Content -->
         <main class="max-w-7xl mx-auto w-full flex-1 px-3 sm:px-6 lg:px-8 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
             
-            <!-- LEFT COLUMN: TOPICS LIST (Collapsible / Stacks on Mobile) -->
+            <!-- LEFT COLUMN: TOPICS LIST -->
             <aside class="hidden lg:block lg:col-span-3 bg-slate-900/80 backdrop-blur-md rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl sticky top-20">
                 <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
                     <h2 class="font-extrabold text-xs tracking-wider text-slate-200 flex items-center gap-2">
@@ -503,7 +503,7 @@
                     <textarea id="post-input" rows="3" placeholder="What's on your mind? Share announcements, questions, or updates..." class="w-full p-3 bg-slate-800/60 border border-slate-700 rounded-2xl text-slate-100 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-brand-yellow transition-all resize-none"></textarea>
 
                     <div id="image-preview-wrapper" class="hidden relative mt-3 rounded-2xl overflow-hidden border border-slate-700 max-h-48">
-                        <img id="image-preview" src="" alt="Preview" class="w-full h-full object-cover">
+                        <img id="image-preview" src="" alt="Preview" class="w-full h-full object-cover" loading="lazy">
                         <button onclick="removeAttachedImage()" class="absolute top-2 right-2 p-1.5 bg-slate-950/80 hover:bg-red-500 text-white rounded-full text-xs">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -819,7 +819,6 @@
         }, 120000);
 
         function switchView(viewId) {
-            // Explicitly force all dropdown menus hidden on view change
             const userMenu = document.getElementById('user-menu');
             const messagesMenu = document.getElementById('messages-menu');
             const notifMenu = document.getElementById('notif-menu');
@@ -904,7 +903,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Forcefully hide all menus on initial load
             const userMenu = document.getElementById('user-menu');
             const messagesMenu = document.getElementById('messages-menu');
             const notifMenu = document.getElementById('notif-menu');
@@ -928,7 +926,6 @@
             switchView('view-auth');
         });
 
-        // Global Click-Outside Listener to Close Menus
         document.addEventListener('click', (event) => {
             const messagesMenu = document.getElementById('messages-menu');
             const messagesBtn = document.getElementById('messages-menu-btn');
@@ -999,7 +996,6 @@
             const studentId = document.getElementById('login-studentid').value;
             const password = document.getElementById('login-pass').value;
 
-            // Trigger smooth button loading animation state
             const submitBtn = document.getElementById('login-submit-btn');
             const btnText = document.getElementById('login-btn-text');
             const btnSpinner = document.getElementById('login-btn-spinner');
@@ -1025,12 +1021,10 @@
                     currentUser = result.user;
                     localStorage.setItem('ptc_user_session', JSON.stringify(currentUser));
 
-                    // 1. Show the Loading Overlay
                     const overlay = document.getElementById('login-loading-overlay');
                     const statusText = document.getElementById('loading-status-text');
                     overlay.classList.remove('hidden');
 
-                    // 2. Animate Status Messages
                     statusText.textContent = "Verifying student session...";
                     await new Promise(r => setTimeout(r, 600));
 
@@ -1039,7 +1033,6 @@
 
                     updateUserInfoDisplays();
 
-                    // 3. Switch View & Hide Overlay (Forces all menus to stay closed)
                     switchView('view-forum');
                     overlay.classList.add('hidden');
                     showToast(`Welcome back, ${currentUser.fullName}!`);
@@ -1049,7 +1042,6 @@
             } catch (err) {
                 showToast("Could not connect to authentication server.", false);
             } finally {
-                // Reset button state if login fails
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                 btnText.textContent = "Enter Student Forum";
@@ -1062,7 +1054,6 @@
 
             const institutionalEmailVal = document.getElementById('signup-institutional-email').value.trim();
 
-            // Validate institutional email format explicitly
             if (!institutionalEmailVal.endsWith('@paterostechnologicalcollege.edu.ph')) {
                 showToast("make sure you already have ptc institutional email (name@paterostechnologicalcollege.edu.ph)", false);
                 return;
@@ -1076,7 +1067,6 @@
                 return;
             }
 
-            // Trigger smooth button loading animation state (matching login button)
             const submitBtn = document.getElementById('signup-submit-btn');
             const btnText = document.getElementById('signup-btn-text');
             const btnSpinner = document.getElementById('signup-btn-spinner');
@@ -1114,7 +1104,6 @@
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    // Automatically set the newly created account as the active session user
                     currentUser = result.user || {
                         studentId: studentIdVal,
                         fullName: fullNameVal,
@@ -1125,7 +1114,6 @@
                     
                     localStorage.setItem('ptc_user_session', JSON.stringify(currentUser));
 
-                    // Show loading overlay matching login flow for smooth transition
                     const overlay = document.getElementById('login-loading-overlay');
                     const statusText = document.getElementById('loading-status-text');
                     overlay.classList.remove('hidden');
@@ -1146,7 +1134,6 @@
             } catch (err) {
                 showToast("Could not connect to server.", false);
             } finally {
-                // Reset button state if signup fails
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                 btnText.textContent = "Create Account";
@@ -1237,7 +1224,6 @@
                     const statusText = isOnline ? 'Online' : 'Offline';
                     const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
 
-                    // 1. Create element for desktop sidebar
                     if (container) {
                         const btn = document.createElement('button');
                         btn.onclick = () => openChat(name, targetId, isOnline);
@@ -1259,7 +1245,6 @@
                         container.appendChild(btn);
                     }
 
-                    // 2. Create element for mobile drawer
                     if (drawerContainer) {
                         const drawerBtn = document.createElement('button');
                         drawerBtn.onclick = () => { closeMobileUserDrawer(); openChat(name, targetId, isOnline); };
@@ -1281,7 +1266,6 @@
                         drawerContainer.appendChild(drawerBtn);
                     }
 
-                    // 3. Create element for Top Bar Messages Menu
                     if (messagesMenuList) {
                         const msgItem = document.createElement('button');
                         msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
@@ -1457,7 +1441,6 @@
             localStorage.removeItem('ptc_user_session');
             currentUser = null;
             
-            // Close active chat box and mobile drawer upon logout
             closeChat();
             closeMobileUserDrawer();
 
@@ -1468,19 +1451,16 @@
         function toggleUserMenu(event) {
             if (event) event.stopPropagation();
             
-            // Close other top navigation menus
             const messagesMenu = document.getElementById('messages-menu');
             const notifMenu = document.getElementById('notif-menu');
             if (messagesMenu) messagesMenu.classList.add('hidden');
             if (notifMenu) notifMenu.classList.add('hidden');
 
-            // On mobile screens (< 640px), open the slide drawer matching wireframe
             if (window.innerWidth < 640) {
                 document.getElementById('mobile-user-drawer').classList.remove('hidden');
                 return;
             }
 
-            // Desktop menu dropdown
             document.getElementById('user-menu').classList.toggle('hidden');
         }
 
@@ -1519,7 +1499,6 @@
             const postsContainer = document.getElementById('posts-container');
             if (!postsContainer) return;
 
-            // Render Shimmer Skeleton State while fetching
             postsContainer.innerHTML = `
                 <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
                     <div class="flex items-center gap-3">
@@ -1555,12 +1534,16 @@
                     return;
                 }
 
+                // Use a DocumentFragment to avoid DOM reflow bottleneck / lag spikes
+                const fragment = document.createDocumentFragment();
+
                 posts.forEach(post => {
                     const article = document.createElement('article');
                     article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
 
+                    // Added native lazy loading to images to boost feed render performance
                     let imageHTML = post.image_url ? 
-                        `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover"></div>` : '';
+                        `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover" loading="lazy"></div>` : '';
 
                     let commentsHTML = '';
                     if (post.comments && post.comments.length > 0) {
@@ -1572,7 +1555,7 @@
                     article.innerHTML = `
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-3 truncate">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-cover ring-2 ring-brand-bright/60 shrink-0">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-cover ring-2 ring-brand-bright/60 shrink-0" loading="lazy">
                                 <div class="truncate">
                                     <h4 class="font-bold text-xs sm:text-sm text-white flex items-center gap-1.5 truncate">
                                         <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
@@ -1611,8 +1594,10 @@
                             </div>
                         </div>
                     `;
-                    postsContainer.appendChild(article);
+                    fragment.appendChild(article);
                 });
+
+                postsContainer.appendChild(fragment);
             } catch (e) {
                 postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
             }
