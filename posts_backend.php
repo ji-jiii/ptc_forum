@@ -23,10 +23,16 @@ try {
 
 $action = $_REQUEST['action'] ?? '';
 
-// GET ALL POSTS WITH COMMENTS & REPLIES
+// GET ALL POSTS WITH COMMENTS & REPLIES (WITH PAGINATION LIMIT & OFFSET)
 if ($action === 'get_posts') {
     try {
-        $stmt = $pdo->query("SELECT * FROM posts ORDER BY created_at DESC");
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+        $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+
+        $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
         $posts = $stmt->fetchAll();
 
         foreach ($posts as &$post) {
@@ -86,7 +92,7 @@ if ($action === 'toggle_like' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $fetch = $pdo->prepare("SELECT likes_count FROM posts WHERE id = ?");
         $fetch->execute([$postId]);
-        $res = $fetch->fetch(); // Fixed syntax from . to ->
+        $res = $fetch->fetch();
         
         echo json_encode(['status' => 'success', 'likes_count' => $res['likes_count'] ?? 0]);
     } catch (\Exception $e) {
@@ -149,7 +155,4 @@ if ($action === 'delete_post' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     exit;
 }
-    // Add this query execution during active backend endpoints (e.g. login.php or posts_backend.php)
-$updateActivity = $pdo->prepare("UPDATE users SET last_activity = CURRENT_TIMESTAMP, is_online = 1 WHERE student_id = ?");
-$updateActivity->execute([$studentId]);
 ?>
