@@ -191,7 +191,6 @@
                         <a href="#" onclick="alert('Password reset link sent to registered college email.')" class="text-brand-bright hover:underline font-medium">Forgot password?</a>
                     </div>
 
-                    <!-- SMOOTH ANIMATED LOGIN BUTTON -->
                     <button type="submit" id="login-submit-btn" class="smooth-btn w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-brand-bright to-emerald-500 text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-green hover:brightness-110 hover:scale-[1.01] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
                         <span id="login-btn-text">Enter Student Forum</span>
                         <i id="login-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm"></i>
@@ -275,7 +274,6 @@
                         </div>
                     </div>
 
-                    <!-- ANIMATED SIGN UP BUTTON (Maintains user styling preference) -->
                     <button type="submit" id="signup-submit-btn" class="smooth-btn w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-yellow hover:scale-[1.01] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
                         <span id="signup-btn-text">Create Account</span>
                         <i id="signup-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm"></i>
@@ -518,9 +516,10 @@
                             </label>
                         </div>
 
-                        <button onclick="addNewPost()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs shadow-glow-yellow hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5">
-                            <span>POST</span>
-                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        <!-- POST BUTTON WITH ANIMATION & SPINNER STATE -->
+                        <button id="post-submit-btn" onclick="addNewPost()" class="smooth-btn px-5 py-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs shadow-glow-yellow hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
+                            <span id="post-btn-text">POST</span>
+                            <i id="post-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-xs"></i>
                         </button>
                     </div>
                 </div>
@@ -1534,14 +1533,13 @@
                     return;
                 }
 
-                // Use a DocumentFragment to avoid DOM reflow bottleneck / lag spikes
                 const fragment = document.createDocumentFragment();
 
+                // Iterate in reverse (or use insertBefore) so that newer posts sort to the top below the create box
                 posts.forEach(post => {
                     const article = document.createElement('article');
                     article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
 
-                    // Added native lazy loading to images to boost feed render performance
                     let imageHTML = post.image_url ? 
                         `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover" loading="lazy"></div>` : '';
 
@@ -1594,7 +1592,8 @@
                             </div>
                         </div>
                     `;
-                    fragment.appendChild(article);
+                    // Prepend so newest items appear at the top of the feed immediately below the create post box
+                    fragment.insertBefore(article, fragment.firstChild);
                 });
 
                 postsContainer.appendChild(fragment);
@@ -1612,6 +1611,16 @@
                 showToast("Please write something to post!", false);
                 return;
             }
+
+            // Post button animation & spinner feedback state
+            const submitBtn = document.getElementById('post-submit-btn');
+            const btnText = document.getElementById('post-btn-text');
+            const btnSpinner = document.getElementById('post-btn-spinner');
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed', 'scale-95');
+            btnText.textContent = "Posting...";
+            btnSpinner.classList.remove('hidden');
 
             const formData = new FormData();
             formData.append('action', 'create_post');
@@ -1637,6 +1646,11 @@
                 }
             } catch (err) {
                 showToast("Could not connect to server.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'scale-95');
+                btnText.textContent = "POST";
+                btnSpinner.classList.add('hidden');
             }
         }
 
