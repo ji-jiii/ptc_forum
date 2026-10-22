@@ -29,7 +29,6 @@ if (!$studentId) {
 }
 
 try {
-    // Select all unique users involved in any message exchange with the current user
     $stmt = $pdo->prepare("
         SELECT DISTINCT u.student_id, u.full_name, u.course, u.role, u.is_online,
                (SELECT COUNT(*) FROM messages WHERE sender_id = u.student_id AND receiver_id = ? AND (is_read = 0 OR is_read = FALSE)) AS unread_count
@@ -48,15 +47,22 @@ try {
     $stmt->execute([$studentId, $studentId, $studentId, $studentId, $studentId]);
     $recentChats = $stmt->fetchAll();
 
-    // Map each record to include flags required by frontend badge filters
-    foreach ($recentChats as &$chat) {
-        $chat['unread_count'] = (int)($chat['unread_count'] ?? 0);
-        $chat['has_unread'] = $chat['unread_count'] > 0;
-        // Include chat thread even if it's outbound so names appear correctly in menu
-        $chat['is_new'] = true; 
+    $formattedChats = [];
+    foreach ($recentChats as $chat) {
+        $unread = (int)($chat['unread_count'] ?? 0);
+        $formattedChats[] = [
+            'student_id' => $chat['student_id'],
+            'full_name' => $chat['full_name'],
+            'course' => $chat['course'] ?? 'Member',
+            'role' => $chat['role'] ?? 'Student',
+            'is_online' => $chat['is_online'],
+            'unread_count' => $unread,
+            'has_unread' => true, // Force true so active conversation threads always appear in menu
+            'is_new' => true
+        ];
     }
 
-    echo json_encode($recentChats);
+    echo json_encode($formattedChats);
 } catch (\Exception $e) {
     echo json_encode([]);
 }
