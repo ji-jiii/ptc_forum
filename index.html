@@ -91,6 +91,14 @@
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
         }
+
+        /* Reliable Icon Click Target Fix */
+        button, a {
+            touch-action: manipulation;
+        }
+        button i, a i {
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-brand-bg via-brand-dark to-slate-950 font-sans min-h-screen text-slate-100 flex flex-col antialiased overflow-x-hidden">
@@ -147,10 +155,10 @@
                 
                 <!-- Auth Tabs -->
                 <div class="flex items-center justify-between p-1 bg-slate-950/80 rounded-2xl border border-slate-800 mb-5 shrink-0">
-                    <button type="button" id="auth-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-xl text-brand-yellow bg-slate-900 shadow transition-all">
+                    <button type="button" id="auth-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-xl text-brand-yellow bg-slate-900 shadow transition-all cursor-pointer">
                         Log In
                     </button>
-                    <button type="button" id="auth-tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition-all">
+                    <button type="button" id="auth-tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition-all cursor-pointer">
                         Sign Up
                     </button>
                 </div>
@@ -168,7 +176,7 @@
                                    placeholder="2026-1234" 
                                    oninput="formatStudentIdInput(this)" 
                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
-                            <i class="fa-solid fa-id-card absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+                            <i class="fa-solid fa-id-card absolute left-3.5 top-3 text-slate-500 text-xs pointer-events-none"></i>
                         </div>
                     </div>
 
@@ -176,9 +184,9 @@
                         <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
                         <div class="relative">
                             <input type="password" id="login-pass" required placeholder="••••••••" class="w-full pl-10 pr-10 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
-                            <i class="fa-solid fa-lock absolute left-3.5 top-3 text-slate-500 text-xs"></i>
-                            <button type="button" onclick="togglePassVisibility('login-pass', this)" class="absolute right-3.5 top-2.5 text-slate-400 hover:text-white text-xs">
-                                <i class="fa-solid fa-eye"></i>
+                            <i class="fa-solid fa-lock absolute left-3.5 top-3 text-slate-500 text-xs pointer-events-none"></i>
+                            <button type="button" onclick="togglePassVisibility('login-pass', this)" class="absolute right-3.5 top-2.5 text-slate-400 hover:text-white text-xs cursor-pointer">
+                                <i class="fa-solid fa-eye pointer-events-none"></i>
                             </button>
                         </div>
                     </div>
@@ -193,7 +201,7 @@
 
                     <button type="submit" id="login-submit-btn" class="smooth-btn w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-brand-bright to-emerald-500 text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-green hover:brightness-110 hover:scale-[1.01] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
                         <span id="login-btn-text">Enter Student Forum</span>
-                        <i id="login-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm"></i>
+                        <i id="login-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm pointer-events-none"></i>
                     </button>
                 </form>
 
@@ -216,7 +224,7 @@
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Institutional Email</label>
                         <div class="relative">
                             <input type="email" id="signup-institutional-email" required placeholder="name@paterostechnologicalcollege.edu.ph" class="w-full pl-9 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
-                            <i class="fa-solid fa-envelope absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                            <i class="fa-solid fa-envelope absolute left-3 top-2.5 text-slate-500 text-xs pointer-events-none"></i>
                         </div>
                     </div>
 
@@ -245,7 +253,7 @@
                         <div class="flex items-center gap-3">
                             <input type="file" id="signup-id-file" accept="image/*" onchange="previewSignupID(event)" class="hidden">
                             <label for="signup-id-file" class="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-dashed border-slate-600 rounded-xl text-xs text-slate-300 text-center cursor-pointer transition-colors">
-                                <i class="fa-solid fa-cloud-arrow-up text-brand-bright mr-1"></i> Choose image...
+                                <i class="fa-solid fa-cloud-arrow-up text-brand-bright mr-1 pointer-events-none"></i> Choose image...
                             </label>
                             <div id="signup-id-preview-box" class="hidden w-9 h-9 rounded-xl bg-slate-800 border border-brand-bright overflow-hidden shrink-0">
                                 <img id="signup-id-preview" src="" alt="ID Preview" class="w-full h-full object-cover" loading="lazy">
@@ -258,8 +266,8 @@
                             <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Password</label>
                             <div class="relative">
                                 <input type="password" id="signup-pass" required placeholder="••••••••" class="w-full pl-3 pr-8 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-bright">
-                                <button type="button" onclick="togglePassVisibility('signup-pass', this)" class="absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs">
-                                    <i class="fa-solid fa-eye"></i>
+                                <button type="button" onclick="togglePassVisibility('signup-pass', this)" class="absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs cursor-pointer">
+                                    <i class="fa-solid fa-eye pointer-events-none"></i>
                                 </button>
                             </div>
                         </div>
@@ -267,8 +275,8 @@
                             <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Confirm Password</label>
                             <div class="relative">
                                 <input type="password" id="signup-pass-confirm" required placeholder="••••••••" class="w-full pl-3 pr-8 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-bright">
-                                <button type="button" onclick="togglePassVisibility('signup-pass-confirm', this)" class="absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs">
-                                    <i class="fa-solid fa-eye"></i>
+                                <button type="button" onclick="togglePassVisibility('signup-pass-confirm', this)" class="absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs cursor-pointer">
+                                    <i class="fa-solid fa-eye pointer-events-none"></i>
                                 </button>
                             </div>
                         </div>
@@ -276,7 +284,7 @@
 
                     <button type="submit" id="signup-submit-btn" class="smooth-btn w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-yellow hover:scale-[1.01] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2">
                         <span id="signup-btn-text">Create Account</span>
-                        <i id="signup-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm"></i>
+                        <i id="signup-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-sm pointer-events-none"></i>
                     </button>
                 </form>
 
@@ -312,7 +320,7 @@
                     <div class="relative w-full">
                         <input type="text" id="forum-search" onkeyup="filterForumPosts()" placeholder="Search discussions, topics, or members..." class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-700/80 rounded-2xl text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-all">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                            <i class="fa-solid fa-magnifying-glass text-xs pointer-events-none"></i>
                         </div>
                     </div>
                 </div>
@@ -321,21 +329,21 @@
                 <div class="flex items-center gap-1.5 sm:gap-3">
                     
                     <!-- Switch to Admin View -->
-                    <button id="admin-portal-btn" onclick="switchView('view-admin')" class="hidden px-2.5 sm:px-3 py-2 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/40 hover:bg-slate-700 text-xs font-bold transition-all items-center gap-1.5" title="Open Admin Panel">
-                        <i class="fa-solid fa-user-shield"></i>
+                    <button id="admin-portal-btn" onclick="switchView('view-admin')" class="hidden px-2.5 sm:px-3 py-2 rounded-xl text-brand-yellow bg-slate-800/80 border border-brand-yellow/40 hover:bg-slate-700 text-xs font-bold transition-all items-center gap-1.5 cursor-pointer" title="Open Admin Panel">
+                        <i class="fa-solid fa-user-shield pointer-events-none"></i>
                         <span class="hidden sm:inline">Admin</span>
                     </button>
 
                     <!-- Home -->
-                    <button id="home-btn" onclick="handleHomeClick()" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Refresh & Home Feed">
-                        <i class="fa-solid fa-house text-xs sm:text-sm"></i>
+                    <button id="home-btn" onclick="handleHomeClick()" class="min-w-[36px] min-h-[36px] flex items-center justify-center p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative cursor-pointer" title="Refresh & Home Feed">
+                        <i class="fa-solid fa-house text-xs sm:text-sm pointer-events-none"></i>
                     </button>
 
                     <!-- Direct Messages Dropdown Menu -->
                     <div class="relative">
-                        <button id="messages-menu-btn" onclick="toggleMessagesMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Messages Inbox">
-                            <i class="fa-solid fa-comment-dots text-xs sm:text-sm"></i>
-                            <span id="msg-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-brand-bright text-brand-dark rounded-full"></span>
+                        <button id="messages-menu-btn" onclick="toggleMessagesMenu(event)" class="min-w-[36px] min-h-[36px] flex items-center justify-center p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-brand-bright hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative cursor-pointer" title="Messages Inbox">
+                            <i class="fa-solid fa-comment-dots text-xs sm:text-sm pointer-events-none"></i>
+                            <span id="msg-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-brand-bright text-brand-dark rounded-full pointer-events-none"></span>
                         </button>
 
                         <div id="messages-menu" class="hidden absolute right-0 mt-3 w-72 sm:w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-3 z-50 fade-in">
@@ -349,7 +357,7 @@
                                 <p class="text-xs text-slate-400 text-center py-4">Loading messages...</p>
                             </div>
                             <div class="pt-2 border-t border-slate-800 text-center">
-                                <button onclick="toggleMessagesMenu(); scrollToContacts();" class="text-[11px] font-bold text-brand-bright hover:underline">
+                                <button onclick="toggleMessagesMenu(); scrollToContacts();" class="text-[11px] font-bold text-brand-bright hover:underline cursor-pointer">
                                     View all forum members
                                 </button>
                             </div>
@@ -358,9 +366,9 @@
 
                     <!-- Notifications Dropdown -->
                     <div class="relative">
-                        <button id="notif-menu-btn" onclick="toggleNotificationsMenu(event)" class="p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative" title="Notifications">
-                            <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
-                            <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full"></span>
+                        <button id="notif-menu-btn" onclick="toggleNotificationsMenu(event)" class="min-w-[36px] min-h-[36px] flex items-center justify-center p-2 sm:p-2.5 rounded-xl text-slate-300 hover:text-red-400 hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all relative cursor-pointer" title="Notifications">
+                            <i class="fa-solid fa-bell text-xs sm:text-sm pointer-events-none"></i>
+                            <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 px-1.5 py-0.5 text-[9px] font-bold bg-red-500 text-white rounded-full pointer-events-none"></span>
                         </button>
 
                         <div id="notif-menu" class="hidden absolute right-0 mt-3 w-72 sm:w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-3 z-50">
@@ -376,9 +384,9 @@
 
                     <!-- User Profile Dropdown Avatar -->
                     <div class="relative ml-0.5">
-                        <button id="user-menu-btn" onclick="toggleUserMenu(event)" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60" loading="lazy">
-                            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
+                        <button id="user-menu-btn" onclick="toggleUserMenu(event)" class="flex items-center gap-1.5 p-1 rounded-2xl hover:bg-slate-800 border border-transparent hover:border-slate-700 transition-all cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-2 ring-brand-bright/60 pointer-events-none" loading="lazy">
+                            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block pointer-events-none"></i>
                         </button>
 
                         <!-- Desktop Profile Menu -->
@@ -389,12 +397,12 @@
                                 <p id="current-user-id" class="current-user-id-text text-[10px] text-slate-400">ID: 2026-XXXXX</p>
                             </div>
                             <a href="#" id="admin-menu-link" class="admin-menu-link-el hidden flex items-center gap-2 px-3 py-2 text-xs text-brand-yellow hover:bg-slate-800 rounded-xl transition-colors" onclick="switchView('view-admin')">
-                                <i class="fa-solid fa-gauge-high w-4"></i> Admin Dashboard
+                                <i class="fa-solid fa-gauge-high w-4 pointer-events-none"></i> Admin Dashboard
                             </a>
 
                             <div class="border-t border-slate-800 my-1"></div>
                             <a href="#" onclick="handleLogout()" class="flex items-center gap-2 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-xl transition-colors">
-                                <i class="fa-solid fa-right-from-bracket w-4"></i> Log Out
+                                <i class="fa-solid fa-right-from-bracket w-4 pointer-events-none"></i> Log Out
                             </a>
                         </div>
                     </div>
@@ -406,7 +414,7 @@
                 <div class="relative w-full">
                     <input type="text" id="forum-search-mobile" onkeyup="document.getElementById('forum-search').value = this.value; filterForumPosts();" placeholder="Search discussions..." class="w-full pl-9 pr-3 py-1.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-yellow">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        <i class="fa-solid fa-magnifying-glass text-xs pointer-events-none"></i>
                     </div>
                 </div>
             </div>
@@ -422,8 +430,8 @@
                 
                 <!-- 1. USER PROFILE HEADER CARD -->
                 <div class="p-4 bg-slate-950 border-b border-slate-800 relative">
-                    <button onclick="closeMobileUserDrawer()" class="absolute top-3 right-3 text-slate-400 hover:text-white p-1">
-                        <i class="fa-solid fa-xmark text-sm"></i>
+                    <button onclick="closeMobileUserDrawer()" class="absolute top-3 right-3 text-slate-400 hover:text-white p-1 cursor-pointer">
+                        <i class="fa-solid fa-xmark text-sm pointer-events-none"></i>
                     </button>
 
                     <div class="mb-3">
@@ -434,11 +442,11 @@
 
                     <div class="space-y-1.5 pt-3 border-t border-slate-800/80">
                         <a href="#" class="admin-menu-link-el hidden flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-brand-yellow bg-brand-yellow/10 hover:bg-brand-yellow/20 rounded-xl transition-colors" onclick="closeMobileUserDrawer(); switchView('view-admin');">
-                            <i class="fa-solid fa-compass text-sm"></i>
+                            <i class="fa-solid fa-compass text-sm pointer-events-none"></i>
                             <span>Admin Dashboard</span>
                         </a>
-                        <button onclick="handleLogout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-colors text-left">
-                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                        <button onclick="handleLogout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-colors text-left cursor-pointer">
+                            <i class="fa-solid fa-right-from-bracket text-sm pointer-events-none"></i>
                             <span>Log Out</span>
                         </button>
                     </div>
@@ -448,8 +456,8 @@
                 <div class="p-3 bg-slate-900 border-b border-slate-800 shrink-0">
                     <div class="relative">
                         <input type="text" onkeyup="filterDrawerContactsList(this.value)" placeholder="search contact" class="w-full pl-8 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-bright">
-                        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 text-xs">
-                            <i class="fa-regular fa-user"></i>
+                        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 text-xs pointer-events-none">
+                            <i class="fa-regular fa-user pointer-events-none"></i>
                         </div>
                     </div>
                 </div>
@@ -486,7 +494,7 @@
                         <i class="fa-solid fa-hashtag text-brand-yellow"></i>
                         TOPICS
                     </h2>
-                    <button onclick="resetTopicFilter()" class="text-[11px] text-brand-bright hover:underline font-medium">Clear</button>
+                    <button onclick="resetTopicFilter()" class="text-[11px] text-brand-bright hover:underline font-medium cursor-pointer">Clear</button>
                 </div>
 
                 <div class="text-center py-6 px-3 bg-slate-800/30 rounded-2xl border border-slate-800">
@@ -511,8 +519,8 @@
 
                     <div id="image-preview-wrapper" class="hidden relative mt-3 rounded-2xl overflow-hidden border border-slate-700 max-h-48">
                         <img id="image-preview" src="" alt="Preview" class="w-full h-full object-cover" loading="lazy">
-                        <button onclick="removeAttachedImage()" class="absolute top-2 right-2 p-1.5 bg-slate-950/80 hover:bg-red-500 text-white rounded-full text-xs">
-                            <i class="fa-solid fa-xmark"></i>
+                        <button onclick="removeAttachedImage()" class="absolute top-2 right-2 p-1.5 bg-slate-950/80 hover:bg-red-500 text-white rounded-full text-xs cursor-pointer">
+                            <i class="fa-solid fa-xmark pointer-events-none"></i>
                         </button>
                     </div>
 
@@ -520,7 +528,7 @@
                         <div class="flex items-center gap-2">
                             <input type="file" id="post-file-input" accept="image/*" class="hidden" onchange="previewPostImage(event)">
                             <label for="post-file-input" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium cursor-pointer transition-colors border border-slate-700">
-                                <i class="fa-regular fa-image text-brand-bright"></i>
+                                <i class="fa-regular fa-image text-brand-bright pointer-events-none"></i>
                                 <span>Photo</span>
                             </label>
                         </div>
@@ -528,7 +536,7 @@
                         <!-- POST BUTTON WITH ANIMATION & SPINNER STATE -->
                         <button id="post-submit-btn" onclick="addNewPost()" class="smooth-btn px-5 py-2 rounded-xl bg-gradient-to-r from-brand-yellow via-brand-gold to-brand-yellow text-brand-dark font-extrabold text-xs shadow-glow-yellow hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
                             <span id="post-btn-text">POST</span>
-                            <i id="post-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-xs"></i>
+                            <i id="post-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-xs pointer-events-none"></i>
                         </button>
                     </div>
                 </div>
@@ -536,7 +544,7 @@
                 <!-- Active Filter Alert -->
                 <div id="active-filter-banner" class="hidden bg-brand-dark/90 border border-brand-yellow/40 rounded-2xl p-3 flex items-center justify-between text-xs">
                     <span class="text-slate-300">Filtering by topic: <strong id="filter-topic-name" class="text-brand-yellow">---</strong></span>
-                    <button onclick="resetTopicFilter()" class="text-xs text-red-400 hover:underline">Remove filter</button>
+                    <button onclick="resetTopicFilter()" class="text-xs text-red-400 hover:underline cursor-pointer">Remove filter</button>
                 </div>
 
                 <!-- Posts List Container -->
@@ -566,8 +574,8 @@
 
                 <div class="relative">
                     <input type="text" id="contact-search-input" onkeyup="filterContactsList()" placeholder="Search contact..." class="w-full pl-9 pr-3 py-2 bg-slate-800/70 border border-slate-700 rounded-2xl text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-bright">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">
-                        <i class="fa-regular fa-user"></i>
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs pointer-events-none">
+                        <i class="fa-regular fa-user pointer-events-none"></i>
                     </div>
                 </div>
 
@@ -610,12 +618,12 @@
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <button onclick="switchView('view-forum')" class="px-3 py-1.5 rounded-xl bg-brand-bright/20 text-brand-bright hover:bg-brand-bright hover:text-brand-dark border border-brand-bright/40 text-xs font-bold transition-all flex items-center gap-1.5">
-                        <i class="fa-solid fa-comments"></i>
+                    <button onclick="switchView('view-forum')" class="px-3 py-1.5 rounded-xl bg-brand-bright/20 text-brand-bright hover:bg-brand-bright hover:text-brand-dark border border-brand-bright/40 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-comments pointer-events-none"></i>
                         <span class="hidden sm:inline">Student Forum</span>
                     </button>
-                    <button onclick="handleLogout()" class="p-2 rounded-xl text-red-400 hover:bg-red-500/10 border border-red-500/30 text-xs">
-                        <i class="fa-solid fa-right-from-bracket"></i>
+                    <button onclick="handleLogout()" class="p-2 rounded-xl text-red-400 hover:bg-red-500/10 border border-red-500/30 text-xs cursor-pointer">
+                        <i class="fa-solid fa-right-from-bracket pointer-events-none"></i>
                     </button>
                 </div>
             </div>
@@ -625,20 +633,20 @@
             
             <!-- Left Admin Navigation Sidebar -->
             <aside id="admin-sidebar" class="md:col-span-3 bg-slate-900/90 rounded-3xl p-3 sm:p-4 border border-slate-800 shadow-xl flex md:flex-col gap-2 overflow-x-auto h-fit">
-                <button onclick="setActiveAdminTab('users', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all">
-                    <i class="fa-solid fa-user-gear text-sm w-4"></i>
+                <button onclick="setActiveAdminTab('users', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all cursor-pointer">
+                    <i class="fa-solid fa-user-gear text-sm w-4 pointer-events-none"></i>
                     <span>Users</span>
                 </button>
-                <button onclick="setActiveAdminTab('posts', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
-                    <i class="fa-regular fa-clock text-sm w-4"></i>
+                <button onclick="setActiveAdminTab('posts', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer">
+                    <i class="fa-regular fa-clock text-sm w-4 pointer-events-none"></i>
                     <span>Posts</span>
                 </button>
-                <button onclick="setActiveAdminTab('reports', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
-                    <i class="fa-solid fa-triangle-exclamation text-sm w-4"></i>
+                <button onclick="setActiveAdminTab('reports', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer">
+                    <i class="fa-solid fa-triangle-exclamation text-sm w-4 pointer-events-none"></i>
                     <span>Reports</span>
                 </button>
-                <button onclick="setActiveAdminTab('settings', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all">
-                    <i class="fa-regular fa-circle-check text-sm w-4"></i>
+                <button onclick="setActiveAdminTab('settings', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer">
+                    <i class="fa-regular fa-circle-check text-sm w-4 pointer-events-none"></i>
                     <span>Settings</span>
                 </button>
             </aside>
@@ -695,7 +703,7 @@
                         <h2 class="text-sm sm:text-lg font-bold text-white tracking-tight">
                             User management
                         </h2>
-                        <button onclick="toggleEditMode(this)" class="px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all">
+                        <button onclick="toggleEditMode(this)" class="px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer">
                             Edit
                         </button>
                     </div>
@@ -734,14 +742,14 @@
     <!-- User Detail Admin Modal -->
     <div id="modal-user-detail" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-brand-bright/30 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative fade-in">
-            <button onclick="closeUserModal()" class="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-full">
-                <i class="fa-solid fa-xmark text-lg"></i>
+            <button onclick="closeUserModal()" class="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-full cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg pointer-events-none"></i>
             </button>
 
             <div class="flex items-center gap-4 mb-4">
                 <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-brand-bright to-brand-yellow p-0.5 shrink-0">
                     <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-brand-yellow font-bold text-xl">
-                        <i class="fa-solid fa-user-gear"></i>
+                        <i class="fa-solid fa-user-gear pointer-events-none"></i>
                     </div>
                 </div>
                 <div>
@@ -772,7 +780,7 @@
             </div>
 
             <div class="mt-5 flex items-center justify-end gap-2">
-                <button onclick="closeUserModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200">
+                <button onclick="closeUserModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 cursor-pointer">
                     Close
                 </button>
             </div>
@@ -784,7 +792,7 @@
         <div class="bg-brand-dark p-3.5 border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-xl bg-brand-bright/20 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-user pointer-events-none"></i>
                 </div>
                 <div class="truncate max-w-[200px]">
                     <h4 id="chat-contact-name" class="font-bold text-xs text-white truncate">Contact Name</h4>
@@ -794,8 +802,8 @@
                     </span>
                 </div>
             </div>
-            <button onclick="closeChat()" class="text-slate-400 hover:text-white p-1">
-                <i class="fa-solid fa-xmark text-sm"></i>
+            <button onclick="closeChat()" class="text-slate-400 hover:text-white p-1 cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm pointer-events-none"></i>
             </button>
         </div>
 
@@ -805,8 +813,8 @@
 
         <div class="p-2.5 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
             <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChatMessage()" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-bright">
-            <button onclick="sendChatMessage()" class="p-2 bg-brand-bright text-brand-dark rounded-xl font-bold hover:scale-105 transition-transform">
-                <i class="fa-solid fa-paper-plane text-xs"></i>
+            <button onclick="sendChatMessage()" class="p-2 bg-brand-bright text-brand-dark rounded-xl font-bold hover:scale-105 transition-transform cursor-pointer">
+                <i class="fa-solid fa-paper-plane text-xs pointer-events-none"></i>
             </button>
         </div>
     </div>
@@ -1196,12 +1204,12 @@
                             <span class="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 font-medium">${escapeHTML(user.role || 'Student')}</span>
                         </td>
                         <td class="py-3.5 px-3 sm:px-4 text-center">
-                            <button onclick="openUserModal('${escapeHTML(user.student_id || user.studentId || '')}', '${escapeHTML(user.first_name || user.full_name || user.fullName || '')}', '${escapeHTML(user.last_name || '')}', '${escapeHTML(user.role || 'Student')}', '${escapeHTML(user.course || 'N/A')}', '${escapeHTML(user.email || user.institutional_email || 'N/A')}')" class="px-3 py-1 rounded-full border border-slate-600 bg-slate-800 hover:bg-brand-bright hover:text-brand-dark transition-all font-semibold">
+                            <button onclick="openUserModal('${escapeHTML(user.student_id || user.studentId || '')}', '${escapeHTML(user.first_name || user.full_name || user.fullName || '')}', '${escapeHTML(user.last_name || '')}', '${escapeHTML(user.role || 'Student')}', '${escapeHTML(user.course || 'N/A')}', '${escapeHTML(user.email || user.institutional_email || 'N/A')}')" class="px-3 py-1 rounded-full border border-slate-600 bg-slate-800 hover:bg-brand-bright hover:text-brand-dark transition-all font-semibold cursor-pointer">
                                 View
                             </button>
                         </td>
                         <td class="py-3.5 px-3 sm:px-4 text-center">
-                            <button onclick="removeTableRow(this)" class="px-3 py-1 rounded-full border border-red-500/40 bg-slate-800 text-red-400 hover:bg-red-500 hover:text-white transition-all font-semibold">
+                            <button onclick="removeTableRow(this)" class="px-3 py-1 rounded-full border border-red-500/40 bg-slate-800 text-red-400 hover:bg-red-500 hover:text-white transition-all font-semibold cursor-pointer">
                                 Remove
                             </button>
                         </td>
@@ -1273,9 +1281,9 @@
                     if (container) {
                         const btn = document.createElement('button');
                         btn.onclick = () => openChat(name, targetId, isOnline);
-                        btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group fade-in';
+                        btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group fade-in cursor-pointer';
                         btn.innerHTML = `
-                            <div class="flex items-center gap-3 truncate">
+                            <div class="flex items-center gap-3 truncate pointer-events-none">
                                 <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
                                     <i class="fa-regular fa-user"></i>
                                 </div>
@@ -1286,7 +1294,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
+                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0 pointer-events-none"></i>
                         `;
                         container.appendChild(btn);
                     }
@@ -1294,9 +1302,9 @@
                     if (drawerContainer) {
                         const drawerBtn = document.createElement('button');
                         drawerBtn.onclick = () => { closeMobileUserDrawer(); openChat(name, targetId, isOnline); };
-                        drawerBtn.className = 'drawer-contact-card w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group fade-in';
+                        drawerBtn.className = 'drawer-contact-card w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group fade-in cursor-pointer';
                         drawerBtn.innerHTML = `
-                            <div class="flex items-center gap-2.5 truncate">
+                            <div class="flex items-center gap-2.5 truncate pointer-events-none">
                                 <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-[10px] shrink-0">
                                     <i class="fa-regular fa-user"></i>
                                 </div>
@@ -1307,7 +1315,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0"></i>
+                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0 pointer-events-none"></i>
                         `;
                         drawerContainer.appendChild(drawerBtn);
                     }
@@ -1376,9 +1384,9 @@
 
                 const msgItem = document.createElement('button');
                 msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
-                msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group';
+                msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group cursor-pointer';
                 msgItem.innerHTML = `
-                    <div class="flex items-center gap-2.5 truncate">
+                    <div class="flex items-center gap-2.5 truncate pointer-events-none">
                         <div class="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
                             <i class="fa-solid fa-user"></i>
                             ${isOnline ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-brand-bright border-2 border-slate-900"></span>' : ''}
@@ -1388,7 +1396,7 @@
                             <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
                         </div>
                     </div>
-                    <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all">New</span>
+                    <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all pointer-events-none">New</span>
                 `;
                 messagesMenuList.appendChild(msgItem);
             });
@@ -1721,16 +1729,16 @@
                 ${imageHTML}
 
                 <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs text-slate-400">
-                    <button onclick="toggleLike(this)" class="flex items-center gap-1.5 hover:text-red-400 transition-colors">
-                        <i class="fa-regular fa-heart text-sm"></i>
+                    <button onclick="toggleLike(this)" class="flex items-center gap-1.5 hover:text-red-400 transition-colors cursor-pointer">
+                        <i class="fa-regular fa-heart text-sm pointer-events-none"></i>
                         <span class="like-count font-semibold">${post.likes_count || 0}</span>
                     </button>
-                    <button onclick="toggleComments(this)" class="flex items-center gap-1.5 hover:text-brand-bright transition-colors">
-                        <i class="fa-regular fa-comment text-sm"></i>
+                    <button onclick="toggleComments(this)" class="flex items-center gap-1.5 hover:text-brand-bright transition-colors cursor-pointer">
+                        <i class="fa-regular fa-comment text-sm pointer-events-none"></i>
                         <span class="comment-count font-semibold">${post.comments ? post.comments.length : 0}</span>
                     </button>
-                    <button onclick="showToast('Post link copied!')" class="flex items-center gap-1.5 hover:text-brand-yellow transition-colors">
-                        <i class="fa-solid fa-share text-sm"></i>
+                    <button onclick="showToast('Post link copied!')" class="flex items-center gap-1.5 hover:text-brand-yellow transition-colors cursor-pointer">
+                        <i class="fa-solid fa-share text-sm pointer-events-none"></i>
                         <span class="hidden sm:inline">Share</span>
                     </button>
                 </div>
@@ -1741,7 +1749,7 @@
                     </div>
                     <div class="flex gap-2 pt-1">
                         <input type="text" placeholder="Write a comment..." class="comment-input flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-bright">
-                        <button onclick="addCommentToDatabase(${post.id}, this)" class="px-3 py-1.5 bg-brand-bright text-brand-dark rounded-xl font-bold text-xs shrink-0">Send</button>
+                        <button onclick="addCommentToDatabase(${post.id}, this)" class="px-3 py-1.5 bg-brand-bright text-brand-dark rounded-xl font-bold text-xs shrink-0 cursor-pointer">Send</button>
                     </div>
                 </div>
             `;
@@ -1822,11 +1830,11 @@
             let count = parseInt(countSpan.textContent);
 
             if (icon.classList.contains('fa-regular')) {
-                icon.className = 'fa-solid fa-heart text-sm text-red-500';
+                icon.className = 'fa-solid fa-heart text-sm text-red-500 pointer-events-none';
                 countSpan.textContent = count + 1;
                 countSpan.classList.add('text-red-400');
             } else {
-                icon.className = 'fa-regular fa-heart text-sm';
+                icon.className = 'fa-regular fa-heart text-sm pointer-events-none';
                 countSpan.textContent = count - 1;
                 countSpan.classList.remove('text-red-400');
             }
@@ -1897,20 +1905,20 @@
 
         function setActiveAdminTab(tabName, btn) {
             document.querySelectorAll('.admin-nav-item').forEach(b => {
-                b.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all";
+                b.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer";
             });
-            btn.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all";
+            btn.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all cursor-pointer";
             showToast(`Admin View: Switched to ${tabName.toUpperCase()} section.`);
         }
 
         function toggleEditMode(btn) {
             if (btn.textContent.trim() === "Edit") {
                 btn.textContent = "Done";
-                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-brand-yellow bg-brand-yellow/20 text-brand-yellow text-xs font-bold transition-all";
+                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-brand-yellow bg-brand-yellow/20 text-brand-yellow text-xs font-bold transition-all cursor-pointer";
                 showToast("User management edit mode enabled.");
             } else {
                 btn.textContent = "Edit";
-                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all";
+                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer";
                 showToast("Changes saved.");
             }
         }
