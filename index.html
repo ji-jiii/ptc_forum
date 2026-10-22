@@ -460,7 +460,16 @@
                         People in forum
                     </h4>
                     <div id="drawer-contacts-list" class="space-y-1">
-                        <p class="text-xs text-slate-400 text-center py-4">Loading contacts...</p>
+                        <!-- Initial Shimmer Skeleton Loading State -->
+                        <div class="p-2 rounded-xl bg-slate-800/40 border border-slate-800 space-y-2 animate-shimmer">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-7 h-7 rounded-lg animate-shimmer shrink-0"></div>
+                                <div class="space-y-1 flex-1">
+                                    <div class="w-24 h-2.5 rounded-md animate-shimmer"></div>
+                                    <div class="w-16 h-2 rounded-md animate-shimmer"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -570,7 +579,16 @@
                 </div>
 
                 <div id="contacts-list" class="space-y-2 max-h-[300px] sm:max-h-[360px] overflow-y-auto pr-1">
-                    <p class="text-xs text-slate-400 text-center py-4">Loading contacts...</p>
+                    <!-- Initial Shimmer Skeleton Loading State -->
+                    <div class="p-2.5 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-2 animate-shimmer">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-1.5 flex-1">
+                                <div class="w-24 h-3 rounded-md animate-shimmer"></div>
+                                <div class="w-16 h-2.5 rounded-md animate-shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </aside>
 
@@ -816,6 +834,13 @@
                 } catch (e) {}
             }
         }, 120000);
+
+        // Poll for new messages and update the badge every 8 seconds
+        setInterval(() => {
+            if (currentUser && currentUser.studentId) {
+                fetchRecentChats();
+            }
+        }, 8000);
 
         function switchView(viewId) {
             const userMenu = document.getElementById('user-menu');
@@ -1189,13 +1214,40 @@
         }
 
         async function fetchForumContacts() {
+            const container = document.getElementById('contacts-list');
+            const drawerContainer = document.getElementById('drawer-contacts-list');
+            const activeCount = document.getElementById('active-contacts-count');
+
+            if (container) {
+                container.innerHTML = `
+                    <div class="p-2.5 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-2 animate-shimmer">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-1.5 flex-1">
+                                <div class="w-24 h-3 rounded-md animate-shimmer"></div>
+                                <div class="w-16 h-2.5 rounded-md animate-shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (drawerContainer) {
+                drawerContainer.innerHTML = `
+                    <div class="p-2 rounded-xl bg-slate-800/40 border border-slate-800 space-y-2 animate-shimmer">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg animate-shimmer shrink-0"></div>
+                            <div class="space-y-1 flex-1">
+                                <div class="w-24 h-2.5 rounded-md animate-shimmer"></div>
+                                <div class="w-16 h-2 rounded-md animate-shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
             try {
                 const response = await fetch('get_contacts.php');
                 const contacts = await response.json();
-
-                const container = document.getElementById('contacts-list');
-                const drawerContainer = document.getElementById('drawer-contacts-list');
-                const activeCount = document.getElementById('active-contacts-count');
                 
                 if (container) container.innerHTML = '';
                 if (drawerContainer) drawerContainer.innerHTML = '';
@@ -1209,23 +1261,19 @@
 
                 if (activeCount) activeCount.textContent = `${contacts.length} Members`;
 
-                let activeMembersCount = 0;
-
                 contacts.forEach(user => {
                     const targetId = user.student_id || user.studentId;
                     if (currentUser && targetId === currentUser.studentId) return;
 
                     const name = user.full_name || user.fullName || (user.first_name ? `${user.first_name} ${user.last_name || ''}` : 'User');
                     const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
-                    if (isOnline) activeMembersCount++;
-
                     const statusText = isOnline ? 'Online' : 'Offline';
                     const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
 
                     if (container) {
                         const btn = document.createElement('button');
                         btn.onclick = () => openChat(name, targetId, isOnline);
-                        btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group';
+                        btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group fade-in';
                         btn.innerHTML = `
                             <div class="flex items-center gap-3 truncate">
                                 <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
@@ -1246,7 +1294,7 @@
                     if (drawerContainer) {
                         const drawerBtn = document.createElement('button');
                         drawerBtn.onclick = () => { closeMobileUserDrawer(); openChat(name, targetId, isOnline); };
-                        drawerBtn.className = 'drawer-contact-card w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group';
+                        drawerBtn.className = 'drawer-contact-card w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group fade-in';
                         drawerBtn.innerHTML = `
                             <div class="flex items-center gap-2.5 truncate">
                                 <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-[10px] shrink-0">
@@ -1266,10 +1314,8 @@
                 });
 
             } catch (err) {
-                const container = document.getElementById('contacts-list');
-                if (container) {
-                    container.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load accounts.</p>';
-                }
+                if (container) container.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load accounts.</p>';
+                if (drawerContainer) drawerContainer.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load accounts.</p>';
             }
         }
 
@@ -1305,7 +1351,6 @@
 
             messagesMenuList.innerHTML = '';
 
-            // Filter out chats that actually have unread/new messages or show active chats only when there's an actual message
             const activeChats = chats ? chats.filter(c => c.has_unread || c.unread_count > 0 || c.is_new) : [];
 
             if (!activeChats || activeChats.length === 0) {
@@ -1343,7 +1388,7 @@
                             <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
                         </div>
                     </div>
-                    <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all">Open</span>
+                    <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all">New</span>
                 `;
                 messagesMenuList.appendChild(msgItem);
             });
@@ -1437,7 +1482,6 @@
             const messagesMenu = document.getElementById('messages-menu');
             messagesMenu.classList.toggle('hidden');
 
-            // If opening the menu, load instantly from memory cache if fresh, otherwise fetch
             if (!messagesMenu.classList.contains('hidden')) {
                 const now = Date.now();
                 if (cachedChats && (now - lastFetchTime < 30000)) {
@@ -1559,7 +1603,6 @@
             document.getElementById('image-preview-wrapper').classList.add('hidden');
         }
 
-        // Pagination Tracking Variables
         let currentOffset = 0;
         const postsPerPage = 10;
 
@@ -1614,7 +1657,6 @@
 
                 const fragment = document.createDocumentFragment();
 
-                // Render posts from up (first post) to down (last post)
                 posts.forEach(post => {
                     const article = createPostElement(post);
                     fragment.appendChild(article);
@@ -1623,7 +1665,6 @@
                 postsContainer.appendChild(fragment);
                 currentOffset += posts.length;
 
-                // Add "Load More" button if a full batch was returned
                 if (posts.length === postsPerPage) {
                     const loadMoreDiv = document.createElement('div');
                     loadMoreDiv.id = 'load-more-btn-container';
@@ -1745,12 +1786,10 @@
                     removeAttachedImage();
                     showToast("Your post is live!");
 
-                    // Instantly prepend the new post to the top of the feed without reloading/refreshing the page
                     const postsContainer = document.getElementById('posts-container');
                     const emptyPlaceholder = document.getElementById('empty-feed-placeholder');
                     if (emptyPlaceholder) emptyPlaceholder.remove();
 
-                    // Use the newly created post object from response if available, or construct a temporary local one
                     const newPostObj = result.post || {
                         id: Date.now(),
                         author_name: currentUser ? currentUser.fullName : 'Student User',
