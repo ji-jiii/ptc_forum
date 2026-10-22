@@ -1353,54 +1353,63 @@
         }
 
         function renderRecentChats(chats) {
-            const messagesMenuList = document.getElementById('messages-menu-list');
-            const msgBadge = document.getElementById('msg-badge');
-            if (!messagesMenuList) return;
+    const messagesMenuList = document.getElementById('messages-menu-list');
+    const msgBadge = document.getElementById('msg-badge');
+    if (!messagesMenuList) return;
 
-            messagesMenuList.innerHTML = '';
+    messagesMenuList.innerHTML = '';
 
-            const activeChats = chats ? chats.filter(c => c.has_unread || c.unread_count > 0 || c.is_new) : [];
+    const activeChats = chats ? chats.filter(c => c.has_unread || c.unread_count > 0 || c.is_new) : [];
 
-            if (!activeChats || activeChats.length === 0) {
-                messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No new messages or chats right now.</p>';
-                if (msgBadge) {
-                    msgBadge.textContent = '';
-                    msgBadge.classList.add('hidden');
-                }
-                return;
-            }
-
-            if (msgBadge) {
-                msgBadge.textContent = activeChats.length;
-                msgBadge.classList.remove('hidden');
-            }
-
-            activeChats.forEach(user => {
-                const targetId = user.student_id || user.studentId;
-                const name = user.full_name || user.fullName || 'User';
-                const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
-                const statusText = isOnline ? 'Online' : 'Offline';
-                const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
-
-                const msgItem = document.createElement('button');
-                msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
-                msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group cursor-pointer';
-                msgItem.innerHTML = `
-                    <div class="flex items-center gap-2.5 truncate pointer-events-none">
-                        <div class="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
-                            <i class="fa-solid fa-user"></i>
-                            ${isOnline ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-brand-bright border-2 border-slate-900"></span>' : ''}
-                        </div>
-                        <div class="truncate">
-                            <p class="font-bold text-xs text-white group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
-                            <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
-                        </div>
-                    </div>
-                    <span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all pointer-events-none">New</span>
-                `;
-                messagesMenuList.appendChild(msgItem);
-            });
+    if (!activeChats || activeChats.length === 0) {
+        messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No new messages or chats right now.</p>';
+        if (msgBadge) {
+            msgBadge.textContent = '';
+            msgBadge.classList.add('hidden');
         }
+        return;
+    }
+
+    // FIX: Calculate badge count strictly from actual unread messages
+    const totalUnreadCount = chats.reduce((sum, chat) => sum + (parseInt(chat.unread_count) || 0), 0);
+
+    if (msgBadge) {
+        if (totalUnreadCount > 0) {
+            msgBadge.textContent = totalUnreadCount;
+            msgBadge.classList.remove('hidden');
+        } else {
+            msgBadge.textContent = '';
+            msgBadge.classList.add('hidden');
+        }
+    }
+
+    activeChats.forEach(user => {
+        const targetId = user.student_id || user.studentId;
+        const name = user.full_name || user.fullName || 'User';
+        const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
+        const statusText = isOnline ? 'Online' : 'Offline';
+        const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
+        const hasUnread = (parseInt(user.unread_count) || 0) > 0;
+
+        const msgItem = document.createElement('button');
+        msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
+        msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group cursor-pointer';
+        msgItem.innerHTML = `
+            <div class="flex items-center gap-2.5 truncate pointer-events-none">
+                <div class="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
+                    <i class="fa-solid fa-user"></i>
+                    ${isOnline ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-brand-bright border-2 border-slate-900"></span>' : ''}
+                </div>
+                <div class="truncate">
+                    <p class="font-bold text-xs text-white group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                    <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
+                </div>
+            </div>
+            ${hasUnread ? '<span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all pointer-events-none">New</span>' : ''}
+        `;
+        messagesMenuList.appendChild(msgItem);
+    });
+}
 
         async function openChat(name, targetStudentId, isOnline) {
             activeChatReceiverId = targetStudentId;
