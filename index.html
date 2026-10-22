@@ -819,10 +819,17 @@
     <!-- ================================================================= -->
     <!-- JAVASCRIPT LOGIC & INTERACTION CONTROLLERS -->
     <!-- ================================================================= -->
-    <script>
+   <script>
         let currentUser = null;
         let activeChatReceiverId = null;
         let toastTimer = null;
+
+        // Poll for new messages and update the badge every 8 seconds
+        setInterval(() => {
+            if (currentUser && currentUser.studentId) {
+                fetchRecentChats();
+            }
+        }, 8000);
 
         // Activity Heartbeat Ping
         setInterval(async () => {
@@ -834,13 +841,6 @@
                 } catch (e) {}
             }
         }, 120000);
-
-        // Poll for new messages and update the badge every 8 seconds
-        setInterval(() => {
-            if (currentUser && currentUser.studentId) {
-                fetchRecentChats();
-            }
-        }, 8000);
 
         function switchView(viewId) {
             const userMenu = document.getElementById('user-menu');
