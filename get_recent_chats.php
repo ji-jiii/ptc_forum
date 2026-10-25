@@ -29,36 +29,26 @@ if (!$studentId) {
 }
 
 try {
-    // Select all unique users who have exchanged messages with the current student
+    // Fallback: Select all users except current student so they appear in chat menu instantly
     $stmt = $pdo->prepare("
-        SELECT DISTINCT u.student_id, u.full_name, u.course, u.role, u.is_online,
-               (SELECT COUNT(*) FROM messages WHERE sender_id = u.student_id AND receiver_id = ? AND (is_read = 0 OR is_read = FALSE)) AS unread_count
-        FROM users u
-        WHERE u.student_id != ? 
-          AND u.student_id IN (
-              SELECT 
-                  CASE 
-                      WHEN sender_id = ? THEN receiver_id 
-                      ELSE sender_id 
-                  END 
-              FROM messages 
-              WHERE sender_id = ? OR receiver_id = ?
-          )
+        SELECT student_id, full_name, course, role, is_online, 
+               0 AS unread_count 
+        FROM users 
+        WHERE student_id != ?
     ");
-    $stmt->execute([$studentId, $studentId, $studentId, $studentId, $studentId]);
+    $stmt->execute([$studentId]);
     $recentChats = $stmt->fetchAll();
 
     $formattedChats = [];
     foreach ($recentChats as $chat) {
-        $unread = (int)($chat['unread_count'] ?? 0);
         $formattedChats[] = [
             'student_id' => $chat['student_id'],
             'full_name' => $chat['full_name'],
             'course' => $chat['course'] ?? 'Member',
             'role' => $chat['role'] ?? 'Student',
             'is_online' => $chat['is_online'],
-            'unread_count' => $unread,
-            'has_unread' => true, // Forces active thread inclusion in dropdown
+            'unread_count' => 0,
+            'has_unread' => false,
             'is_new' => true
         ];
     }
