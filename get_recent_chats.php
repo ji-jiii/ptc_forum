@@ -29,6 +29,7 @@ if (!$studentId) {
 }
 
 try {
+    // Select all unique users who have exchanged messages with the current student
     $stmt = $pdo->prepare("
         SELECT DISTINCT u.student_id, u.full_name, u.course, u.role, u.is_online,
                (SELECT COUNT(*) FROM messages WHERE sender_id = u.student_id AND receiver_id = ? AND (is_read = 0 OR is_read = FALSE)) AS unread_count
@@ -57,7 +58,7 @@ try {
             'role' => $chat['role'] ?? 'Student',
             'is_online' => $chat['is_online'],
             'unread_count' => $unread,
-            'has_unread' => true, // Force true so active conversation threads always appear in menu
+            'has_unread' => true, // Forces active thread inclusion in dropdown
             'is_new' => true
         ];
     }
