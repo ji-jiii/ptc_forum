@@ -42,6 +42,15 @@
                 }
             }
         }
+        // Instantly trigger logout when user closes the tab or browser window
+window.addEventListener('beforeunload', () => {
+    if (currentUser && currentUser.studentId) {
+        const formData = new FormData();
+        formData.append('studentId', currentUser.studentId);
+        // sendBeacon reliably transmits data even as the page is unloading
+        navigator.sendBeacon('logout.php', formData);
+    }
+});
     </script>
     <style>
         /* Custom Scrollbar Styling */
