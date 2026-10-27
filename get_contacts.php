@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
 
-// Connect to Neon PostgreSQL using Render's environment variable
 $database_url = getenv('DATABASE_URL') ?: 'postgres://user:password@host/dbname?sslmode=require';
 
 try {
@@ -23,7 +22,9 @@ try {
 }
 
 try {
-    // Directly select the is_online column (0 or 1) without any time cooldowns
+    // Automatically set users to offline if their last heartbeat activity is older than 2 minutes
+    $pdo->exec("UPDATE users SET is_online = 0 WHERE last_activity < NOW() - INTERVAL '2 minutes'");
+
     $stmt = $pdo->query("
         SELECT student_id, full_name, course, role, is_online 
         FROM users 
@@ -31,7 +32,6 @@ try {
     ");
     $contacts = $stmt->fetchAll();
 
-    // Ensure is_online is cleanly cast to an integer for the frontend
     $formattedContacts = [];
     foreach ($contacts as $contact) {
         $formattedContacts[] = [
