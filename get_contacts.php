@@ -23,26 +23,28 @@ try {
 }
 
 try {
-    // Dynamically calculate online status based on last 5 minutes of activity
+    // Directly select the is_online column (0 or 1) without any time cooldowns
     $stmt = $pdo->query("
-        SELECT student_id, full_name, course, role,
-               CASE 
-                   WHEN last_activity >= NOW() - INTERVAL '5 minutes' THEN 1 
-                   ELSE 0 
-               END AS is_online
+        SELECT student_id, full_name, course, role, is_online 
         FROM users 
         ORDER BY full_name ASC
     ");
     $contacts = $stmt->fetchAll();
-    
-    echo json_encode($contacts);
-} catch (Exception $e) {
-    // Fallback if last_activity column doesn't exist yet
-    try {
-        $stmt = $pdo->query("SELECT student_id, full_name, course, role, is_online FROM users ORDER BY full_name ASC");
-        echo json_encode($stmt->fetchAll());
-    } catch (Exception $ex) {
-        echo json_encode([]);
+
+    // Ensure is_online is cleanly cast to an integer for the frontend
+    $formattedContacts = [];
+    foreach ($contacts as $contact) {
+        $formattedContacts[] = [
+            'student_id' => $contact['student_id'],
+            'full_name' => $contact['full_name'],
+            'course' => $contact['course'] ?? 'Member',
+            'role' => $contact['role'] ?? 'Student',
+            'is_online' => (int)($contact['is_online'] ?? 0)
+        ];
     }
+    
+    echo json_encode($formattedContacts);
+} catch (Exception $e) {
+    echo json_encode([]);
 }
 ?>
