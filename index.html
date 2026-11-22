@@ -1,3 +1,8 @@
+
+
+
+HTML icon
+index-v2
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,14 +48,14 @@
             }
         }
         // Instantly trigger logout when user closes the tab or browser window
-        window.addEventListener('beforeunload', () => {
-            if (currentUser && currentUser.studentId) {
-                const formData = new FormData();
-                formData.append('studentId', currentUser.studentId);
-                // sendBeacon reliably transmits data even as the page is unloading
-                navigator.sendBeacon('logout.php', formData);
-            }
-        });
+window.addEventListener('beforeunload', () => {
+    if (currentUser && currentUser.studentId) {
+        const formData = new FormData();
+        formData.append('studentId', currentUser.studentId);
+        // sendBeacon reliably transmits data even as the page is unloading
+        navigator.sendBeacon('logout.php', formData);
+    }
+});
     </script>
     <style>
         /* Custom Scrollbar Styling */
@@ -408,14 +413,11 @@
                             <a href="#" id="admin-menu-link" class="admin-menu-link-el hidden flex items-center gap-2 px-3 py-2 text-xs text-brand-yellow hover:bg-slate-800 rounded-xl transition-colors" onclick="switchView('view-admin')">
                                 <i class="fa-solid fa-gauge-high w-4 pointer-events-none"></i> Admin Dashboard
                             </a>
-
-                            <div class="border-t border-slate-800 my-1"></div>
-
-                            <!-- Change Password above Log Out -->
-                            <button type="button" onclick="openChangePasswordModal()" class="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-200 hover:bg-slate-800 hover:text-brand-yellow rounded-xl transition-colors text-left cursor-pointer">
-                                <i class="fa-solid fa-key w-4 text-brand-bright pointer-events-none"></i> Change Password
+                            <button type="button" onclick="openChangePasswordModal()" class="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-200 hover:text-brand-bright hover:bg-slate-800 rounded-xl transition-colors text-left cursor-pointer">
+                                <i class="fa-solid fa-key w-4 pointer-events-none"></i> Change Password
                             </button>
 
+                            <div class="border-t border-slate-800 my-1"></div>
                             <a href="#" onclick="handleLogout()" class="flex items-center gap-2 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-xl transition-colors">
                                 <i class="fa-solid fa-right-from-bracket w-4 pointer-events-none"></i> Log Out
                             </a>
@@ -460,13 +462,10 @@
                             <i class="fa-solid fa-compass text-sm pointer-events-none"></i>
                             <span>Admin Dashboard</span>
                         </a>
-
-                        <!-- Change Password above Log Out (Mobile) -->
-                        <button type="button" onclick="closeMobileUserDrawer(); openChangePasswordModal();" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-200 bg-slate-800/90 hover:bg-slate-800 hover:text-brand-yellow rounded-xl transition-colors text-left cursor-pointer">
-                            <i class="fa-solid fa-key text-sm text-brand-bright pointer-events-none"></i>
+                        <button type="button" onclick="closeMobileUserDrawer(); openChangePasswordModal();" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-200 bg-slate-800/80 hover:bg-slate-800 hover:text-brand-bright rounded-xl transition-colors text-left cursor-pointer">
+                            <i class="fa-solid fa-key text-sm pointer-events-none"></i>
                             <span>Change Password</span>
                         </button>
-
                         <button onclick="handleLogout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-colors text-left cursor-pointer">
                             <i class="fa-solid fa-right-from-bracket text-sm pointer-events-none"></i>
                             <span>Log Out</span>
@@ -656,4 +655,1538 @@
             <!-- Left Admin Navigation Sidebar -->
             <aside id="admin-sidebar" class="md:col-span-3 bg-slate-900/90 rounded-3xl p-3 sm:p-4 border border-slate-800 shadow-xl flex md:flex-col gap-2 overflow-x-auto h-fit">
                 <button onclick="setActiveAdminTab('users', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all cursor-pointer">
-                    <i class="fa-solid fa-user-gear text-sm w-4 pointer
+                    <i class="fa-solid fa-user-gear text-sm w-4 pointer-events-none"></i>
+                    <span>Users</span>
+                </button>
+                <button onclick="setActiveAdminTab('posts', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer">
+                    <i class="fa-regular fa-clock text-sm w-4 pointer-events-none"></i>
+                    <span>Posts</span>
+                </button>
+                <button onclick="setActiveAdminTab('reports', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer">
+                    <i class="fa-solid fa-triangle-exclamation text-sm w-4 pointer-events-none"></i>
+                    <span>Reports</span>
+                </button>
+                <button onclick="setActiveAdminTab('settings', this)" class="admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer">
+                    <i class="fa-regular fa-circle-check text-sm w-4 pointer-events-none"></i>
+                    <span>Settings</span>
+                </button>
+            </aside>
+
+            <!-- Main Admin Content Area -->
+            <main class="md:col-span-9 space-y-4 sm:space-y-6">
+                
+                <!-- TOP ANALYTICS CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                    
+                    <!-- Total Users -->
+                    <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                        <div class="flex items-center gap-2 text-slate-300 font-bold text-xs mb-2">
+                            <i class="fa-regular fa-circle-user text-brand-bright"></i>
+                            <span>Total Users</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1" id="stat-total-users">0</div>
+                        <div class="h-10 w-full">
+                            <canvas id="chart-users"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Active Posts -->
+                    <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                        <div class="flex items-center gap-2 text-slate-300 font-bold text-xs mb-2">
+                            <i class="fa-regular fa-compass text-brand-yellow"></i>
+                            <span>Active Posts</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1" id="stat-total-posts">0</div>
+                        <div class="h-10 w-full">
+                            <canvas id="chart-posts"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Reported -->
+                    <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                        <div class="flex items-center gap-2 text-slate-300 font-bold text-xs mb-2">
+                            <i class="fa-regular fa-shield text-red-400"></i>
+                            <span>Reported</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white my-1" id="stat-total-reports">0</div>
+                        <div class="h-10 w-full">
+                            <canvas id="chart-reports"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- USER MANAGEMENT SECTION & TABLE -->
+                <div class="bg-slate-900/90 rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-xl space-y-4">
+                    
+                    <!-- Section Header -->
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm sm:text-lg font-bold text-white tracking-tight">
+                            User management
+                        </h2>
+                        <button onclick="toggleEditMode(this)" class="px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer">
+                            Edit
+                        </button>
+                    </div>
+
+                    <!-- User Table Container -->
+                    <div class="overflow-x-auto rounded-2xl border border-slate-800">
+                        <table class="w-full text-left text-xs border-collapse min-w-[600px]">
+                            <thead>
+                                <tr class="bg-slate-800/80 text-slate-300 border-b border-slate-700">
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Student ID number</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Name</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Last Name</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold">Role</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold text-center">Review</th>
+                                    <th class="py-3 px-3 sm:px-4 font-semibold text-center">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body" class="divide-y divide-slate-800 text-slate-200">
+                                <tr>
+                                    <td colspan="6" class="py-6 text-center text-slate-400">Loading database users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- SHARED CHAT DRAWER & MODALS -->
+    <!-- ================================================================= -->
+    
+    <!-- User Detail Admin Modal -->
+    <div id="modal-user-detail" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-brand-bright/30 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative fade-in">
+            <button onclick="closeUserModal()" class="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-full cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg pointer-events-none"></i>
+            </button>
+
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-brand-bright to-brand-yellow p-0.5 shrink-0">
+                    <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-brand-yellow font-bold text-xl">
+                        <i class="fa-solid fa-user-gear pointer-events-none"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 id="modal-user-fullname" class="text-base sm:text-lg font-bold text-white">---</h3>
+                    <p id="modal-user-role" class="text-xs text-brand-bright font-medium">---</p>
+                </div>
+            </div>
+
+            <div class="space-y-2.5 sm:space-y-3 bg-slate-800/60 p-3 sm:p-4 rounded-2xl border border-slate-700/60 text-xs">
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Student ID Number:</span>
+                    <span id="modal-user-id" class="font-mono font-bold text-white">---</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Program / Dept:</span>
+                    <span id="modal-user-dept" class="font-bold text-slate-200">---</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Official Email:</span>
+                    <span id="modal-user-email" class="font-mono text-brand-yellow truncate max-w-[180px]">---</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Account Status:</span>
+                    <span class="text-emerald-400 font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-circle text-[8px]"></i> Verified Active
+                    </span>
+                </div>
+            </div>
+
+            <div class="mt-5 flex items-center justify-end gap-2">
+                <button onclick="closeUserModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 cursor-pointer">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Contact Direct Message Drawer -->
+    <div id="chat-modal" class="hidden fixed bottom-2 right-2 left-2 sm:left-auto sm:bottom-4 sm:right-4 z-50 sm:w-96 bg-slate-900 border border-brand-bright/30 rounded-3xl shadow-2xl overflow-hidden fade-in">
+        <div class="bg-brand-dark p-3.5 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-brand-bright/20 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
+                    <i class="fa-solid fa-user pointer-events-none"></i>
+                </div>
+                <div class="truncate max-w-[200px]">
+                    <h4 id="chat-contact-name" class="font-bold text-xs text-white truncate">Contact Name</h4>
+                    <span id="chat-contact-id" class="hidden"></span>
+                    <span id="chat-contact-status" class="text-[10px] text-brand-bright flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now
+                    </span>
+                </div>
+            </div>
+            <button onclick="closeChat()" class="text-slate-400 hover:text-white p-1 cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm pointer-events-none"></i>
+            </button>
+        </div>
+
+        <div id="chat-history" class="p-3 h-52 sm:h-56 overflow-y-auto space-y-2 text-xs bg-slate-950/60">
+            <p class="text-slate-500 text-center py-4">Loading conversation...</p>
+        </div>
+
+        <div class="p-2.5 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
+            <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChatMessage()" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-bright">
+            <button onclick="sendChatMessage()" class="p-2 bg-brand-bright text-brand-dark rounded-xl font-bold hover:scale-105 transition-transform cursor-pointer">
+                <i class="fa-solid fa-paper-plane text-xs pointer-events-none"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="modal-change-password" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-brand-bright/30 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative fade-in">
+            <button type="button" onclick="closeChangePasswordModal()" class="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-full cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg pointer-events-none"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-11 h-11 rounded-2xl bg-brand-bright/15 border border-brand-bright/40 flex items-center justify-center text-brand-bright shrink-0">
+                    <i class="fa-solid fa-key text-base pointer-events-none"></i>
+                </div>
+                <div>
+                    <h3 class="text-base sm:text-lg font-bold text-white">Change Password</h3>
+                    <p class="text-xs text-slate-400">Update your PTC Online Forum account password</p>
+                </div>
+            </div>
+
+            <form id="form-change-password" onsubmit="handleChangePasswordSubmit(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Current Password</label>
+                    <div class="relative">
+                        <input type="password" id="cp-current-pass" required placeholder="••••••••" class="w-full pl-3.5 pr-9 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
+                        <button type="button" onclick="togglePassVisibility('cp-current-pass', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-white text-xs cursor-pointer">
+                            <i class="fa-solid fa-eye pointer-events-none"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">New Password</label>
+                    <div class="relative">
+                        <input type="password" id="cp-new-pass" minlength="6" required placeholder="Minimum 6 characters" class="w-full pl-3.5 pr-9 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
+                        <button type="button" onclick="togglePassVisibility('cp-new-pass', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-white text-xs cursor-pointer">
+                            <i class="fa-solid fa-eye pointer-events-none"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">Confirm New Password</label>
+                    <div class="relative">
+                        <input type="password" id="cp-confirm-pass" minlength="6" required placeholder="Re-enter new password" class="w-full pl-3.5 pr-9 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-bright">
+                        <button type="button" onclick="togglePassVisibility('cp-confirm-pass', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-white text-xs cursor-pointer">
+                            <i class="fa-solid fa-eye pointer-events-none"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeChangePasswordModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 cursor-pointer">
+                        Cancel
+                    </button>
+                    <button type="submit" id="cp-submit-btn" class="smooth-btn px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-bright to-emerald-500 text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-glow-green hover:brightness-110 cursor-pointer flex items-center justify-center gap-2">
+                        <span id="cp-btn-text">Update Password</span>
+                        <i id="cp-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden text-xs pointer-events-none"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast Popup -->
+    <div id="toast" class="fixed top-20 right-5 z-50 bg-slate-900 border-l-4 border-brand-bright text-white px-4 py-3 rounded-2xl shadow-2xl transition-all duration-300 transform translate-y-[-150%] opacity-0 text-xs font-semibold">
+        Toast Notification
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- JAVASCRIPT LOGIC & INTERACTION CONTROLLERS -->
+    <!-- ================================================================= -->
+   <script>
+        let currentUser = null;
+        let activeChatReceiverId = null;
+        let toastTimer = null;
+
+        // Poll for new messages and update the badge every 8 seconds
+        setInterval(() => {
+            if (currentUser && currentUser.studentId) {
+                fetchRecentChats();
+            }
+        }, 8000);
+
+        // Activity Heartbeat Ping
+        setInterval(async () => {
+            if (currentUser && currentUser.studentId) {
+                try {
+                    const formData = new FormData();
+                    formData.append('studentId', currentUser.studentId);
+                    await fetch('update_activity.php', { method: 'POST', body: formData });
+                } catch (e) {}
+            }
+        }, 120000);
+
+        function switchView(viewId) {
+            const userMenu = document.getElementById('user-menu');
+            const messagesMenu = document.getElementById('messages-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
+            if (viewId === 'view-admin') {
+                if (!currentUser || currentUser.role !== 'Admin') {
+                    showToast("Access Denied: Admin privileges required.", false);
+                    return;
+                }
+                fetchDatabaseUsers();
+                fetchAdminStats();
+            } else if (viewId === 'view-forum') {
+                fetchForumContacts();
+                fetchRecentChats();
+                fetchUserNotifications();
+                loadSavedPosts();
+            }
+
+            const authView = document.getElementById('view-auth');
+            const forumView = document.getElementById('view-forum');
+            const adminView = document.getElementById('view-admin');
+
+            authView.style.display = 'none';
+            forumView.style.display = 'none';
+            adminView.style.display = 'none';
+
+            if (viewId === 'view-auth') {
+                authView.style.display = 'flex';
+            } else if (viewId === 'view-forum') {
+                forumView.style.display = 'flex';
+            } else if (viewId === 'view-admin') {
+                adminView.style.display = 'flex';
+                if (typeof initSparklines === 'function') initSparklines();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        async function fetchAdminStats() {
+            try {
+                const usersRes = await fetch('get_users.php');
+                const users = await usersRes.json();
+                document.getElementById('stat-total-users').textContent = users.length || 0;
+
+                const postsRes = await fetch('posts_backend.php?action=get_posts');
+                const posts = await postsRes.json();
+                document.getElementById('stat-total-posts').textContent = posts.length || 0;
+
+                document.getElementById('stat-total-reports').textContent = '0';
+            } catch (e) {}
+        }
+
+        function updateUserInfoDisplays() {
+            if (!currentUser) return;
+
+            document.querySelectorAll('.current-user-name-text').forEach(el => el.textContent = currentUser.fullName);
+            document.querySelectorAll('.current-user-course-text').forEach(el => {
+                if (currentUser.course) el.textContent = currentUser.course;
+            });
+            document.querySelectorAll('.current-user-id-text').forEach(el => el.textContent = `ID: ${currentUser.studentId}`);
+
+            const adminPortalBtn = document.getElementById('admin-portal-btn');
+            document.querySelectorAll('.admin-menu-link-el').forEach(el => {
+                if (currentUser.role === 'Admin') {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            if (adminPortalBtn) {
+                if (currentUser.role === 'Admin') {
+                    adminPortalBtn.classList.remove('hidden');
+                    adminPortalBtn.classList.add('flex');
+                } else {
+                    adminPortalBtn.classList.add('hidden');
+                    adminPortalBtn.classList.remove('flex');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userMenu = document.getElementById('user-menu');
+            const messagesMenu = document.getElementById('messages-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
+            const savedUser = localStorage.getItem('ptc_user_session');
+            const loadingOverlay = document.getElementById('login-loading-overlay');
+
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    updateUserInfoDisplays();
+                    switchView('view-forum');
+                    if (loadingOverlay) loadingOverlay.style.display = 'none';
+                    return;
+                } catch (e) {
+                    localStorage.removeItem('ptc_user_session');
+                }
+            }
+
+            switchView('view-auth');
+            if (loadingOverlay) loadingOverlay.style.display = 'none';
+        });
+
+        document.addEventListener('click', (event) => {
+            const messagesMenu = document.getElementById('messages-menu');
+            const messagesBtn = document.getElementById('messages-menu-btn');
+            const notifMenu = document.getElementById('notif-menu');
+            const notifBtn = document.getElementById('notif-menu-btn');
+            const userMenu = document.getElementById('user-menu');
+            const userBtn = document.getElementById('user-menu-btn');
+
+            if (messagesMenu && messagesBtn && !messagesMenu.contains(event.target) && !messagesBtn.contains(event.target)) {
+                messagesMenu.classList.add('hidden');
+            }
+
+            if (notifMenu && notifBtn && !notifMenu.contains(event.target) && !notifBtn.contains(event.target)) {
+                notifMenu.classList.add('hidden');
+            }
+
+            if (userMenu && userBtn && !userMenu.contains(event.target) && !userBtn.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('form-login');
+            const signupForm = document.getElementById('form-signup');
+            const loginTabBtn = document.getElementById('auth-tab-login');
+            const signupTabBtn = document.getElementById('auth-tab-signup');
+
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                loginTabBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl text-brand-yellow bg-slate-900 shadow transition-all";
+                signupTabBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition-all";
+            } else {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+                signupTabBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl text-brand-yellow bg-slate-900 shadow transition-all";
+                loginTabBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition-all";
+            }
+        }
+
+        function togglePassVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function previewSignupID(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('signup-id-preview').src = evt.target.result;
+                    document.getElementById('signup-id-preview-box').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('login-studentid').value;
+            const password = document.getElementById('login-pass').value;
+
+            const submitBtn = document.getElementById('login-submit-btn');
+            const btnText = document.getElementById('login-btn-text');
+            const btnSpinner = document.getElementById('login-btn-spinner');
+            
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.textContent = "Authenticating...";
+            btnSpinner.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('studentId', studentId);
+            formData.append('password', password);
+
+            try {
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    currentUser = result.user;
+                    localStorage.setItem('ptc_user_session', JSON.stringify(currentUser));
+
+                    const overlay = document.getElementById('login-loading-overlay');
+                    const statusText = document.getElementById('loading-status-text');
+                    overlay.style.display = 'flex';
+
+                    statusText.textContent = "Verifying student session...";
+                    await new Promise(r => setTimeout(r, 600));
+
+                    statusText.textContent = "Loading campus forum & messages...";
+                    await new Promise(r => setTimeout(r, 700));
+
+                    updateUserInfoDisplays();
+
+                    switchView('view-forum');
+                    overlay.style.display = 'none';
+                    showToast(`Welcome back, ${currentUser.fullName}!`);
+                } else {
+                    showToast(result.message, false);
+                }
+            } catch (err) {
+                showToast("Could not connect to authentication server.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.textContent = "Enter Student Forum";
+                btnSpinner.classList.add('hidden');
+            }
+        }
+
+        async function handleSignupSubmit(e) {
+            e.preventDefault();
+
+            const institutionalEmailVal = document.getElementById('signup-institutional-email').value.trim();
+
+            if (!institutionalEmailVal.endsWith('@paterostechnologicalcollege.edu.ph')) {
+                showToast("make sure you already have ptc institutional email (name@paterostechnologicalcollege.edu.ph)", false);
+                return;
+            }
+
+            const pass = document.getElementById('signup-pass').value;
+            const confirmPass = document.getElementById('signup-pass-confirm').value;
+
+            if (pass !== confirmPass) {
+                showToast("Passwords do not match!", false);
+                return;
+            }
+
+            const submitBtn = document.getElementById('signup-submit-btn');
+            const btnText = document.getElementById('signup-btn-text');
+            const btnSpinner = document.getElementById('signup-btn-spinner');
+            
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.textContent = "Creating Account...";
+            btnSpinner.classList.remove('hidden');
+
+            const fullNameVal = document.getElementById('signup-fullname').value;
+            const studentIdVal = document.getElementById('signup-studentid').value;
+            const courseVal = document.getElementById('signup-course').value;
+            const roleVal = document.getElementById('signup-role').value;
+
+            const formData = new FormData();
+            formData.append('role', roleVal);
+            formData.append('fullName', fullNameVal);
+            formData.append('institutionalEmail', institutionalEmailVal);
+            formData.append('studentId', studentIdVal);
+            formData.append('phoneNumber', document.getElementById('signup-phone').value);
+            formData.append('course', courseVal);
+            formData.append('password', pass);
+
+            const fileInput = document.getElementById('signup-id-file');
+            if (fileInput.files[0]) {
+                formData.append('student_id_image', fileInput.files[0]);
+            }
+
+            try {
+                const response = await fetch('register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    currentUser = result.user || {
+                        studentId: studentIdVal,
+                        fullName: fullNameVal,
+                        email: institutionalEmailVal,
+                        course: courseVal,
+                        role: roleVal
+                    };
+                    
+                    localStorage.setItem('ptc_user_session', JSON.stringify(currentUser));
+
+                    const overlay = document.getElementById('login-loading-overlay');
+                    const statusText = document.getElementById('loading-status-text');
+                    overlay.style.display = 'flex';
+
+                    statusText.textContent = "Setting up your account profile...";
+                    await new Promise(r => setTimeout(r, 600));
+
+                    statusText.textContent = "Loading campus forum & messages...";
+                    await new Promise(r => setTimeout(r, 700));
+
+                    updateUserInfoDisplays();
+                    switchView('view-forum');
+                    overlay.style.display = 'none';
+                    showToast(result.message || "Account created successfully!");
+                } else {
+                    showToast(result.message, false);
+                }
+            } catch (err) {
+                showToast("Could not connect to server.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.textContent = "Create Account";
+                btnSpinner.classList.add('hidden');
+            }
+        }
+
+        async function fetchDatabaseUsers() {
+            try {
+                const response = await fetch('get_users.php');
+                const users = await response.json();
+
+                const tbody = document.getElementById('user-table-body');
+                tbody.innerHTML = '';
+
+                if (!users || users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-400">No registered accounts found in database.</td></tr>';
+                    document.getElementById('stat-total-users').textContent = '0';
+                    return;
+                }
+
+                document.getElementById('stat-total-users').textContent = users.length;
+
+                users.forEach(user => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-800/40 transition-colors';
+                    tr.innerHTML = `
+                        <td class="py-3.5 px-3 sm:px-4 font-mono text-slate-300">${escapeHTML(user.student_id || user.studentId || '')}</td>
+                        <td class="py-3.5 px-3 sm:px-4 font-medium">${escapeHTML(user.first_name || user.full_name || user.fullName || '')}</td>
+                        <td class="py-3.5 px-3 sm:px-4 font-medium">${escapeHTML(user.last_name || '')}</td>
+                        <td class="py-3.5 px-3 sm:px-4">
+                            <span class="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 font-medium">${escapeHTML(user.role || 'Student')}</span>
+                        </td>
+                        <td class="py-3.5 px-3 sm:px-4 text-center">
+                            <button onclick="openUserModal('${escapeHTML(user.student_id || user.studentId || '')}', '${escapeHTML(user.first_name || user.full_name || user.fullName || '')}', '${escapeHTML(user.last_name || '')}', '${escapeHTML(user.role || 'Student')}', '${escapeHTML(user.course || 'N/A')}', '${escapeHTML(user.email || user.institutional_email || 'N/A')}')" class="px-3 py-1 rounded-full border border-slate-600 bg-slate-800 hover:bg-brand-bright hover:text-brand-dark transition-all font-semibold cursor-pointer">
+                                View
+                            </button>
+                        </td>
+                        <td class="py-3.5 px-3 sm:px-4 text-center">
+                            <button onclick="removeTableRow(this)" class="px-3 py-1 rounded-full border border-red-500/40 bg-slate-800 text-red-400 hover:bg-red-500 hover:text-white transition-all font-semibold cursor-pointer">
+                                Remove
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                document.getElementById('user-table-body').innerHTML = '<tr><td colspan="6" class="py-6 text-center text-red-400">Error loading users from database.</td></tr>';
+            }
+        }
+
+        async function fetchForumContacts() {
+            const container = document.getElementById('contacts-list');
+            const drawerContainer = document.getElementById('drawer-contacts-list');
+            const activeCount = document.getElementById('active-contacts-count');
+
+            if (container) {
+                container.innerHTML = `
+                    <div class="p-2.5 rounded-2xl bg-slate-800/40 border border-slate-800 space-y-2 animate-shimmer">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-1.5 flex-1">
+                                <div class="w-24 h-3 rounded-md animate-shimmer"></div>
+                                <div class="w-16 h-2.5 rounded-md animate-shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (drawerContainer) {
+                drawerContainer.innerHTML = `
+                    <div class="p-2 rounded-xl bg-slate-800/40 border border-slate-800 space-y-2 animate-shimmer">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg animate-shimmer shrink-0"></div>
+                            <div class="space-y-1 flex-1">
+                                <div class="w-24 h-2.5 rounded-md animate-shimmer"></div>
+                                <div class="w-16 h-2 rounded-md animate-shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            try {
+                const response = await fetch('get_contacts.php');
+                const contacts = await response.json();
+                
+                if (container) container.innerHTML = '';
+                if (drawerContainer) drawerContainer.innerHTML = '';
+
+                if (!contacts || contacts.length === 0) {
+                    if (container) container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
+                    if (drawerContainer) drawerContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No registered accounts found.</p>';
+                    if (activeCount) activeCount.textContent = '0 Members';
+                    return;
+                }
+
+                if (activeCount) activeCount.textContent = `${contacts.length} Members`;
+
+                contacts.forEach(user => {
+                    const targetId = user.student_id || user.studentId;
+                    if (currentUser && targetId === currentUser.studentId) return;
+
+                    const name = user.full_name || user.fullName || (user.first_name ? `${user.first_name} ${user.last_name || ''}` : 'User');
+                    const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
+                    const statusText = isOnline ? 'Online' : 'Offline';
+                    const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
+
+                    if (container) {
+                        const btn = document.createElement('button');
+                        btn.onclick = () => openChat(name, targetId, isOnline);
+                        btn.className = 'contact-card w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-slate-800/80 transition-colors text-left group fade-in cursor-pointer';
+                        btn.innerHTML = `
+                            <div class="flex items-center gap-3 truncate pointer-events-none">
+                                <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <div class="truncate">
+                                    <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                                    <p class="text-[10px] text-slate-400">
+                                        <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0 pointer-events-none"></i>
+                        `;
+                        container.appendChild(btn);
+                    }
+
+                    if (drawerContainer) {
+                        const drawerBtn = document.createElement('button');
+                        drawerBtn.onclick = () => { closeMobileUserDrawer(); openChat(name, targetId, isOnline); };
+                        drawerBtn.className = 'drawer-contact-card w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group fade-in cursor-pointer';
+                        drawerBtn.innerHTML = `
+                            <div class="flex items-center gap-2.5 truncate pointer-events-none">
+                                <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 font-bold text-[10px] shrink-0">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <div class="truncate">
+                                    <p class="font-semibold text-xs text-slate-200 group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                                    <p class="text-[9px] text-slate-400">
+                                        <span class="${statusColorClass}">${statusText}</span> • ${escapeHTML(user.course || user.role || 'Member')}
+                                    </p>
+                                </div>
+                            </div>
+                            <i class="fa-regular fa-comment-dots text-slate-500 group-hover:text-brand-bright text-xs shrink-0 pointer-events-none"></i>
+                        `;
+                        drawerContainer.appendChild(drawerBtn);
+                    }
+                });
+
+            } catch (err) {
+                if (container) container.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load accounts.</p>';
+                if (drawerContainer) drawerContainer.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load accounts.</p>';
+            }
+        }
+
+        let cachedChats = null;
+        let lastFetchTime = 0;
+
+        async function fetchRecentChats() {
+            if (!currentUser || !currentUser.studentId) return;
+
+            const messagesMenuList = document.getElementById('messages-menu-list');
+            const msgBadge = document.getElementById('msg-badge');
+            if (!messagesMenuList) return;
+
+            try {
+                const response = await fetch(`get_recent_chats.php?studentId=${currentUser.studentId}`);
+                const chats = await response.json();
+                cachedChats = chats;
+                lastFetchTime = Date.now();
+                renderRecentChats(chats);
+            } catch (e) {
+                messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Failed to load messages.</p>';
+                if (msgBadge) {
+                    msgBadge.textContent = '';
+                    msgBadge.classList.add('hidden');
+                }
+            }
+        }
+
+        function renderRecentChats(chats) {
+    const messagesMenuList = document.getElementById('messages-menu-list');
+    const msgBadge = document.getElementById('msg-badge');
+    if (!messagesMenuList) return;
+
+    messagesMenuList.innerHTML = '';
+
+    const activeChats = chats ? chats.filter(c => c.has_unread || c.unread_count > 0 || c.is_new) : [];
+
+    if (!activeChats || activeChats.length === 0) {
+        messagesMenuList.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No new messages or chats right now.</p>';
+        if (msgBadge) {
+            msgBadge.textContent = '';
+            msgBadge.classList.add('hidden');
+        }
+        return;
+    }
+
+    // FIX: Calculate badge count strictly from actual unread messages
+    const totalUnreadCount = chats.reduce((sum, chat) => sum + (parseInt(chat.unread_count) || 0), 0);
+
+    if (msgBadge) {
+        if (totalUnreadCount > 0) {
+            msgBadge.textContent = totalUnreadCount;
+            msgBadge.classList.remove('hidden');
+        } else {
+            msgBadge.textContent = '';
+            msgBadge.classList.add('hidden');
+        }
+    }
+
+    activeChats.forEach(user => {
+        const targetId = user.student_id || user.studentId;
+        const name = user.full_name || user.fullName || 'User';
+        const isOnline = user.is_online == 1 || user.is_online === true || user.is_online === '1';
+        const statusText = isOnline ? 'Online' : 'Offline';
+        const statusColorClass = isOnline ? 'text-brand-bright font-semibold' : 'text-slate-500';
+        const hasUnread = (parseInt(user.unread_count) || 0) > 0;
+
+        const msgItem = document.createElement('button');
+        msgItem.onclick = () => { toggleMessagesMenu(); openChat(name, targetId, isOnline); };
+        msgItem.className = 'w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800 transition-colors text-left group cursor-pointer';
+        msgItem.innerHTML = `
+            <div class="flex items-center gap-2.5 truncate pointer-events-none">
+                <div class="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-bright font-bold text-xs shrink-0">
+                    <i class="fa-solid fa-user"></i>
+                    ${isOnline ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-brand-bright border-2 border-slate-900"></span>' : ''}
+                </div>
+                <div class="truncate">
+                    <p class="font-bold text-xs text-white group-hover:text-brand-yellow transition-colors truncate">${escapeHTML(name)}</p>
+                    <p class="text-[10px] text-slate-400 truncate">${escapeHTML(user.course || user.role || 'Member')} • <span class="${statusColorClass}">${statusText}</span></p>
+                </div>
+            </div>
+            ${hasUnread ? '<span class="text-[10px] font-bold text-brand-bright bg-brand-bright/10 px-2 py-0.5 rounded-full group-hover:bg-brand-bright group-hover:text-brand-dark transition-all pointer-events-none">New</span>' : ''}
+        `;
+        messagesMenuList.appendChild(msgItem);
+    });
+}
+
+        async function openChat(name, targetStudentId, isOnline) {
+            activeChatReceiverId = targetStudentId;
+            document.getElementById('chat-contact-name').textContent = name;
+            
+            const statusContainer = document.getElementById('chat-contact-status');
+            if (statusContainer) {
+                if (isOnline) {
+                    statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-brand-bright"></span> Active Now';
+                    statusContainer.className = "text-[10px] text-brand-bright flex items-center gap-1";
+                } else {
+                    statusContainer.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Offline';
+                    statusContainer.className = "text-[10px] text-slate-400 flex items-center gap-1";
+                }
+            }
+
+            document.getElementById('chat-modal').classList.remove('hidden');
+            await loadChatHistory();
+        }
+
+        function closeChat() {
+            document.getElementById('chat-modal').classList.add('hidden');
+            activeChatReceiverId = null;
+        }
+
+        async function loadChatHistory() {
+            if (!currentUser || !activeChatReceiverId) return;
+
+            const history = document.getElementById('chat-history');
+            try {
+                const response = await fetch(`messages.php?action=fetch&user1=${currentUser.studentId}&user2=${activeChatReceiverId}`);
+                const messages = await response.json();
+
+                history.innerHTML = '';
+                if (messages.length === 0) {
+                    history.innerHTML = '<p class="text-slate-500 text-center py-4">No conversation yet. Say hi!</p>';
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    const isMe = msg.sender_id === currentUser.studentId;
+
+                    msgDiv.className = isMe 
+                        ? "bg-brand-bright text-brand-dark p-2.5 rounded-2xl rounded-tr-none max-w-[80%] ml-auto font-medium text-xs break-words"
+                        : "bg-slate-800 p-2.5 rounded-2xl rounded-tl-none max-w-[80%] text-slate-200 text-xs break-words";
+                    
+                    msgDiv.textContent = msg.message;
+                    history.appendChild(msgDiv);
+                });
+
+                history.scrollTop = history.scrollHeight;
+            } catch (e) {
+                history.innerHTML = '<p class="text-red-400 text-center py-4">Failed to load messages.</p>';
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg || !activeChatReceiverId || !currentUser) return;
+
+            const formData = new FormData();
+            formData.append('action', 'send');
+            formData.append('senderId', currentUser.studentId);
+            formData.append('receiverId', activeChatReceiverId);
+            formData.append('message', msg);
+
+            try {
+                await fetch('messages.php', { method: 'POST', body: formData });
+                input.value = '';
+                cachedChats = null; // Invalidate cache on new message sent
+                await loadChatHistory();
+                await fetchRecentChats(); 
+            } catch (e) {
+                showToast("Failed to send message.", false);
+            }
+        }
+
+        async function toggleMessagesMenu(event) {
+            if (event) event.stopPropagation();
+            const notifMenu = document.getElementById('notif-menu');
+            const userMenu = document.getElementById('user-menu');
+            if (notifMenu) notifMenu.classList.add('hidden');
+            if (userMenu) userMenu.classList.add('hidden');
+
+            const messagesMenu = document.getElementById('messages-menu');
+            messagesMenu.classList.toggle('hidden');
+
+            if (!messagesMenu.classList.contains('hidden')) {
+                const now = Date.now();
+                if (cachedChats && (now - lastFetchTime < 30000)) {
+                    renderRecentChats(cachedChats);
+                } else {
+                    await fetchRecentChats();
+                }
+            }
+        }
+
+        function toggleNotificationsMenu(event) {
+            if (event) event.stopPropagation();
+            const messagesMenu = document.getElementById('messages-menu');
+            const userMenu = document.getElementById('user-menu');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (userMenu) userMenu.classList.add('hidden');
+
+            document.getElementById('notif-menu').classList.toggle('hidden');
+        }
+
+        async function fetchUserNotifications() {
+            if (!currentUser) return;
+            try {
+                const response = await fetch(`notifications.php?studentId=${currentUser.studentId}`);
+                const notifs = await response.json();
+
+                const list = document.getElementById('notif-list');
+                const badge = document.getElementById('notif-badge');
+                list.innerHTML = '';
+
+                if (notifs && notifs.length > 0) {
+                    badge.classList.remove('hidden');
+                    badge.textContent = notifs.length;
+
+                    notifs.forEach(n => {
+                        const div = document.createElement('div');
+                        div.className = 'bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60 text-xs text-slate-300';
+                        div.textContent = n.title;
+                        list.appendChild(div);
+                    });
+                } else {
+                    if (badge) {
+                        badge.textContent = '';
+                        badge.classList.add('hidden');
+                    }
+                    list.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">No notifications yet.</p>';
+                }
+            } catch (e) {
+                const badge = document.getElementById('notif-badge');
+                if (badge) badge.classList.add('hidden');
+            }
+        }
+
+        async function handleLogout() {
+            const userName = currentUser ? currentUser.fullName : "User";
+
+            if (currentUser && currentUser.studentId) {
+                try {
+                    const formData = new FormData();
+                    formData.append('studentId', currentUser.studentId);
+                    await fetch('logout.php', { method: 'POST', body: formData });
+                } catch (err) {}
+            }
+
+            localStorage.removeItem('ptc_user_session');
+            currentUser = null;
+            
+            closeChat();
+            closeMobileUserDrawer();
+
+            switchView('view-auth');
+            showToast(`Goodbye, ${userName}! You have been logged out.`);
+        }
+
+        function toggleUserMenu(event) {
+            if (event) event.stopPropagation();
+            
+            const messagesMenu = document.getElementById('messages-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            if (messagesMenu) messagesMenu.classList.add('hidden');
+            if (notifMenu) notifMenu.classList.add('hidden');
+
+            if (window.innerWidth < 640) {
+                document.getElementById('mobile-user-drawer').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('user-menu').classList.toggle('hidden');
+        }
+
+        function closeMobileUserDrawer() {
+            document.getElementById('mobile-user-drawer').classList.add('hidden');
+        }
+
+        function filterDrawerContactsList(q) {
+            const query = q.toLowerCase();
+            document.querySelectorAll('#drawer-contacts-list .drawer-contact-card').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        let attachedImageBase64 = null;
+        function previewPostImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    attachedImageBase64 = e.target.result;
+                    document.getElementById('image-preview').src = attachedImageBase64;
+                    document.getElementById('image-preview-wrapper').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeAttachedImage() {
+            attachedImageBase64 = null;
+            document.getElementById('post-file-input').value = '';
+            document.getElementById('image-preview-wrapper').classList.add('hidden');
+        }
+
+        let currentOffset = 0;
+        const postsPerPage = 10;
+
+        async function loadSavedPosts(isLoadMore = false) {
+            const postsContainer = document.getElementById('posts-container');
+            if (!postsContainer) return;
+
+            if (!isLoadMore) {
+                currentOffset = 0;
+                postsContainer.innerHTML = `
+                    <div class="bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md space-y-4 fade-in">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl animate-shimmer shrink-0"></div>
+                            <div class="space-y-2 flex-1">
+                                <div class="w-32 h-3.5 rounded-lg animate-shimmer"></div>
+                                <div class="w-20 h-3 rounded-lg animate-shimmer"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2 pt-2">
+                            <div class="w-full h-4 rounded-lg animate-shimmer"></div>
+                            <div class="w-4/5 h-4 rounded-lg animate-shimmer"></div>
+                        </div>
+                        <div class="w-full h-40 rounded-2xl animate-shimmer mt-2"></div>
+                    </div>
+                `;
+            } else {
+                const existingBtn = document.getElementById('load-more-btn-container');
+                if (existingBtn) existingBtn.remove();
+            }
+
+            try {
+                const response = await fetch(`posts_backend.php?action=get_posts&limit=${postsPerPage}&offset=${currentOffset}`);
+                const posts = await response.json();
+
+                if (!isLoadMore) {
+                    postsContainer.innerHTML = '';
+                }
+
+                if (!posts || posts.length === 0) {
+                    if (!isLoadMore) {
+                        postsContainer.innerHTML = `
+                            <div id="empty-feed-placeholder" class="bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-lg backdrop-blur-md text-center fade-in">
+                                <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-brand-bright/10 border border-brand-bright/30 flex items-center justify-center text-brand-bright">
+                                    <i class="fa-solid fa-pen-nib text-xl sm:text-2xl"></i>
+                                </div>
+                                <h4 class="text-sm sm:text-base font-bold text-white mb-1">Wanna start discussion?</h4>
+                                <p class="text-xs text-slate-400 max-w-sm mx-auto">No posts here yet. Be the first to start a conversation, ask a question, or share an announcement above!</p>
+                            </div>`;
+                    }
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+
+                posts.forEach(post => {
+                    const article = createPostElement(post);
+                    fragment.appendChild(article);
+                });
+
+                postsContainer.appendChild(fragment);
+                currentOffset += posts.length;
+
+                if (posts.length === postsPerPage) {
+                    const loadMoreDiv = document.createElement('div');
+                    loadMoreDiv.id = 'load-more-btn-container';
+                    loadMoreDiv.className = 'text-center py-4';
+                    loadMoreDiv.innerHTML = `
+                        <button onclick="loadMorePosts()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-200 transition-all shadow-md cursor-pointer">
+                            Load More Discussions
+                        </button>
+                    `;
+                    postsContainer.appendChild(loadMoreDiv);
+                }
+
+            } catch (e) {
+                if (!isLoadMore) {
+                    postsContainer.innerHTML = `<p class="text-xs text-red-400 text-center py-4">Failed to load posts feed.</p>`;
+                }
+            }
+        }
+
+        function loadMorePosts() {
+            loadSavedPosts(true);
+        }
+
+        function createPostElement(post) {
+            const article = document.createElement('article');
+            article.className = "post-card bg-slate-900/80 rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-lg backdrop-blur-md fade-in";
+            article.setAttribute('data-post-id', post.id);
+
+            let imageHTML = post.image_url ? 
+                `<div class="rounded-2xl overflow-hidden my-3 max-h-60 sm:max-h-72"><img src="${escapeHTML(post.image_url)}" class="w-full h-full object-cover" loading="lazy"></div>` : '';
+
+            let commentsHTML = '';
+            if (post.comments && post.comments.length > 0) {
+                post.comments.forEach(c => {
+                    commentsHTML += `<div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/50 text-xs mt-2"><span class="font-bold text-brand-yellow">${escapeHTML(c.author_name)}:</span> <span class="text-slate-300 ml-1">${escapeHTML(c.content)}</span></div>`;
+                });
+            }
+
+            article.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3 truncate">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-cover ring-2 ring-brand-bright/60 shrink-0" loading="lazy">
+                        <div class="truncate">
+                            <h4 class="font-bold text-xs sm:text-sm text-white flex items-center gap-1.5 truncate">
+                                <span class="truncate">${escapeHTML(post.author_name || 'Student User')}</span>
+                                <span class="text-[9px] sm:text-[10px] bg-brand-bright/20 text-brand-bright px-2 py-0.5 rounded-full shrink-0">${escapeHTML(post.course || 'BSIT')}</span>
+                            </h4>
+                            <span class="text-[10px] sm:text-[11px] text-slate-400">${escapeHTML(post.created_at)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-200 leading-relaxed break-words">${escapeHTML(post.content)}</p>
+                ${imageHTML}
+
+                <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs text-slate-400">
+                    <button onclick="toggleLike(this)" class="flex items-center gap-1.5 hover:text-red-400 transition-colors cursor-pointer">
+                        <i class="fa-regular fa-heart text-sm pointer-events-none"></i>
+                        <span class="like-count font-semibold">${post.likes_count || 0}</span>
+                    </button>
+                    <button onclick="toggleComments(this)" class="flex items-center gap-1.5 hover:text-brand-bright transition-colors cursor-pointer">
+                        <i class="fa-regular fa-comment text-sm pointer-events-none"></i>
+                        <span class="comment-count font-semibold">${post.comments ? post.comments.length : 0}</span>
+                    </button>
+                    <button onclick="showToast('Post link copied!')" class="flex items-center gap-1.5 hover:text-brand-yellow transition-colors cursor-pointer">
+                        <i class="fa-solid fa-share text-sm pointer-events-none"></i>
+                        <span class="hidden sm:inline">Share</span>
+                    </button>
+                </div>
+
+                <div class="comments-section hidden pt-4 border-t border-slate-800/80 mt-3 space-y-3">
+                    <div id="comments-list-${post.id}">
+                        ${commentsHTML}
+                    </div>
+                    <div class="flex gap-2 pt-1">
+                        <input type="text" placeholder="Write a comment..." class="comment-input flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-bright">
+                        <button onclick="addCommentToDatabase(${post.id}, this)" class="px-3 py-1.5 bg-brand-bright text-brand-dark rounded-xl font-bold text-xs shrink-0 cursor-pointer">Send</button>
+                    </div>
+                </div>
+            `;
+            return article;
+        }
+
+        async function addNewPost() {
+            const input = document.getElementById('post-input');
+            const content = input.value.trim();
+            const fileInput = document.getElementById('post-file-input');
+
+            if (!content && (!fileInput.files || !fileInput.files[0])) {
+                showToast("Please write something to post!", false);
+                return;
+            }
+
+            const submitBtn = document.getElementById('post-submit-btn');
+            const btnText = document.getElementById('post-btn-text');
+            const btnSpinner = document.getElementById('post-btn-spinner');
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed', 'scale-95');
+            btnText.textContent = "Posting...";
+            btnSpinner.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('action', 'create_post');
+            formData.append('studentId', currentUser ? currentUser.studentId : '');
+            formData.append('authorName', currentUser ? currentUser.fullName : 'Student User');
+            formData.append('course', currentUser ? currentUser.course : 'BSIT');
+            formData.append('content', content);
+            if (fileInput.files[0]) {
+                formData.append('post_image', fileInput.files[0]);
+            }
+
+            try {
+                const response = await fetch('posts_backend.php', { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    input.value = '';
+                    removeAttachedImage();
+                    showToast("Your post is live!");
+
+                    const postsContainer = document.getElementById('posts-container');
+                    const emptyPlaceholder = document.getElementById('empty-feed-placeholder');
+                    if (emptyPlaceholder) emptyPlaceholder.remove();
+
+                    const newPostObj = result.post || {
+                        id: Date.now(),
+                        author_name: currentUser ? currentUser.fullName : 'Student User',
+                        course: currentUser ? currentUser.course : 'BSIT',
+                        content: content,
+                        image_url: attachedImageBase64,
+                        created_at: 'Just now',
+                        likes_count: 0,
+                        comments: []
+                    };
+
+                    const newArticle = createPostElement(newPostObj);
+                    postsContainer.insertBefore(newArticle, postsContainer.firstChild);
+                } else {
+                    showToast(result.message || "Failed to create post.", false);
+                }
+            } catch (err) {
+                showToast("Could not connect to server.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'scale-95');
+                btnText.textContent = "POST";
+                btnSpinner.classList.add('hidden');
+            }
+        }
+
+        function toggleLike(btn) {
+            const icon = btn.querySelector('i');
+            const countSpan = btn.querySelector('.like-count');
+            let count = parseInt(countSpan.textContent);
+
+            if (icon.classList.contains('fa-regular')) {
+                icon.className = 'fa-solid fa-heart text-sm text-red-500 pointer-events-none';
+                countSpan.textContent = count + 1;
+                countSpan.classList.add('text-red-400');
+            } else {
+                icon.className = 'fa-regular fa-heart text-sm pointer-events-none';
+                countSpan.textContent = count - 1;
+                countSpan.classList.remove('text-red-400');
+            }
+        }
+
+        function toggleComments(btn) {
+            const card = btn.closest('article');
+            card.querySelector('.comments-section').classList.toggle('hidden');
+        }
+
+        async function addCommentToDatabase(postId, btn) {
+            const card = btn.closest('article');
+            const input = card.querySelector('.comment-input');
+            const commentText = input.value.trim();
+            if (!commentText) return;
+
+            const formData = new FormData();
+            formData.append('action', 'add_comment');
+            formData.append('postId', postId);
+            formData.append('studentId', currentUser ? currentUser.studentId : '');
+            formData.append('authorName', currentUser ? currentUser.fullName : 'Student User');
+            formData.append('content', commentText);
+
+            try {
+                const response = await fetch('posts_backend.php', { method: 'POST', body: formData });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    input.value = '';
+                    loadSavedPosts();
+                } else {
+                    showToast("Failed to add comment.", false);
+                }
+            } catch (e) {
+                showToast("Could not connect to server.", false);
+            }
+        }
+
+        function resetTopicFilter() {
+            document.getElementById('active-filter-banner').classList.add('hidden');
+            document.querySelectorAll('#posts-container article').forEach(post => post.style.display = 'block');
+        }
+
+        function handleHomeClick() {
+            resetTopicFilter();
+            document.getElementById('forum-search').value = '';
+            loadSavedPosts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast("Feed refreshed!");
+        }
+
+        function filterForumPosts() {
+            const q = document.getElementById('forum-search').value.toLowerCase();
+            document.querySelectorAll('#posts-container article').forEach(post => {
+                post.style.display = post.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+            });
+        }
+
+        function filterContactsList() {
+            const q = document.getElementById('contact-search-input').value.toLowerCase();
+            document.querySelectorAll('#contacts-list .contact-card').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(q) ? 'flex' : 'none';
+            });
+        }
+
+        function scrollToContacts() {
+            document.getElementById('contacts-sidebar').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setActiveAdminTab(tabName, btn) {
+            document.querySelectorAll('.admin-nav-item').forEach(b => {
+                b.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs font-bold transition-all cursor-pointer";
+            });
+            btn.className = "admin-nav-item whitespace-nowrap flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-brand-bright/20 border border-brand-bright/50 text-brand-bright text-xs font-bold transition-all cursor-pointer";
+            showToast(`Admin View: Switched to ${tabName.toUpperCase()} section.`);
+        }
+
+        function toggleEditMode(btn) {
+            if (btn.textContent.trim() === "Edit") {
+                btn.textContent = "Done";
+                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-brand-yellow bg-brand-yellow/20 text-brand-yellow text-xs font-bold transition-all cursor-pointer";
+                showToast("User management edit mode enabled.");
+            } else {
+                btn.textContent = "Edit";
+                btn.className = "px-3 sm:px-4 py-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer";
+                showToast("Changes saved.");
+            }
+        }
+
+        function openUserModal(id, fname, lname, role, dept, email) {
+            document.getElementById('modal-user-fullname').textContent = `${fname} ${lname}`;
+            document.getElementById('modal-user-role').textContent = role;
+            document.getElementById('modal-user-id').textContent = id;
+            document.getElementById('modal-user-dept').textContent = dept;
+            document.getElementById('modal-user-email').textContent = email;
+            document.getElementById('modal-user-detail').classList.remove('hidden');
+        }
+
+        function closeUserModal() {
+            document.getElementById('modal-user-detail').classList.add('hidden');
+        }
+
+        function removeTableRow(btn) {
+            const row = btn.closest('tr');
+            row.style.opacity = '0';
+            row.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                row.remove();
+                const userCounter = document.getElementById('stat-total-users');
+                userCounter.textContent = Math.max(0, parseInt(userCounter.textContent) - 1);
+                showToast("User record removed successfully.");
+            }, 250);
+        }
+
+        let sparklinesInitialized = false;
+        function initSparklines() {
+            if (sparklinesInitialized) return;
+            sparklinesInitialized = true;
+
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { x: { display: false }, y: { display: false } },
+                elements: { point: { radius: 0 }, line: { borderWidth: 2, tension: 0.4 } }
+            };
+
+            new Chart(document.getElementById('chart-users').getContext('2d'), {
+                type: 'line',
+                data: { labels: [1,2,3,4,5,6,7], datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true }] },
+                options: chartOptions
+            });
+
+            new Chart(document.getElementById('chart-posts').getContext('2d'), {
+                type: 'line',
+                data: { labels: [1,2,3,4,5,6,7], datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true }] },
+                options: chartOptions
+            });
+
+            new Chart(document.getElementById('chart-reports').getContext('2d'), {
+                type: 'line',
+                data: { labels: [1,2,3,4,5,6,7], datasets: [{ data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#f87171', backgroundColor: 'rgba(248, 113, 113, 0.1)', fill: true }] },
+                options: chartOptions
+            });
+        }
+
+        function showToast(msg, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+
+            if (toastTimer) clearTimeout(toastTimer);
+
+            toast.textContent = msg;
+            toast.className = `fixed top-20 right-5 z-50 px-4 py-3 rounded-2xl shadow-2xl transition-all duration-500 transform text-xs font-semibold ${
+                isSuccess 
+                    ? 'bg-slate-900 border-l-4 border-brand-bright text-white' 
+                    : 'bg-slate-900 border-l-4 border-red-500 text-white'
+            }`;
+
+            toast.style.display = 'block';
+            toast.classList.add('translate-y-0', 'opacity-100');
+            toast.classList.remove('translate-y-[-150%]', 'opacity-0');
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-[-150%]', 'opacity-0');
+
+                setTimeout(() => {
+                    if (toast.classList.contains('opacity-0')) {
+                        toast.style.display = 'none';
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        function formatStudentIdInput(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                input.value = value.slice(0, 4) + '-' + value.slice(4, 8);
+            } else {
+                input.value = value;
+            }
+        }
+
+        function openChangePasswordModal() {
+            const userMenu = document.getElementById('user-menu');
+            if (userMenu) userMenu.classList.add('hidden');
+            const form = document.getElementById('form-change-password');
+            if (form) form.reset();
+            document.getElementById('modal-change-password').classList.remove('hidden');
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('modal-change-password').classList.add('hidden');
+        }
+
+        async function handleChangePasswordSubmit(e) {
+            e.preventDefault();
+
+            if (!currentUser || !currentUser.studentId) {
+                showToast("Session expired. Please log in again.", false);
+                return;
+            }
+
+            const currentPassword = document.getElementById('cp-current-pass').value;
+            const newPassword = document.getElementById('cp-new-pass').value;
+            const confirmPassword = document.getElementById('cp-confirm-pass').value;
+
+            if (newPassword !== confirmPassword) {
+                showToast("New passwords do not match!", false);
+                return;
+            }
+
+            if (currentPassword === newPassword) {
+                showToast("New password must be different from your current password.", false);
+                return;
+            }
+
+            const submitBtn = document.getElementById('cp-submit-btn');
+            const btnText = document.getElementById('cp-btn-text');
+            const btnSpinner = document.getElementById('cp-btn-spinner');
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.textContent = "Updating...";
+            btnSpinner.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('studentId', currentUser.studentId);
+            formData.append('currentPassword', currentPassword);
+            formData.append('newPassword', newPassword);
+
+            try {
+                const response = await fetch('change_password.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    closeChangePasswordModal();
+                    showToast(result.message || "Password updated successfully!");
+                } else {
+                    showToast(result.message || "Failed to update password.", false);
+                }
+            } catch (err) {
+                showToast("Could not connect to server.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.textContent = "Update Password";
+                btnSpinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
+Processed and analyzed in code
