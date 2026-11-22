@@ -2153,20 +2153,21 @@ window.addEventListener('beforeunload', () => {
             btnText.textContent = "Updating...";
             btnSpinner.classList.remove('hidden');
 
-            const formData = new FormData();
-            formData.append('studentId', currentUser.studentId);
-            formData.append('currentPassword', currentPassword);
-            formData.append('newPassword', newPassword);
-
             try {
                 const response = await fetch('change_password.php', {
                     method: 'POST',
-                    body: formData
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        studentId: currentUser.studentId,
+                        currentPassword: currentPassword,
+                        newPassword: newPassword
+                    })
                 });
 
                 const result = await response.json();
 
-                if (result.status === 'success') {
+                if (response.ok && (result.success || result.status === 'success')) {
                     closeChangePasswordModal();
                     showToast(result.message || "Password updated successfully!");
                 } else {
@@ -2184,4 +2185,3 @@ window.addEventListener('beforeunload', () => {
     </script>
 </body>
 </html>
-Processed and analyzed in code
